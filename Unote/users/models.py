@@ -38,6 +38,14 @@ class Group(models.Model):
 
 class Lesson(models.Model):
     name = models.CharField(max_length=255)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    teacher= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+class Room(models.Model):
+    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -48,18 +56,16 @@ class Session(models.Model):
     exam = models.BooleanField()
     date = models.DateTimeField()
     is_called_done = models.BooleanField(default=False)
+    room = models.ForeignKey(Room,on_delete=models.CASCADE)
+    lesson= models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Session du {self.heure_debut} au {self.heure_fin}"
 
-class Room(models.Model):
-    name = models.CharField(max_length=255)
 
-    def __str__(self):
-        return self.name
 
-class Note(models.Model):
-    note = models.FloatField()
+class Grade(models.Model):
+    grade = models.FloatField()
     coeff = models.IntegerField()
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     Subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
