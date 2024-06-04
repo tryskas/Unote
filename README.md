@@ -58,7 +58,7 @@ de récupérer une copie du projet sur Github (update), de commit et de push.
    l'éventuel commit en cours.
    Dans le dossier "local" (toujours au même endroit), vous pouvez, si vous 
    n'avez pas déjà push, faire un clic droit et push les changements.
-f
+
 #### Annuler un commit pas encore push
 
 Vous pouvez aussi annuler le commit en faisant un clic droit sur l'élément 
