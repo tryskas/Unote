@@ -17,12 +17,10 @@ class Enrollment(models.Model):
         return self.name
     
 class Grade(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
+    note = models.IntegerField()
+    coeff = models.IntegerField()
     
 class GradeForm(ModelForm):
     class Meta:
         model = Grade
-        fields = ['name']
+        fields = ['note']
