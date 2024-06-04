@@ -1,5 +1,105 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
-  h
+<table>
+  <thead>
+  <tr>
+      <th colspan="2">Information sur l'étudiant</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>Nom Prénom</td>
+      <td>{{ user.nom }} {{ user.prenom }} </td>
+  </tr>
+  <tr>
+      <td>Numéro étudiant</td>
+      <td> {{ user.identifiant }} </td>
+  </tr>
+  <tr>
+    <td>Classe</td>
+    <td>1Ax</td>
+</tr>
+  </tbody>
+</table>
+
+{% for unite in ue %}
+  <table>
+    <thead>
+    <tr>
+        <th colspan="2"><span style="margin-left:40px;"">UE</span></th>
+        <th>Professeur</th>
+        <th>Coefficient</th>
+        <th>Average</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="4"> {{ unite.nom }} </td>
+        <td>Activité Scientifique</td>
+        <td>Moyenne d'unité</td>
+        <td>Moyenne d'unité</td>
+        <td>17</td>
+    </tr>
+    <tr>
+        <td>Education Artistique</td>
+        <td>Moyenne d'unité</td>
+        <td>Moyenne d'unité</td>
+        <td>18</td>
+    </tr>
+    <tr>
+        <td>Education Physique</td>
+        <td>Moyenne d'unité</td>
+        <td>Moyenne d'unité</td>
+        <td>8</td>
+    </tr>
+    <tr>
+        <td>Histoire Géographie</td>
+        <td>Moyenne d'unité</td>
+        <td>Moyenne d'unité</td>
+        <td>9.83333333333333</td>
+    </tr>
+    <tr>
+        <td colspan="3">Total</td>
+        <td class="total">8.75</td>
+    </tr>
+    </tbody>
+  </table>
+{% enfor %}
+<table>
+  <thead>
+  <tr>
+      <th colspan="5">Controls Continues</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>First control</td>
+      <td>Moyenne Note</td>
+      <td>7</td>
+      <td>Student</td>
+       
+  </tr>
+  <tr>
+      <td>Second control</td>
+      <td>Moyenne Note</td>
+      <td>5.5</td>
+      <td>Student</td>
+       
+  </tr>
+  <tr><td>Third control</td>
+      <td>Moyenne Note</td>
+      <td>-</td>
+      <td>Student</td>
+       
+  </tr>
+  <tr>
+      <td>Fourth control</td>
+      <td>Moyenne Note</td>
+      <td>-</td>
+      <td>Student</td>
+       
+  </tr>
+  </tbody>
+</table>
 {% endblock %}

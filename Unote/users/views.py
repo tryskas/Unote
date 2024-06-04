@@ -3,27 +3,33 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Subject, Enrollment, Grade
+from .models import Matiere, Note, User, UE
 from .forms import GradeForm
+from django.shortcuts import render, redirect
 
-class SubjectListView(ListView):
-    model = Subject
-    template_name = 'notes/subject_list.html'
+def SubjectListView(request):
+    matiere = Matiere.objects.all()
+    note = Note.objects.all()
+    user = User.objects.all()
+    ue = UE.objects.all()
+    context = {'user': user, 'matiere':matiere,'note':note,'ue':ue}
+    #template_name = 'notes/subject_list.html'
     context_object_name = 'subject_list'
+    return render(request,'notes/subject_list.html',context)
 
 class SubjectDetailView(DetailView):
-    model = Subject
+    model = Matiere
     template_name = 'notes/subject_detail.html'
-    context_object_name = 'subject'
+    context_object_name = 'matiere'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        subject = self.get_object()
-        context['enrollments'] = Enrollment.objects.filter(subject=subject)
+        matiere = self.get_object()
+        context['enrollments'] = Enrollment.objects.filter(matiere=matiere)
         return context
 
 class GradeCreateView(CreateView):
-    model = Grade
+    model = Note
     form_class = GradeForm
     template_name = 'notes/add_grade.html'
 
@@ -36,7 +42,7 @@ class GradeCreateView(CreateView):
         return reverse_lazy('subject_detail', kwargs={'pk': enrollment.subject.id})
 
 class GradeUpdateView(UpdateView):
-    model = Grade
+    model = Note
     form_class = GradeForm
     template_name = 'notes/edit_grade.html'
 
