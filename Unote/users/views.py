@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, FormView
-from django.contrib.auth.views import (LoginView, LogoutView,
+from django.contrib.auth.views import (TemplateView,LoginView, LogoutView,
                                        PasswordChangeView,
                                        PasswordChangeDoneView,
                                        PasswordResetView,
@@ -67,6 +67,8 @@ class ProfilView(FormView):
     form_class = UserProfilForm
     success_url = reverse_lazy('main:home')
 
+
+
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -88,3 +90,7 @@ class ProfilView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+    
+    
+class AttendanceView(TemplateView):
+    template_name = "attendance/attendance_teacher.html"

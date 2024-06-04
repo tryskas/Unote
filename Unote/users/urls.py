@@ -21,4 +21,6 @@ urlpatterns = [
          name='password_reset_complete'),
     path("register/", views.UserCreationView.as_view(), name="register"),
     path('profil/', views.ProfilView.as_view(), name='profil'),
+    path('attendance_teacher/',views.AttendanceView.as_view(), name="attendance_teacher"),
+
 ]
