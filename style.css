@@ -6,14 +6,17 @@ body {
     flex-direction: column;
     height: 100vh;
     background-size: 100%;
-    background-color: rgba(235, 239, 240, 0.685);
+    /*background: linear-gradient(to bottom right, rgb(0, 204, 255), rgb(32, 199, 221), rgb(0, 255, 255));"*/
+    background-color: rgb(253, 245, 245);
     
     
     
 }
 
 header {
-    background-color: #5499B6;
+    /*background-color: #5499B6;*/
+    /*background-color: #0056b3;*/
+    background-color: rgb(179, 36, 1);
     color: white;
     padding: 1px;
     text-align: center;
@@ -34,7 +37,7 @@ main {
 .colonne-gauche {
     width: 40%;
 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .colonne-milieu {
@@ -55,14 +58,15 @@ main {
 }
 
 .emploi-du-temps div {
-    background-color: #BDC3C7;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 5px;
     text-align: center;
 }
 
 .boite-info {
-    background-color: #05b6fcc4;
+    /*background-color: #90d0db;*/
+    background-color: rgb(255, 255, 255);
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
