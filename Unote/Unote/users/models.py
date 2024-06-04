@@ -14,71 +14,75 @@ class CustomUser(AbstractUser):
 from django.db import models
 
 class UE(models.Model):
-    nom = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.nom
+        return self.name
     
-class Matiere(models.Model):
-    nom = models.CharField(max_length=255)
+class Subject(models.Model):
+    name = models.CharField(max_length=255)
     coeff = models.IntegerField()
-    ues = models.ManyToManyField(UE, related_name='matieres')
+    ues = models.ManyToManyField(UE, related_name='Subjects')
 
     def __str__(self):
-        return self.nom
+        return self.name
 
-class Groupe(models.Model):
+class Group(models.Model):
     type = models.CharField(max_length=255)
-    nom = models.CharField(max_length=255)
-    ues = models.ManyToManyField(UE, related_name='groupes')
+    name = models.CharField(max_length=255)
+    ues = models.ManyToManyField(UE, related_name='groups')
+    users = models.ManyToManyField(CustomUser, related_name='groups')
 
     def __str__(self):
-        return self.nom
+        return self.name
 
-class Cours(models.Model):
-    nom = models.CharField(max_length=255)
+class Lesson(models.Model):
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.nom
+        return self.name
 
 class Session(models.Model):
-    heure_debut = models.DateTimeField()
-    heure_fin = models.DateTimeField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
     exam = models.BooleanField()
+    date = models.DateTimeField()
+    is_called_done = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Session du {self.heure_debut} au {self.heure_fin}"
 
-class Salle(models.Model):
-    nom = models.CharField(max_length=255)
+class Room(models.Model):
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.nom
+        return self.name
 
 class Note(models.Model):
     note = models.FloatField()
     coeff = models.IntegerField()
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
+    Subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
 class Message(models.Model):
     objet = models.CharField(max_length=255)
     texte = models.TextField()
     date = models.DateTimeField()
-    lu = models.BooleanField(default=False)
-    favori = models.BooleanField(default=False)
+    read = models.BooleanField(default=False)
+    favorite = models.BooleanField(default=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 class Presence(models.Model):
     PRESENT = 'P'
     ABSENT = 'A'
-    RETARD = 'R'
+    DELAY = 'D'
     STATUS_CHOICES = [
         (PRESENT, 'Présent'),
         (ABSENT, 'Absent'),
-        (RETARD, 'En retard'),
+        (DELAY, 'DELAY'),
     ]
+
     presence = models.CharField(max_length=1, choices=STATUS_CHOICES)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    salle = models.ForeignKey(Salle, on_delete=models.CASCADE)
+    Room = models.ForeignKey(Room, on_delete=models.CASCADE)
