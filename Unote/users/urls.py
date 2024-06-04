@@ -21,4 +21,8 @@ urlpatterns = [
          name='password_reset_complete'),
     path("register/", views.UserCreationView.as_view(), name="register"),
     path('profil/', views.ProfilView.as_view(), name='profil'),
+    path('', CourseListView.as_view(), name='course_list'),
+    path('course/<int:pk>/', CourseDetailView.as_view(), name='course_detail'),
+    path('enrollment/<int:enrollment_id>/add_grade/', GradeCreateView.as_view(), name='add_grade'),
+    path('grade/<int:pk>/edit/', GradeUpdateView.as_view(), name='edit_grade'),
 ]
