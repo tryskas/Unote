@@ -1,0 +1,33 @@
+<!doctype html>
+{% load static %}
+<html lang="fr">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ensisingerie</title>
+        {% block styles %}
+            <link rel="stylesheet" href="{% static 'style.css' %}"/>
+            <link rel="stylesheet" href="{% static 'users/css/style.css' %}"/>
+            <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
+        {% endblock %}
+    </head>
+
+    <body>
+        <section id="main-content">
+            {% block content %} {% endblock %}
+        </section>
+
+        <footer>
+            <p>Site web ENSISA groupe Antropius/Ben
+                Charnia/Carbon/Jabri/Ouidir/Oumaloul/Routier</p>
+        </footer>
+
+        {% block js %}
+            <!-- Script de base -->
+            <script type="text/javascript"
+                    src="{% static 'script.js' %}"></script>
+            <script type="text/javascript"
+                    src="{% static 'users/js/script.js' %}"></script>
+        {% endblock %}
+    </body>
+</html>
