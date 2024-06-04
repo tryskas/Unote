@@ -3,22 +3,25 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Matiere, Note, User, UE
+from .models import Subject, Note, CustomUser, UE
 from .forms import GradeForm
 from django.shortcuts import render, redirect
 
-def SubjectListView(request):
-    matiere = Matiere.objects.all()
-    note = Note.objects.all()
-    user = User.objects.all()
+def subject_list_view(request):
+    user = request.user
     ue = UE.objects.all()
-    context = {'user': user, 'matiere':matiere,'note':note,'ue':ue}
+    subjects = Subject.objects.all()
+    notes = Note.objects.all()
+    
+    
+    context = {'user': user, 'subjects':subjects,'notes':notes,'ue':ue}
     #template_name = 'notes/subject_list.html'
     context_object_name = 'subject_list'
     return render(request,'notes/subject_list.html',context)
 
+
 class SubjectDetailView(DetailView):
-    model = Matiere
+    model = Subject
     template_name = 'notes/subject_detail.html'
     context_object_name = 'matiere'
 

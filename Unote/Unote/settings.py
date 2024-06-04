@@ -158,3 +158,5 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # Use this line for manifest-based cache busting.
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+
+AUTH_USER_MODEL = 'users.CustomUser'

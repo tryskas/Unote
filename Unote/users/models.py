@@ -26,31 +26,32 @@ class GradeForm(ModelForm):
         fields = ['note']
 '''
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class Matiere(models.Model):
-    nom = models.CharField(max_length=255)
-    coeff = models.IntegerField()
+class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('student', 'Étudiant'),
+        ('teacher', 'Professeur'),
+        ('admin', 'Administrateur'),
+    )
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='student')
 
-    def __str__(self):
-        return self.nom
 
 class UE(models.Model):
-    nom = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.nom
+        return self.name
 
-class User(models.Model):
-    identifiant = models.CharField(max_length=255)
-    nom = models.CharField(max_length=255)
-    prenom = models.CharField(max_length=255)
-    mot_de_passe = models.CharField(max_length=255)
-
+class Subject(models.Model):
+    name = models.CharField(max_length=255)
+    coeff = models.IntegerField()
+    ues = models.ManyToManyField(UE, related_name='subjects')
     def __str__(self):
-        return self.identifiant
+        return self.name
 
 class Note(models.Model):
     note = models.FloatField()
     coeff = models.IntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)

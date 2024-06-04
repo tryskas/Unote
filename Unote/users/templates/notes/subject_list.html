@@ -4,17 +4,17 @@
 <table>
   <thead>
   <tr>
-      <th colspan="2">Information sur l'étudiant</th>
+      <th colspan="2">Informations sur l'étudiant</th>
   </tr>
   </thead>
   <tbody>
   <tr>
       <td>Nom Prénom</td>
-      <td>{{ user.nom }} {{ user.prenom }} </td>
+      <td>{{ user.last_name }} {{ user.first_name }} </td>
   </tr>
   <tr>
       <td>Numéro étudiant</td>
-      <td> {{ user.identifiant }} </td>
+      <td> {{ user.username }} </td>
   </tr>
   <tr>
     <td>Classe</td>
@@ -23,7 +23,7 @@
   </tbody>
 </table>
 
-{% for unite in ue %}
+{% for unite in ues %}
   <table>
     <thead>
     <tr>
@@ -33,10 +33,11 @@
         <th>Average</th>
     </tr>
     </thead>
+    {% for mat in unite.subjects %}
     <tbody>
     <tr>
-        <td rowspan="4"> {{ unite.nom }} </td>
-        <td>Activité Scientifique</td>
+        <td rowspan="4"> {{ unite.name }} </td>
+        <td> {{ mat.name }} </td>
         <td>Moyenne d'unité</td>
         <td>Moyenne d'unité</td>
         <td>17</td>
@@ -59,13 +60,14 @@
         <td>Moyenne d'unité</td>
         <td>9.83333333333333</td>
     </tr>
+    {% endfor %}
     <tr>
-        <td colspan="3">Total</td>
-        <td class="total">8.75</td>
+      <td colspan="3">Total</td>
+      <td class="total">8.75</td>
     </tr>
-    </tbody>
+  </tbody>
   </table>
-{% enfor %}
+{% endfor %}
 <table>
   <thead>
   <tr>
