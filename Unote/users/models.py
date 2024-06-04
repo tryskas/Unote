@@ -31,7 +31,7 @@ class Group(models.Model):
     type = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     ues = models.ManyToManyField(UE, related_name='groups')
-    users = models.ManyToManyField(CustomUser, related_name='groups')
+    users = models.ManyToManyField(CustomUser, related_name='users_groups')
 
     def __str__(self):
         return self.name
