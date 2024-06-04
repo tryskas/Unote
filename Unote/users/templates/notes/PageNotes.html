@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Report Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            width: 50px;
+            background-color: #0044cc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100vh;
+        }
+        .sidebar-button {
+            background-color: #ffffff;  
+            color: #0044cc; 
+            padding: 10px 20px;
+            margin: 10px 0;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 200px; 
+            box-sizing: border-box; 
+            border: 2px solid #0033a0 ;
+        }
+        
+        .sidebar-button:hover {
+            background-color: #0033a0; 
+            color: #ffffff; 
+        }
+        
+        .sidebar-item {
+            margin: 15px 0;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="main-content">
+    <div class="container">
+        <div class="sidebar">
+            <a href="home.html" class="sidebar-button">Home</a>
+            <a href="messagerie.html" class="sidebar-button">Messagerie</a>
+            <a href="mon-compte.html" class="sidebar-button">Mon Compte</a>
+        </div>
+        <aside class="sidebar">
+            <div class="sidebar-item"><i class="icon-home"></i></div>
+            <div class="sidebar-item"><i class="icon-work"></i></div>
+            <div class="sidebar-item"><i class="icon-absence"></i></div>
+            <div class="sidebar-item"><i class="icon-exam"></i></div>
+            <div class="sidebar-item"><i class="icon-notes"></i></div>
+        </aside>
+        <div class="main-content">
+            <h1>Université de Haute-Alsace</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Information sur l'étudiant</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Classe</td>
+                    <td>1A-IR</td>
+                </tr>
+                <tr>
+                    <td>Nombre d'étudiants</td>
+                    <td>50</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="3">Subjects</th>
+                    <th>Average</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td rowspan="4">Probabilités et Stochastiques</td>
+                    <td>Activité Scientifique</td>
+                    <td>Moyenne d'unité</td>
+                    <td>17</td>
+                </tr>
+                <tr>
+                    <td>Education Artistique</td>
+                    <td>Moyenne d'unité</td>
+                    <td>18</td>
+                </tr>
+                <tr>
+                    <td>Education Physique</td>
+                    <td>Moyenne d'unité</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>Histoire Géographie</td>
+                    <td>Moyenne d'unité</td>
+                    <td>9.83333333333333</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td class="total">8.75</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="5">Controls Continues</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>First control</td>
+                    <td>Moyenne Note</td>
+                    <td>7</td>
+                    <td>Student</td>
+                    <td>999</td>
+                </tr>
+                <tr>
+                    <td>Second control</td>
+                    <td>Moyenne Note</td>
+                    <td>5.5</td>
+                    <td>Student</td>
+                    <td>999</td>
+                </tr>
+                <tr><td>Third control</td>
+                    <td>Moyenne Note</td>
+                    <td>-</td>
+                    <td>Student</td>
+                    <td>999</td>
+                </tr>
+                <tr>
+                    <td>Fourth control</td>
+                    <td>Moyenne Note</td>
+                    <td>-</td>
+                    <td>Student</td>
+                    <td>999</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
