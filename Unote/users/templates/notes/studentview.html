@@ -35,20 +35,23 @@
     </thead>
     <tbody>
     <td rowspan="50"> {{ unite.name }} </td>
+  
+    
     {% for mat in unite.Subjects.all %}
     <tr>
         <td> {{ mat.name }} </td>
         <td>Moyenne d'unité</td>
         <td>{{ mat.coeff }}</td>
-        <td> {{ mat.name }} </td>
+        <td>{{ subj_average.0 }}</td>
     </tr>
     {% endfor %}
     <tr>
       <td colspan="3">Total</td>
-      <td class="total"></td>
+      <td class="total">{{ ues_average.1 }}</td>
     </tr>
   </tbody>
   </table>
+
 {% endfor %}
 <table>
   <thead>

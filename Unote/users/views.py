@@ -17,12 +17,26 @@ from .models import Subject, Grade, UE, Group
 
 def studentview(request):
     user = request.user
-    ue = UE.objects.all()
-    subjects = Subject.objects.all()
-    grades = Grade.objects.all()
     user_promo= Group.objects.filter(type="promo",users=user).first()
-    
-    context = {'user': user, 'subjects':subjects,'grades':grades,'ue':ue, 'user_promo':user_promo}
+    ues_average=[]
+    subj_average=[]
+    for ue in user_promo.ues.all() :
+        ave = 0.0
+        sum=0
+        for s in ue.Subjects.all():
+            ave_s=0.0
+            sum_coeff_s=0
+            for g in Grade.objects.filter(Subject=s,user=user):
+                ave_s+=g.grade
+                sum_coeff_s+=g.coeff
+            ave_s/=sum_coeff_s
+            ave+=ave_s*s.coeff
+            sum+=s.coeff
+            subj_average.append(ave_s)
+        ave/=sum
+        ues_average.append(ave)
+
+    context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average}
 
     return render(request,'notes/studentview.html',context)
 
