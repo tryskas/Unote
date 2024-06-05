@@ -143,10 +143,13 @@ def class_call(request, id):
                 user=student,
                 session=session,
                 Room=session.room 
+
             )
             attendance.presence = attendance_status
             attendance.save()
-        
+            session.is_called_done = True
+            session.save()
+            return HttpResponseRedirect("/attendance_teacher/")
         
         
     
