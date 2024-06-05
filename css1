@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 130px;
+    background-color: #0044cc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding-top: 10px;
+}
+
+.sidebar-button {
+    background-color: #ffffff; 
+    color: #0044cc; 
+    padding: 10px 20px;
+    margin: 10px 0;
+    text-align: left;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 120px; 
+    box-sizing: border-box; 
+    border: 2px solid #0033a0 ;
+}
+
+.sidebar-button:hover {
+    background-color: #0033a0; 
+    color: #ffffff; 
+}
+
+.sidebar-item {
+    margin: 15px 0;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+ul li::marker {
+    color: red; 
+}
+
+header h1 {
+    color: #333;
+}
+
+.exam-preparation {
+    background-color: #0056e0;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    max-width: 300px; /* Adjust the max-width to make it smaller */
+    align-self: flex-end; /* Align the box to the right */
+}
+
+.exam-title {
+    font-size: 16px; /* Adjust the font-size to make it smaller */
+    font-weight: bold;
+}
+
+.content-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.content div {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.content p {
+    color: #ff6b6b;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.schedule {
+    width: 300px;
+    margin-left: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar th, .calendar td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.calendar th {
+    background-color: #e0e7ff;
+    color: #333;
+    font-weight: bold;
+}
+
+.calendar td {
+    background-color: #f9f9f9;
+}
+
+a {
+    text-decoration: none;
+}
