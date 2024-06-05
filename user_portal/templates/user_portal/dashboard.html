@@ -1,0 +1,10 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h2>Bonjour {{ user.first_name|default:'invité' }} !</h2>
+    <p>Ton rôle: {{ user.user_type }}</p>
+    <a href="{% url 'users:password_change' %}">Modifier mot de passe</a>
+</div>
+{% endblock %}
