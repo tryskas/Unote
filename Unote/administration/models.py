@@ -58,10 +58,10 @@ class Grade(models.Model):
     grade = models.FloatField()
     coeff = models.IntegerField()
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    Subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
 class Message(models.Model):
-    objet = models.CharField(max_length=255)
+    object = models.CharField(max_length=255)
     texte = models.TextField()
     date = models.DateTimeField()
     read = models.BooleanField(default=False)
@@ -81,4 +81,4 @@ class Presence(models.Model):
     presence = models.CharField(max_length=1, choices=STATUS_CHOICES)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)

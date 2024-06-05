@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import CustomUser, Grade, Room, Subject, UE, Group, Lesson, Message, Session, Presence
+from .models import CustomUser
+from administration.models import Grade, Room, Subject, UE, Group, Lesson, Message, Session, Presence
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):

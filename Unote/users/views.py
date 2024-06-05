@@ -12,7 +12,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfileForm
 from django.shortcuts import render, redirect
-from .models import Subject, Grade, UE, Group
+from administration.models import Subject, Grade, UE, Group
 
 @login_required
 def studentview(request):
