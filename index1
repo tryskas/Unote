@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Emploi du Temps</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Université d'haute Alsace</h1>
+    </header>
+    <main>
+        <!-- Colonne gauche : Emploi du temps -->
+        <div class="colonne-gauche">
+            <div class="schedule-container">
+                <div class="schedule">
+                    <div class="header">
+                        <div class="time-slot"></div>
+                        <div class="day">Lundi 03/06/2024</div>
+                        <div class="day">Mardi 04/06/2024</div>
+                        <div class="day">Mercredi 05/06/2024</div>
+                        <div class="day">Jeudi 06/06/2024</div>
+                        <div class="day">Vendredi 07/06/2024</div>
+                        <div class="day">Samedi 08/06/2024</div>
+                    </div>
+                    <div class="body">
+                        <!-- Répéter les créneaux horaires de 7h à 20h -->
+                        <div class="time-slot">07:00 - 08:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+        
+                        <div class="time-slot">08:00 - 09:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+        
+                        <div class="time-slot">09:00 - 10:00</div>
+                        <div class="event">Intro Cyber Sécurité - 1 CM<br>ILL_J Petit Amphi<br>1A info<br>DION Joel</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+        
+                        <div class="time-slot">10:00 - 11:00</div>
+                        <div class="event">Dével durable I - 1 CM<br>ILL_J Grand Amphi<br>1A auto<br>1A info<br>FONDENET Frédéric</div>
+                        <div class="event"></div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+        
+                        <div class="time-slot">11:00 - 12:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+        
+                        <div class="time-slot">12:00 - 13:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+        
+                        <div class="time-slot">13:00 - 14:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+        
+                        <div class="time-slot">14:00 - 15:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event greyed-out crossed-out">Pas de cours</div>
+        
+                        <div class="time-slot">15:00 - 16:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event greyed-out crossed-out">Pas de cours</div>
+        
+                        <div class="time-slot">16:00 - 17:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event projets">Projets IR 1A TP<br>ILL_J_E20a<br>ILL_J_E21<br>ILL_J_E22<br>ILL_J_E24<br>1A info</div>
+                        <div class="event greyed-out crossed-out">Pas de cours</div>
+        
+                        <div class="time-slot">17:00 - 18:00</div>
+                        <div class="event physique">Physique</div>
+                        <div class="event"></div>
+                        <div class="event math">Mathématiques</div>
+                        <div class="event"></div>
+                        <div class="event anglais">Anglais</div>
+                        <div class="event greyed-out crossed-out">Pas de cours</div>
+        
+                        <div class="time-slot">18:00 - 19:00</div>
+                        <div class="event"></div>
+                        <div class="event chimie">Chimie</div>
+                        <div class="event math">Mathématiques</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event greyed-out crossed-out">Pas de cours</div>
+        
+                        <div class="time-slot">19:00 - 20:00</div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                        <div class="event"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="week-switch">
+                <button class="prev-week">Semaine précédente</button>
+                <button class="next-week">Semaine suivante</button>
+            </div>
+        </div>
+
+        <!-- Colonne du milieu : Notes et Absences -->
+        <div class="colonne-milieu">
+            <div class="boite-info">
+                <h3>Notes</h3>
+                <p>...</p>
+            </div>
+            <div class="boite-info">
+                <h3>Absences</h3>
+                <p>...</p>
+            </div>
+        </div>
+
+        <!-- Colonne droite : Messagerie et Événements importants -->
+        <div class="colonne-droite">
+            <div class="boite-info">
+                <h3>Événements importants</h3>
+                <p>...</p>
+            </div>
+            <div class="boite-info">
+                <h3>Messagerie</h3>
+                <p>...</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
