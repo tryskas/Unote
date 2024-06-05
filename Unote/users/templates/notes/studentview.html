@@ -18,12 +18,12 @@
   </tr>
   <tr>
     <td>Classe</td>
-    <td>1Ax</td>
+    <td>{{ user_promo }}</td>
 </tr>
   </tbody>
 </table>
 
-{% for unite in ues %}
+{% for unite in user_promo.ues.all %}
   <table>
     <thead>
     <tr>
@@ -34,18 +34,18 @@
     </tr>
     </thead>
     <tbody>
-    <td rowspan="5"> {{ unite.name }} </td>
-    {% for mat in unite.subjects %}
+    <td rowspan="50"> {{ unite.name }} </td>
+    {% for mat in unite.Subjects.all %}
     <tr>
         <td> {{ mat.name }} </td>
         <td>Moyenne d'unité</td>
-        <td>Moyenne d'unité</td>
+        <td>{{ mat.coeff }}</td>
         <td> {{ mat.name }} </td>
     </tr>
     {% endfor %}
     <tr>
       <td colspan="3">Total</td>
-      <td class="total">8.75</td>
+      <td class="total"></td>
     </tr>
   </tbody>
   </table>

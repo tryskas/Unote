@@ -12,7 +12,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfilForm
 from django.shortcuts import render, redirect
-from .models import Subject, Grade, UE
+from .models import Subject, Grade, UE, Group
 
 
 def studentview(request):
@@ -20,9 +20,9 @@ def studentview(request):
     ue = UE.objects.all()
     subjects = Subject.objects.all()
     grades = Grade.objects.all()
+    user_promo= Group.objects.filter(type="promo",users=user).first()
     
-    
-    context = {'user': user, 'subjects':subjects,'grades':grades,'ue':ue}
+    context = {'user': user, 'subjects':subjects,'grades':grades,'ue':ue, 'user_promo':user_promo}
 
     return render(request,'notes/studentview.html',context)
 
