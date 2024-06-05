@@ -18,6 +18,7 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone
 
 from .models import *
 
@@ -119,7 +120,12 @@ def attendance_teacher(request):
     user = request.user
     
     
-    sessions = Session.objects.all()
+    sessions = Session.objects.order_by('-date')
+    
+    maintenant = timezone.now()
+
+
+    sessions = [session for session in sessions if session.date <= maintenant]
   
     
     context = {'user': user, 'sessions':sessions}
@@ -146,7 +152,7 @@ def class_call(request, id):
     lesson= session.lesson
     group=lesson.group
 
-    student_list = group.users.all()
+    student_list = group.users.order_by('last_name')
     
     if request.method == 'POST':
         for student in student_list:
