@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h2>Erreur 403</h2>
+</div>
+<div>
+    <p>Accès interdit</p>
+    <img src="{% static 'images/403.jpg' %}" alt="Error 403" width="100%"/>
+</div>
+{% endblock %}
