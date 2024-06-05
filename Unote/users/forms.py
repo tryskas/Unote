@@ -1,17 +1,24 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from .models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields + ("email",)
+        model = CustomUser
+        fields = UserCreationForm.Meta.fields + ("email", 'user_type',)
+        labels = {
+            'user_type': 'Type d\'utilisateur',
+        }
 
 
 class UserProfilForm(ModelForm):
     class Meta:
-        model = User
-        fields = ["username", "first_name", "last_name", "email"]
+        model = CustomUser
+        fields = ["username", "first_name", "last_name", "email", "user_type"]
+        labels = {
+            'user_type': 'Type d\'utilisateur',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
