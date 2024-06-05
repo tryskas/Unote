@@ -27,7 +27,7 @@ def studentview(request):
             ave_s=0.0
             sum_coeff_s=0
             for g in Grade.objects.filter(Subject=s,user=user):
-                ave_s+=g.grade
+                ave_s+=g.grade*g.coeff
                 sum_coeff_s+=g.coeff
             ave_s/=sum_coeff_s
             ave+=ave_s*s.coeff
