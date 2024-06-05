@@ -21,6 +21,7 @@ class UserProfileForm(ModelForm):
         fields = ["username", "first_name", "last_name", "email", "user_type"]
         labels = {
             'username': 'Identifiant',
+
             'user_type': 'Type d\'utilisateur',
         }
 
