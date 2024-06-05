@@ -92,3 +92,4 @@ class Presence(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     Room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    justified = models.BooleanField(default=False)

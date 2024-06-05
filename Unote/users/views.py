@@ -130,7 +130,7 @@ def attendance_student(request):
     user = request.user
     
     absences = Presence.objects.filter(user=user,presence="Absent")
-    lates = Presence.objects.filter(user=user,presence="Late")
+    lates = Presence.objects.filter(user=user,presence="Late", justified = False)
     
   
     
