@@ -10,9 +10,6 @@ class CustomUser(AbstractUser):
     )
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='student')
 
-
-from django.db import models
-
 class UE(models.Model):
     name = models.CharField(max_length=255)
 

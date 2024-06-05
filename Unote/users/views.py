@@ -11,6 +11,20 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfilForm
+from django.shortcuts import render, redirect
+from .models import Subject, Grade, UE
+
+
+def studentview(request):
+    user = request.user
+    ue = UE.objects.all()
+    subjects = Subject.objects.all()
+    grades = Grade.objects.all()
+    
+    
+    context = {'user': user, 'subjects':subjects,'grades':grades,'ue':ue}
+
+    return render(request,'notes/studentview.html',context)
 
 
 class UserCreationView(CreateView):
