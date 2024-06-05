@@ -12,7 +12,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfilForm
 from django.shortcuts import render, redirect
-from .models import Subject, Grade, UE, Group
+from .models import Subject, Grade, UE, Group,Lesson
 
 
 def studentview(request):
@@ -21,25 +21,32 @@ def studentview(request):
     ues_average=[]
     subj_average = [[] for _ in range(user_promo.ues.count())]
     i=0
+    teachers= [[] for _ in range(user_promo.ues.count())]
     for ue in user_promo.ues.all() :
         ave = 0.0
         sum=0
         for s in ue.Subjects.all():
             ave_s=0.0
             sum_coeff_s=0
+            lesson = Lesson.objects.filter(subject=s).first()
+            if lesson:
+                teacher = lesson.teacher
+                teachers[i].append(teacher.last_name)
+            else : 
+                teachers[i].append("None")
             for g in Grade.objects.filter(Subject=s,user=user):
                 ave_s+=g.grade*g.coeff
                 sum_coeff_s+=g.coeff
             ave_s/=sum_coeff_s
             ave+=ave_s*s.coeff
             sum+=s.coeff
-            subj_average[i].append(ave_s)
+            subj_average[i].append(round(ave_s,2))
         i+=1
         ave/=sum
-        ues_average.append(ave)
+        ues_average.append(round(ave,2))
         
 
-    context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average}
+    context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average, 'teachers':teachers}
 
     return render(request,'notes/studentview.html',context)
 

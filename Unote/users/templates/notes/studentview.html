@@ -42,12 +42,14 @@
    
     {% for mat in unite.Subjects.all %}
     {% with i=forloop.counter %}
+    {% with k=forloop.counter %}
     <tr>
         <td> {{ mat.name }} </td>
-        <td>Moyenne d'unité</td>
+        <td> {{ teachers|slice:j|last|slice:k|last }}</td>
         <td>{{ mat.coeff }}</td>
           <td>{{ subj_average|slice:j|last|slice:i|last }}</td>
     </tr>
+    {% endwith %}
     {% endwith %}
     {% endfor %} 
     
@@ -65,37 +67,9 @@
 <table>
   <thead>
   <tr>
-      <th colspan="5">Controls Continues</th>
+      <th colspan="5">Observations</th>
   </tr>
   </thead>
-  <tbody>
-  <tr>
-      <td>First control</td>
-      <td>Moyenne Note</td>
-      <td>7</td>
-      <td>Student</td>
-       
-  </tr>
-  <tr>
-      <td>Second control</td>
-      <td>Moyenne Note</td>
-      <td>5.5</td>
-      <td>Student</td>
-       
-  </tr>
-  <tr><td>Third control</td>
-      <td>Moyenne Note</td>
-      <td>-</td>
-      <td>Student</td>
-       
-  </tr>
-  <tr>
-      <td>Fourth control</td>
-      <td>Moyenne Note</td>
-      <td>-</td>
-      <td>Student</td>
-       
-  </tr>
-  </tbody>
 </table>
+text
 {% endblock %}
