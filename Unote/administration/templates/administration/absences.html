@@ -1,0 +1,21 @@
+{% load static %}
+
+<div id="room-nav">
+    <h2>Absences</h2>
+</div>
+
+<div id="user_management_sections">
+    <div id="invite-user">
+        <form id="invite-user-form">
+            <input type="text" id="invite-user-input"
+                   placeholder="Rechercher par nom">
+            <input type="submit" value="Rechercher"
+                   id="invite-user-submit"/>
+        </form>
+        <div id="invite-user-results"></div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'rooms/js/user_management_script.js' %}"
+        data-room-id="{{ room.id }}"></script>
