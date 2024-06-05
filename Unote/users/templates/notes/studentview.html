@@ -25,6 +25,8 @@
 
 {% for unite in user_promo.ues.all %}
 {% with j=forloop.counter %}
+{% with k=forloop.counter %}
+
   <table>
     <thead>
     <tr>
@@ -37,24 +39,27 @@
     <tbody>
     <td rowspan="50"> {{ unite.name }} </td>
   
-    
+   
     {% for mat in unite.Subjects.all %}
     {% with i=forloop.counter %}
     <tr>
         <td> {{ mat.name }} </td>
         <td>Moyenne d'unité</td>
-        <td>{{ mat.coeff }} </td>
-        <td>{{ subj_average|slice:i|last }}</td>
+        <td>{{ mat.coeff }}</td>
+          <td>{{ subj_average|slice:j|last|slice:i|last }}</td>
     </tr>
     {% endwith %}
-    {% endfor %}
+    {% endfor %} 
     
     <tr>
       <td colspan="3">Total</td>
       <td class="total">{{ ues_average|slice:j|last }}</td>
     </tr>
+    
+   
   </tbody>
   </table>
+  {% endwith %}
   {% endwith %}
 {% endfor %}
 <table>

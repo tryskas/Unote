@@ -19,7 +19,8 @@ def studentview(request):
     user = request.user
     user_promo= Group.objects.filter(type="promo",users=user).first()
     ues_average=[]
-    subj_average=[]
+    subj_average = [[] for _ in range(user_promo.ues.count())]
+    i=0
     for ue in user_promo.ues.all() :
         ave = 0.0
         sum=0
@@ -32,9 +33,11 @@ def studentview(request):
             ave_s/=sum_coeff_s
             ave+=ave_s*s.coeff
             sum+=s.coeff
-            subj_average.append(ave_s)
+            subj_average[i].append(ave_s)
+        i+=1
         ave/=sum
         ues_average.append(ave)
+        
 
     context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average}
 
