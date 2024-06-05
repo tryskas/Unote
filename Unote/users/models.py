@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
-        ('student', 'Étudiant'),
-        ('teacher', 'Professeur'),
+        ('student', 'student'),
+        ('teacher', 'Professor'),
         ('admin', 'Administrateur'),
     )
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='student')
@@ -60,7 +60,7 @@ class Session(models.Model):
     lesson= models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Session du {self.heure_debut} au {self.heure_fin}"
+        return f"Session du {self.start_time} au {self.end_time}"
 
 
 
@@ -83,7 +83,7 @@ class Presence(models.Model):
     ABSENT = 'A'
     DELAY = 'D'
     STATUS_CHOICES = [
-        (PRESENT, 'Présent'),
+        (PRESENT, 'Present'),
         (ABSENT, 'Absent'),
         (DELAY, 'DELAY'),
     ]
