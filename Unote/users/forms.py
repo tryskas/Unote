@@ -6,17 +6,22 @@ from .models import CustomUser
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = UserCreationForm.Meta.fields + ("email", 'user_type',)
+        fields = UserCreationForm.Meta.fields + ("first_name",
+                                                 "last_name", "email",
+                                                 "user_type",)
         labels = {
+            'username': 'Identifiant',
             'user_type': 'Type d\'utilisateur',
         }
 
 
-class UserProfilForm(ModelForm):
+class UserProfileForm(ModelForm):
     class Meta:
         model = CustomUser
         fields = ["username", "first_name", "last_name", "email", "user_type"]
         labels = {
+            'username': 'Identifiant',
+
             'user_type': 'Type d\'utilisateur',
         }
 

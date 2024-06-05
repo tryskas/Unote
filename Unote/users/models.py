@@ -4,13 +4,12 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
-        ('student', 'student'),
-        ('teacher', 'Professor'),
+        ('student', 'Étudiant'),
+        ('teacher', 'Professeur'),
         ('admin', 'Administrateur'),
     )
-    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='student')
-
-from django.db import models
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES,
+                                 default='student')
 
 class UE(models.Model):
     name = models.CharField(max_length=255)

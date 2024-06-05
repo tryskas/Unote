@@ -1,7 +1,7 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-<h2>S'enregistrer</h2>
+<h2>Enregistrer un utilisateur</h2>
 
 <div class="form-holder">
     <div class="form-content">
@@ -9,7 +9,7 @@
             <form method="post">
                 {% csrf_token %}
                 {{form}}
-                <input type="submit" value="S'enregistrer">
+                <input type="submit" value="Enregistrer">
             </form>
         </div>
     </div>

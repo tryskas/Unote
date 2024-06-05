@@ -1,11 +1,16 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
+admin.site.register(CustomUser, CustomUserAdmin)
 from .models import CustomUser, Grade, Room, Subject, UE, Group, Lesson, Message, Session, Presence
 
 @admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'user_type')
-    search_fields = ('username', 'email', 'first_name', 'last_name')
-
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    fieldsets = UserAdmin.fieldsets + (
+        ('Type d\'utilisateur', {'fields': ('user_type',)}),
+    )
+    
 @admin.register(Grade)
 class GradeAdmin(admin.ModelAdmin):
     list_display = ('user', 'Subject', 'grade')

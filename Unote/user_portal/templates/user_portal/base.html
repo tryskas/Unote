@@ -7,7 +7,8 @@
         <title>Unote</title>
         {% block styles %}
             <link rel="stylesheet" href="{% static 'style.css' %}"/>
-            <link rel="stylesheet" href="{% static 'users/css/style.css' %}"/>
+            <link rel="stylesheet"
+                  href="{% static 'user_portal/css/style.css' %}"/>
             <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
         {% endblock %}
     </head>
@@ -81,7 +82,7 @@
             <script type="text/javascript"
                     src="{% static 'script.js' %}"></script>
             <script type="text/javascript"
-                    src="{% static 'users/js/script.js' %}"></script>
+                    src="{% static 'user_portal/js/script.js' %}"></script>
         {% endblock %}
     </body>
 </html>
