@@ -24,4 +24,5 @@ urlpatterns = [
          name='profile'),
     path('attendance_teacher/',views.attendance_teacher, name="attendance_teacher"),
     path('class_call/<int:id>', views.class_call, name='class_call'),
+    path('attendance_student/',views.attendance_student, name="attendance_student"),
 ]

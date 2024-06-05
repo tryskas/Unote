@@ -126,6 +126,18 @@ def attendance_teacher(request):
 
     return render(request,'attendance/attendance_teacher.html',context)
 
+def attendance_student(request):
+    user = request.user
+    
+    absences = Presence.objects.filter(user=user,presence="Absent")
+    lates = Presence.objects.filter(user=user,presence="Late")
+    
+  
+    
+    context = {'user': user,'absences':absences, 'lates':lates}
+
+    return render(request,'attendance/attendance_student.html',context)
+
 def class_call(request, id):
     user = request.user
     
@@ -149,7 +161,7 @@ def class_call(request, id):
             attendance.save()
             session.is_called_done = True
             session.save()
-            return HttpResponseRedirect("/attendance_teacher/")
+        return HttpResponseRedirect("/attendance_teacher/")
         
         
     
