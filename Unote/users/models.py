@@ -10,7 +10,6 @@ class CustomUser(AbstractUser):
     )
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='student')
 
-
 from django.db import models
 
 class UE(models.Model):
@@ -61,8 +60,6 @@ class Session(models.Model):
 
     def __str__(self):
         return f"Session du {self.start_time} au {self.end_time}"
-
-
 
 class Grade(models.Model):
     grade = models.FloatField()
