@@ -12,18 +12,46 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfileForm
 from django.shortcuts import render, redirect
-from .models import Subject, Grade, UE, Group
+from .models import Subject, Grade, UE, Group, Lesson
 
 @login_required
 def studentview(request):
     user = request.user
-    ue = UE.objects.all()
-    subjects = Subject.objects.all()
-    grades = Grade.objects.all()
-    user_promo = Group.objects.filter(type="promo", users=user).first()
-    
-    context = {'user': user, 'subjects': subjects, 'grades': grades, 'ue': ue, 'user_promo': user_promo}
-    return render(request, 'notes/studentview.html', context)
+    user_promo= Group.objects.filter(type="promo",users=user).first()
+    ues_average=[]
+    subj_average=[]
+    teachers=[]
+    i=0
+    if user_promo is not None:
+        subj_average = [[] for _ in range(user_promo.ues.count())]
+        teachers = [[] for _ in range(user_promo.ues.count())]
+        for ue in user_promo.ues.all() :
+            ave = 0.0
+            sum=0
+            for s in ue.Subjects.all():
+                ave_s=0.0
+                sum_coeff_s=0
+                lesson = Lesson.objects.filter(subject=s).first()
+                if lesson:
+                    teacher = lesson.teacher
+                    teachers[i].append(teacher.last_name)
+                else : 
+                    teachers[i].append("-")
+                for g in Grade.objects.filter(subject=s,user=user):
+                    ave_s+=g.grade*g.coeff
+                    sum_coeff_s+=g.coeff
+                ave_s/=sum_coeff_s
+                ave+=ave_s*s.coeff
+                sum+=s.coeff
+                subj_average[i].append(round(ave_s,2))
+            i+=1
+            ave/=sum
+            ues_average.append(round(ave,2))
+        
+
+    context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average, 'teachers':teachers}
+
+    return render(request,'notes/studentview.html',context)
 
 
 class UserCreationView(CreateView):

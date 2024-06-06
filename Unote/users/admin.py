@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import CustomUser, Grade, Room, Subject, UE, Group, Lesson, Message, Session, Presence
+from django import forms
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -26,10 +27,24 @@ class UEAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
+class GroupAdminForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+    # Override the default widget for the users field
+    users = forms.ModelMultipleChoiceField(
+        queryset=CustomUser.objects.all(),
+        widget=admin.widgets.FilteredSelectMultiple("Users", False),
+    )
+
+
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+    form = GroupAdminForm
+
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
