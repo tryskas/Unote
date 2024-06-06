@@ -10,10 +10,20 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetDoneView,
                                        PasswordResetConfirmView,
                                        PasswordResetCompleteView)
-from .forms import (CustomAuthenticationForm, CustomUserCreationForm,
-                    UserProfileForm)
-from django.shortcuts import get_object_or_404
-from .models import CustomUser
+from .forms import CustomUserCreationForm, UserProfileForm
+from django.shortcuts import render, redirect
+from .models import Subject, Grade, UE, Group
+
+@login_required
+def studentview(request):
+    user = request.user
+    ue = UE.objects.all()
+    subjects = Subject.objects.all()
+    grades = Grade.objects.all()
+    user_promo = Group.objects.filter(type="promo", users=user).first()
+    
+    context = {'user': user, 'subjects': subjects, 'grades': grades, 'ue': ue, 'user_promo': user_promo}
+    return render(request, 'notes/studentview.html', context)
 
 
 class UserCreationView(CreateView):
@@ -21,18 +31,22 @@ class UserCreationView(CreateView):
     form_class = CustomUserCreationForm
 
     def get_success_url(self):
-        user_type = self.request.user.user_type
-        if user_type == 'student' or user_type == 'teacher':
+        if (self.object.user_type == 'student' or
+                self.object.user_type == 'teacher'):
             return reverse_lazy('user_portal:dashboard')
-        elif user_type == 'admin':
+        elif self.object.user_type == 'admin':
             return reverse_lazy('administration:dashboard')
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, self.object)
+        return response
+
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
-    authentication_form = CustomAuthenticationForm
 
     def get_success_url(self):
         user = self.request.user
@@ -81,7 +95,7 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 class ProfileView(FormView):
     template_name = "users/profile.html"
     form_class = UserProfileForm
-    success_url = reverse_lazy('administration:dashboard')
+    success_url = reverse_lazy('main:home')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -89,21 +103,17 @@ class ProfileView(FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        user_id = self.kwargs.get('user_id')
-        if user_id:
-            user = get_object_or_404(CustomUser, pk=user_id)
-            kwargs['instance'] = user
-        else:
-            kwargs['instance'] = self.request.user
+        kwargs['instance'] = self.request.user
         return kwargs
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_id = self.kwargs.get('user_id')
-        if user_id:
-            user = get_object_or_404(CustomUser, pk=user_id)
-            context['profile_user'] = user
-        return context
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.request.user
+        initial['username'] = user.username
+        initial['first_name'] = user.first_name
+        initial['last_name'] = user.last_name
+        initial['email'] = user.email
+        return initial
 
     def form_valid(self, form):
         form.save()

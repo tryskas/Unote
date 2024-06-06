@@ -1,10 +1,6 @@
 {% extends "user_portal/base.html" %}
 {% load static %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'user_portal/css/style_dashboard.css' %}"/>
-{% endblock %}
-
 {% block content %}
 <section class="exam-preparation">
     <div class="exam-title">Événements</div>
@@ -83,15 +79,15 @@
         </ul>
     </div>
     <div class="notes">
-        <a href="{% url 'user_portal:notes' %}">
+        <a href="grades.html">
             <h2>Dernières notes</h2>
         </a>
-        <ul>
-            <li>note 1</li>
-            <li>note 2</li>
-            <li>note 3</li>
+            <ul>
+                <li>note 1</li>
+                <li>note 2</li>
+                <li>note 3</li>
 
-        </ul>
+            </ul>
     
 
     </div>

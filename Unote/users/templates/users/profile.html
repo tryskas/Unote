@@ -1,7 +1,7 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-<h2>Profil de {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+<h2>Votre profil</h2>
 
 <div class="form-holder">
     <div class="form-content">
@@ -14,4 +14,6 @@
         </div>
     </div>
 </div>
+
+<a href="{% url 'users:password_change' %}">Modifier mot de passe</a>
 {% endblock %}

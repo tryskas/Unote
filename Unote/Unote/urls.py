@@ -21,8 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("main.urls")),
     path("", include("users.urls")),
-    path("portal/", include("user_portal.urls")),
-    path("administration/", include("administration.urls")),
+    path("portal", include("user_portal.urls")),
+    path("administration", include("administration.urls")),
 ]
 
 handler400 = 'main.views.error_400'

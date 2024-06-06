@@ -1,12 +1,6 @@
 from django.forms import ModelForm
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
-
-
-class CustomAuthenticationForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].label = "Identifiant"
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -27,6 +21,7 @@ class UserProfileForm(ModelForm):
         fields = ["username", "first_name", "last_name", "email", "user_type"]
         labels = {
             'username': 'Identifiant',
+
             'user_type': 'Type d\'utilisateur',
         }
 
