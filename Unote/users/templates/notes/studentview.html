@@ -41,19 +41,19 @@
     <td rowspan="50"> {{ unite.name }} </td>
   
    
-    {% for mat in unite.Subjects.all %}
+    
+    {% with subjlast=subj_list|slice:j|last %}
+    {% for subj in subjlast %}
     {% with i=forloop.counter %}
-    {% with k=forloop.counter %}
     <tr>
-        <td> {{ mat.name }} </td>
-        <td> {{ teachers|slice:j|last|slice:k|last }}</td>
-        <td>{{ mat.coeff }}</td>
+        <td> {{ subj }} </td>
+        <td> {{ teachers|slice:j|last|slice:i|last }}</td>
+        <td>{{ subj.coeff }}</td>
           <td>{{ subj_average|slice:j|last|slice:i|last }}</td>
     </tr>
     {% endwith %}
+    {% endfor %}
     {% endwith %}
-    {% endfor %} 
-    
     <tr>
       <td colspan="3">Total</td>
       <td class="total">{{ ues_average|slice:j|last }}</td>

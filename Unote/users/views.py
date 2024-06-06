@@ -21,15 +21,23 @@ def studentview(request):
     ues_average=[]
     subj_average=[]
     teachers=[]
+    subj_list =[]
+    
+
     i=0
     if (user.user_type == 'student'):
         if user_promo is not None:
             subj_average = [[] for _ in range(user_promo.ues.count())]
             teachers = [[] for _ in range(user_promo.ues.count())]
+            subj_list = [[] for _ in range(user_promo.ues.count())]
             for ue in user_promo.ues.all() :
                 ave = 0.0
                 sum=0
-                for s in ue.Subjects.all():
+                for subj in ue.Subjects.all():
+                    if (Grade.objects.filter(subject=subj,user=user)):
+                        subj_list[i].append(subj)
+                print(subj_list[0])
+                for s in subj_list[i]:
                     ave_s=0.0
                     sum_coeff_s=0
                     lesson = Lesson.objects.filter(subject=s).first()
@@ -48,7 +56,7 @@ def studentview(request):
                 i+=1
                 ave/=sum
                 ues_average.append(round(ave,2))
-        context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average, 'teachers':teachers}
+        context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average, 'teachers':teachers,'subj_list':subj_list}
     else :
         context = {'user': user}
     return render(request,'notes/studentview.html',context)
@@ -93,19 +101,22 @@ def profview_grades(request):
         group=Group.objects.filter(name=group).first()
         students = group.users.filter(user_type='student').order_by('last_name')
 
-        grades = []
         for student in students:
-            grade = request.POST.get(str(student.id))
-            grades.append(grade)
-
+            grade_value = request.POST.get(str(student.id))
+            if grade_value is not None:
+                grade = Grade.objects.create(
+                    grade=grade_value,
+                    coeff=request.POST.get('coefficient'),
+                    user=student,
+                    subject=Subject.objects.filter(name=request.POST.get('subject')).first()
+                )
+                grade.save()
         context = {
             'user':user,
             'group': group,
-            'students':students,
-            'grades': grades,
         }
 
-        return render(request, 'notes/profviewgrades.html', context)
+        return render(request, 'notes/profview.html', context)
     else:
         return render(request, 'notes/profviewgrades.html')
 
