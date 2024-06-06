@@ -53,6 +53,15 @@ def studentview(request):
 
     return render(request,'notes/studentview.html',context)
 
+@login_required
+def profview(request):
+    user = request.user
+    context = {'user': user}
+
+    return render(request,'notes/profview.html',context)
+
+
+
 
 class UserCreationView(CreateView):
     template_name = 'users/register.html'

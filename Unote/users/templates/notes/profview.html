@@ -1,0 +1,62 @@
+{% extends "notes/base.html" %}
+
+{% block content %}
+<table>
+  <thead>
+  <tr>
+      <th colspan="2">Informations sur le professeur</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>Nom Prénom</td>
+      <td>{{ user.last_name }} {{ user.first_name }} </td>
+  </tr>
+  <tr>
+      <td>Numéro professeur</td>
+      <td> {{ user.username }} </td>
+  </tr>
+  <tr>
+    <td>Classe</td>
+    <td>{{ user.email }}</td>
+</tr>
+  </tbody>
+</table>
+
+
+  <table>
+    <thead>
+    <tr>
+        <th colspan="5">Matière</span></th>
+        <th>Coefficient</th>
+        <th>Moyenne</th>
+    </tr>
+    </thead>
+    <tbody>
+    <td rowspan="50"> Mathématique </td>
+  
+   
+    <tr>
+        <td colspan="4"> TP </td>
+        <td> 6 </td>
+        <td>16,5</td>
+    </tr>
+    
+    <tr>
+      <td colspan="5">Total</td>
+      <td class="total">16,9</td>
+    </tr>
+    
+   
+  </tbody>
+  </table>
+
+<table>
+  <thead>
+  <tr>
+      <th colspan="5">Observations</th>
+  </tr>
+  </thead>
+</table>
+text
+{% endblock %}
