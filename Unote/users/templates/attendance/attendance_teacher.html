@@ -1,0 +1,19 @@
+{% block content %}
+
+<div class="sessionlist">
+    <h3>Appel à faire :</h3>
+    
+    {% for s in sessions %}
+   
+    {% if s.lesson.teacher == user %}
+        {% if not s.is_called_done%}
+            <div >
+            
+            <a  href="/class_call/{{s.id}}" > {{s.lesson.name}} {{s.date}} </a>
+            </div>
+        {% endif %}
+    
+    {% endif %}   
+    {% endfor %}
+</div>
+{% endblock %}
