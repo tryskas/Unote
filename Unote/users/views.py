@@ -56,16 +56,34 @@ def studentview(request):
 @login_required
 def profview(request):
     user = request.user
-    context = {'user': user}
+    lessons = Lesson.objects.filter(teacher=user)
+    subjects = [lesson.subject for lesson in lessons]
+    groups=Group.objects.filter(type="promo")
+    context = {'user': user,'subjects':subjects,'groups':groups}
 
     return render(request,'notes/profview.html',context)
 
 @login_required
 def profview_entergrades(request):
     user = request.user
-    context = {'user': user}
+    if request.method == "POST":
+        subject = request.POST.get('subject')
+        group = request.POST.get('class')
+        coefficient = request.POST.get('coefficient')
+        group=Group.objects.filter(name=group).first()
+        students = []
+        students.extend(group.users.filter(user_type='student'))
+        context = {
+            'user':user,
+            'subject': subject,
+            'group': group,
+            'coefficient': coefficient,
+            'students':students,
+        }
 
-    return render(request,'notes/entergrades.html',context)
+        return render(request, 'notes/entergrades.html', context)
+    else:
+        return render(request, 'notes/entergrades.html')
 
 
 

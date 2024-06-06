@@ -2,6 +2,9 @@
 
 {% block content %}
 {% if user.user_type == 'teacher' %}
+
+<form  action="{% url 'users:profview_entergrades' %}"  method="post">
+    {% csrf_token %}
 <table>
   <thead>
   <tr>
@@ -28,27 +31,28 @@
     </tr>
     </thead>
     <tbody>
-    <td rowspan="2"><select id="menu-deroulant" name="menu-deroulant" required>
+    <td rowspan="2"><select  name="subject" required>
         <option value="" disabled selected hidden>Matière</option>
-        <option value="option1">Maths et signal</option>
-        <option value="option2">Stats</option>
-        <option value="option3">Projet maths</option>
+        {% for subject in subjects %}
+        <option value="{{ subject }}">{{ subject }}</option>
+        {% endfor %}
     </select> </td>
   
    
     <tr>
-        <td colspan="5"><select id="menu-deroulant" name="menu-deroulant" required>
+        <td colspan="5"><select name="class" required>
             <option value="" disabled selected hidden>Classe</option>
-            <option value="option1">1A-IR</option>
-            <option value="option2">1A-ASE</option>
-            <option value="option3">1A-TEXT</option>
+            {% for group in groups %}
+            <option value="{{ group }}">{{ group }}</option>
+            {% endfor %}
         </select></td>
-        <td><input type="number" id="positive-integer" name="positive-integer" min="1" step="1" required placeholder="Coefficient"></td>
+        <td><input type="number" name="coefficient" min="1" step="1" required placeholder="Coefficient"></td>
     </tr>
     <tr>
-        <th colspan="7"> <button onclick="window.location.href='../prof/entergrades'">Valider</button></span></th>
+        <th colspan="7"> <button type="submit">Valider</button></th>
     </tr>
   </table>
+</form>
   {% else %}
   <div>
     Vous n'êtes pas autorisé à accéder à cette page ! 
