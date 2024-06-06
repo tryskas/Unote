@@ -71,8 +71,7 @@ def profview_entergrades(request):
         group = request.POST.get('class')
         coefficient = request.POST.get('coefficient')
         group=Group.objects.filter(name=group).first()
-        students = []
-        students.extend(group.users.filter(user_type='student').order_by('last_name'))
+        students = group.users.filter(user_type='student').order_by('last_name')
         context = {
             'user':user,
             'subject': subject,
@@ -91,17 +90,23 @@ def profview_grades(request):
 
     if request.method == "POST":
         subject = request.POST.get('subject')
-        group = request.POST.get('class')
+        group = request.POST.get('group')
         coefficient = request.POST.get('coefficient')
         group=Group.objects.filter(name=group).first()
-        students = []
-        students.extend(group.users.filter(user_type='student').order_by('last_name'))
+        students = group.users.filter(user_type='student').order_by('last_name')
+
+        grades = []
+        for student in students:
+            grade = request.POST.get(str(student.id))
+            grades.append(grade)
+
         context = {
             'user':user,
             'subject': subject,
             'group': group,
             'coefficient': coefficient,
             'students':students,
+            'grades': grades,
         }
 
         return render(request, 'notes/profviewgrades.html', context)
