@@ -45,11 +45,11 @@
     <tbody>
     <tr>
       <td colspan="6">mike mike</td>
-      <td><input type="number" id="positive-float" name="positive-float" min="0" max="20" step="0.01"></td>
+      <td><input type="number" id="positive-float1" name="positive-float1" min="0" max="20" step="0.01"></td>
     </tr>
     <tr>
         <td colspan="6">mike mike</td>
-        <td><input type="number" id="positive-float" name="positive-float" min="0" max="20" step="0.01"></td>
+        <td><input type="number" id="positive-float2" name="positive-float2" min="0" max="20" step="0.01"></td>
       </tr>
     </tbody>
     <thead>
@@ -58,9 +58,57 @@
     </thead>
     </div>
   </table>
+
+  <button type="button" id="valider-btn" onclick="valider()">Valider</button>
+
+  <p id="error-message" style="color: red; display: none;">Il semble y avoir une erreur, veuillez verifier.</p>
+  <p id="success-message" style="color: green; display: none;">Les notes ont été validées avec succès.</p>
 {% else %}
   <div>
     Vous n'êtes pas autorisé à accéder à cette page ! 
     </div>
 {% endif %}
+
+<script>
+  document.getElementById("valider-btn").addEventListener("click", function() {
+    this.classList.add("clicked");
+    setTimeout(() => {
+      this.classList.remove("clicked");
+    }, 50);
+  });
+
+  function valider() {
+    var mark1 = parseFloat(document.getElementById("positive-float1").value);
+    var mark2 = parseFloat(document.getElementById("positive-float2").value);
+    if (mark1 > 20 || mark2 > 20) {
+      document.getElementById("error-message").style.display = "block";
+      document.getElementById("success-message").style.display = "none"; // Hide success message if error occurs
+      // Scroll to the area where there's an error
+      document.getElementById("positive-float1").scrollIntoView();
+    } else {
+      document.getElementById("error-message").style.display = "none";
+      document.getElementById("success-message").style.display = "block"; // Show success message
+      // Proceed with validation
+    }
+  }
+</script>
+
+<style>
+  #valider-btn {
+    border-radius: 8px; 
+    height: 40px; 
+    width : 200px;
+    font-size: 16px;
+    margin: 0 auto; /* Centers the button horizontally */
+    display: block; /* Ensures the button takes up the full width */
+    margin: 20px auto 0;
+  }
+
+
+
+  #valider-btn.clicked {
+    background-color: #1e90ff; /* Blue color when clicked */
+  }
+</style>
+
 {% endblock %}
