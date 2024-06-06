@@ -10,25 +10,28 @@
         <th scope="col">justifié</th>
     </thead>
     <tbody>
+    <form method="post">
+    {% csrf_token %}
     {% for p in presence %}
         <tr>
             <th scope="row">{{p.presence}}</th>
             <td>{{p.session.lesson.name}} {{p.session.date}}</td>
            
             <td>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="presence_id" value="{{p.id}}">
-                    <input type="checkbox" name="justified" {% if p.justified %} checked {% endif %} onChange="this.form.submit()">
-                </form>
+                
+                <input type="checkbox" value="on" name="{{ p.pk }}" {% if p.justified %} checked {% endif %}>
+               
             </td>
-            </form>
+            
         </tr>
     
             
     {% endfor %}
+   
     </tbody>
-  
+    
 </table>
+<button type="submit" href="/attendance_admin/" > valider </button>
+</form>
 </div>
 {% endblock %}

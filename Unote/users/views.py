@@ -155,19 +155,24 @@ def attendance_admin(request):
 
 def attendance_of(request,username):
     user=get_object_or_404(CustomUser,username=username)
-    
+    presence = Presence.objects.filter(user=user).exclude(presence="Present")
+    presence=presence.order_by('-session__date')
     
     if request.method == 'POST':
-        presence_id = request.POST.get('presence_id')
-        presence = get_object_or_404(Presence, id=presence_id)
-        presence.justified = not presence.justified
-        presence.save()
-    
-    
-    
-    presence = Presence.objects.filter(user=user).exclude(presence="Present")
+        print("test")
+        for p in presence:
+            
+            justified_value = request.POST.get(str(p.pk), 'off')
+            p.justified = (justified_value == "on")
+            p.save()
+        return HttpResponseRedirect("/attendance_admin/")
 
-    presence=presence.order_by('-session__date')
+    
+    
+    
+    
+
+
     context ={'user':user, 'presence':presence}
     return render(request,'attendance/attendance_of.html',context)
 
