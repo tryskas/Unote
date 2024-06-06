@@ -72,7 +72,7 @@ def profview_entergrades(request):
         coefficient = request.POST.get('coefficient')
         group=Group.objects.filter(name=group).first()
         students = []
-        students.extend(group.users.filter(user_type='student'))
+        students.extend(group.users.filter(user_type='student').order_by('last_name'))
         context = {
             'user':user,
             'subject': subject,
@@ -85,8 +85,28 @@ def profview_entergrades(request):
     else:
         return render(request, 'notes/entergrades.html')
 
+@login_required
+def profview_grades(request):
+    user = request.user
 
+    if request.method == "POST":
+        subject = request.POST.get('subject')
+        group = request.POST.get('class')
+        coefficient = request.POST.get('coefficient')
+        group=Group.objects.filter(name=group).first()
+        students = []
+        students.extend(group.users.filter(user_type='student').order_by('last_name'))
+        context = {
+            'user':user,
+            'subject': subject,
+            'group': group,
+            'coefficient': coefficient,
+            'students':students,
+        }
 
+        return render(request, 'notes/profviewgrades.html', context)
+    else:
+        return render(request, 'notes/profviewgrades.html')
 
 class UserCreationView(CreateView):
     template_name = 'users/register.html'
