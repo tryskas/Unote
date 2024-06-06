@@ -19,7 +19,14 @@ class UE(models.Model):
 
 
 class Group(models.Model):
-    type = models.CharField(max_length=255)
+    GROUP_TYPE_CHOICES = (
+        ('promo', 'Promotion'),
+        ('td_group', 'Groupe de TD'),
+        ('tp_group', 'Groupe de TP'),
+        ('generic_group', 'Groupe générique'),
+    )
+    type = models.CharField(max_length=255, choices=GROUP_TYPE_CHOICES,
+                            default='promo')
     name = models.CharField(max_length=255)
     ues = models.ManyToManyField(UE, related_name='groups')
     users = models.ManyToManyField(CustomUser, related_name='users_groups')
@@ -28,7 +35,7 @@ class Group(models.Model):
         return self.name
 
 
-class Lesson(models.Model):
+class Course(models.Model):
     name = models.CharField(max_length=255)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -51,8 +58,8 @@ class Session(models.Model):
     exam = models.BooleanField()
     date = models.DateTimeField()
     is_called_done = models.BooleanField(default=False)
-    room = models.ForeignKey(Room,on_delete=models.CASCADE)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Session du {self.start_time} au {self.end_time}"

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (Grade, Room, Subject, UE, Group, Lesson, Message,
+from .models import (Grade, Room, Subject, UE, Group, Course, Message,
                      Session, Presence)
 
 
@@ -33,8 +33,8 @@ class GroupAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-@admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'group', 'teacher', 'subject')
     search_fields = ('name', 'group__name', 'teacher__username',
                      'subject__name')

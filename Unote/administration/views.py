@@ -11,8 +11,8 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
 from users.models import CustomUser
-from administration.models import Subject, UE
-from .forms import SubjectForm, UEForm
+from administration.models import Subject, UE, Group, Course
+from .forms import SubjectForm, UEForm, GroupForm, CourseForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
@@ -62,9 +62,80 @@ def groups(request):
     if request.user.user_type != "admin":
         return render(request, 'main/403.html', status=403)
 
-    context = {}
+    groups = Group.objects.all()
+
+    context = {'groups': groups}
 
     return render(request, 'administration/groups.html', context)
+
+
+@login_required
+@require_GET
+def search_group(request):
+    search_term = request.GET.get('search_term', '')
+
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    groups = Group.objects.filter(Q(name__icontains=search_term))
+
+    search_results_html = render_to_string(
+        'administration/search_group_results.html',
+        {'search_results': groups})
+
+    return JsonResponse({'search_group_results_html':
+                         search_results_html})
+
+
+class GroupCreationView(CreateView):
+    template_name = 'administration/group_creation.html'
+    form_class = GroupForm
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+
+class GroupUpdateView(UpdateView):
+    model = Group
+    template_name = 'administration/update_group.html'
+    form_class = GroupForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        group = self.get_object()
+        context['group'] = group
+        return context
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+
+@login_required
+@require_POST
+def delete_group(request, group_id):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    try:
+        group = Group.objects.get(pk=group_id)
+        group.delete()
+        messages.success(request, 'La matière a été supprimée avec succès.')
+    except Group.DoesNotExist:
+        messages.error(request, 'La matière n\'existe pas.')
+
+    return redirect('administration:dashboard')
 
 
 @login_required
@@ -72,9 +143,80 @@ def courses(request):
     if request.user.user_type != "admin":
         return render(request, 'main/403.html', status=403)
 
-    context = {}
+    courses = Course.objects.all()
+
+    context = {'courses': courses}
 
     return render(request, 'administration/courses.html', context)
+
+
+@login_required
+@require_GET
+def search_course(request):
+    search_term = request.GET.get('search_term', '')
+
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    courses = Course.objects.filter(Q(name__icontains=search_term))
+
+    search_results_html = render_to_string(
+        'administration/search_course_results.html',
+        {'search_results': courses})
+
+    return JsonResponse({'search_course_results_html':
+                         search_results_html})
+
+
+class CourseCreationView(CreateView):
+    template_name = 'administration/course_creation.html'
+    form_class = CourseForm
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+
+class CourseUpdateView(UpdateView):
+    model = Course
+    template_name = 'administration/update_course.html'
+    form_class = CourseForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = self.get_object()
+        context['course'] = course
+        return context
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+
+@login_required
+@require_POST
+def delete_course(request, course_id):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    try:
+        course = Course.objects.get(pk=course_id)
+        course.delete()
+        messages.success(request, 'Le cours a été supprimée avec succès.')
+    except Course.DoesNotExist:
+        messages.error(request, 'Le cours n\'existe pas.')
+
+    return redirect('administration:dashboard')
 
 
 @login_required
