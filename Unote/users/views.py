@@ -22,7 +22,7 @@ def studentview(request):
     subj_average=[]
     teachers=[]
     subj_list =[]
-    
+    no_note=False
 
     i=0
     if (user.user_type == 'student'):
@@ -36,27 +36,38 @@ def studentview(request):
                 for subj in ue.Subjects.all():
                     if (Grade.objects.filter(subject=subj,user=user)):
                         subj_list[i].append(subj)
-                print(subj_list[0])
-                for s in subj_list[i]:
-                    ave_s=0.0
-                    sum_coeff_s=0
-                    lesson = Lesson.objects.filter(subject=s).first()
-                    if lesson:
-                        teacher = lesson.teacher
-                        teachers[i].append(teacher.last_name)
-                    else : 
-                        teachers[i].append("-")
-                    for g in Grade.objects.filter(subject=s,user=user):
-                        ave_s+=g.grade*g.coeff
-                        sum_coeff_s+=g.coeff
-                    ave_s/=sum_coeff_s
-                    ave+=ave_s*s.coeff
-                    sum+=s.coeff
-                    subj_average[i].append(round(ave_s,2))
-                i+=1
-                ave/=sum
-                ues_average.append(round(ave,2))
-        context = {'user': user, 'user_promo':user_promo, 'ues_average':ues_average, 'subj_average':subj_average, 'teachers':teachers,'subj_list':subj_list}
+                if not any(subj_list):
+                    no_note = True
+                if (subj_list[i]):
+                    print("PASSER")
+                    for s in subj_list[i]:
+                        ave_s=0.0
+                        sum_coeff_s=0
+                        lesson = Lesson.objects.filter(subject=s).first()
+                        if lesson:
+                            teacher = lesson.teacher
+                            teachers[i].append(teacher.last_name)
+                        else : 
+                            teachers[i].append("-")
+                        for g in Grade.objects.filter(subject=s,user=user):
+                            ave_s+=g.grade*g.coeff
+                            sum_coeff_s+=g.coeff
+                        ave_s/=sum_coeff_s
+                        ave+=ave_s*s.coeff
+                        sum+=s.coeff
+                        subj_average[i].append(round(ave_s,2))
+                    i+=1
+                    ave/=sum
+                    ues_average.append(round(ave,2))
+        context = {
+            'user': user, 
+            'user_promo':user_promo, 
+            'ues_average':ues_average, 
+            'subj_average':subj_average, 
+            'teachers':teachers,
+            'subj_list':subj_list,
+            'no_note':no_note
+        }
     else :
         context = {'user': user}
     return render(request,'notes/studentview.html',context)
@@ -66,7 +77,12 @@ def profview(request):
     user = request.user
     lessons = Lesson.objects.filter(teacher=user)
     subjects = [lesson.subject for lesson in lessons]
-    groups=Group.objects.filter(type="promo")
+    groups= []
+    for l in lessons:
+        for g in Group.objects.filter(type="promo"):
+            if (l.group==g):
+                groups.append(g)
+    print(groups)
     context = {'user': user,'subjects':subjects,'groups':groups}
 
     return render(request,'notes/profview.html',context)

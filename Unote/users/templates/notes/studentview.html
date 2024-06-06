@@ -24,6 +24,8 @@
   </tbody>
 </table>
 
+{% if no_note == False %}
+
 {% for unite in user_promo.ues.all %}
 {% with j=forloop.counter %}
 {% with k=forloop.counter %}
@@ -73,6 +75,9 @@
   </thead>
 </table>
 text
+{% else %}
+<div> Pas de notes pour le moment !</div>
+{% endif %}
 {% else %}
   <div>
     Vous n'êtes pas autorisé à accéder à cette page ! 
