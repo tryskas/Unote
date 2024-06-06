@@ -1,6 +1,5 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
-from django.shortcuts import render, get_object_or_404
 
 app_name = "administration"
 urlpatterns = [
@@ -12,4 +11,9 @@ urlpatterns = [
     path("absences/", views.absences, name="absences"),
     path("eus/", views.eus, name="eus"),
     path("subjects/", views.subjects, name="subjects"),
+    path("search_subject/", views.search_subject, name="search_subject"),
+    path("create_subject/", views.SubjectCreationView.as_view(),
+         name="create_subject"),
+    path("update_subject/<int:pk>/", views.SubjectUpdateView.as_view(),
+         name="update_subject"),
 ]

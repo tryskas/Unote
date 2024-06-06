@@ -6,7 +6,14 @@ from django.views.decorators.http import require_GET
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Q
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.views.generic.edit import CreateView
+from django.views.generic import UpdateView
 from users.models import CustomUser
+from administration.models import Subject
+from .forms import SubjectForm
+from django.http import HttpResponseRedirect
 
 
 @method_decorator(login_required, name='dispatch')
@@ -39,7 +46,7 @@ def search_user(request):
 
     users = CustomUser.objects.filter(Q(first_name__icontains=search_term) |
                                       Q(last_name__icontains=search_term) |
-                                      Q(username__icontains=search_term))[:5]
+                                      Q(username__icontains=search_term))
 
     search_results_html = render_to_string(
         'administration/search_user_results.html',
@@ -94,6 +101,62 @@ def subjects(request):
     if request.user.user_type != "admin":
         return render(request, 'main/403.html', status=403)
 
-    context = {}
+    subjects = Subject.objects.all()
 
-    return render(request, 'administration/subjects.html', context)
+    context = {'subjects': subjects}
+
+    return render(request, 'administration/subjects.html',
+                  context)
+
+
+@login_required
+@require_GET
+def search_subject(request):
+    search_term = request.GET.get('search_term', '')
+
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    subjects = Subject.objects.filter(Q(name__icontains=search_term))
+
+    search_results_html = render_to_string(
+        'administration/search_subject_results.html',
+        {'search_results': subjects})
+
+    return JsonResponse({'search_subject_results_html':
+                         search_results_html})
+
+
+class SubjectCreationView(CreateView):
+    template_name = 'administration/subject_creation.html'
+    form_class = SubjectForm
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+
+class SubjectUpdateView(UpdateView):
+    model = Subject
+    template_name = 'administration/update_subject.html'
+    form_class = SubjectForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subject = self.get_object()
+        context['subject'] = subject
+        return context
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
