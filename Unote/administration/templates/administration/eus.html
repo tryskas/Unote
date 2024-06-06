@@ -1,21 +1,33 @@
 {% load static %}
 
-<div id="room-nav">
+<div>
     <h2>UE</h2>
 </div>
 
-<div id="user_management_sections">
-    <div id="invite-user">
-        <form id="invite-user-form">
-            <input type="text" id="invite-user-input"
+<div>
+    <div>
+        <form id="search-ue-form">
+            <input type="text" id="search-ue-input"
                    placeholder="Rechercher par nom">
-            <input type="submit" value="Rechercher"
-                   id="invite-user-submit"/>
+            <input type="submit" value="Rechercher"/>
         </form>
-        <div id="invite-user-results"></div>
+        <div id="search-ue-results">
+            <ul class="scrollable-list">
+                {% for ue in ues %}
+                    <li>
+                        <a href="{% url 'administration:update_ue' ue.id %}"
+                           >{{ ue.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
+    <p><a href="{% url 'administration:create_ue' %}"
+          >Créer une UE</a></p>
 </div>
 
 <script type="text/javascript"
-        src="{% static 'rooms/js/user_management_script.js' %}"
-        data-room-id="{{ room.id }}"></script>
+        src="{% static 'administration/js/home_script.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'administration/js/ues_script.js' %}"></script>

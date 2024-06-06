@@ -1,5 +1,5 @@
 from django import forms
-from .models import Subject
+from .models import Subject, UE
 
 
 class SubjectForm(forms.ModelForm):
@@ -9,4 +9,14 @@ class SubjectForm(forms.ModelForm):
         labels = {
             'name': 'Nom de la matière',
             'coeff': 'Coefficient',
+        }
+
+
+class UEForm(forms.ModelForm):
+    class Meta:
+        model = UE
+        fields = ['name', 'subjects']
+        labels = {
+            'name': 'Nom de l\'UE',
+            'subjects': 'Matières associées',
         }

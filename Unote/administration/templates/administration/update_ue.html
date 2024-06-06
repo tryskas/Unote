@@ -8,7 +8,7 @@
 {% endblock %}
 
 <div>
-    <h2>Page de {{ subject.name }}</h2>
+    <h2>Page de {{ ue.name }}</h2>
 </div>
 
 <div class="form-holder">
@@ -25,10 +25,10 @@
 
 <div class="form-items">
     <form method="post"
-          action="{% url 'administration:delete_subject' subject.id %}">
+          action="{% url 'administration:delete_ue' ue.id %}">
         {% csrf_token %}
-        <input type="hidden" name="subject_id" value="{{ subject.id }}">
-        <input type="submit" value="Supprimer matière">
+        <input type="hidden" name="ue_id" value="{{ ue.id }}">
+        <input type="submit" value="Supprimer UE">
     </form>
 </div>
 
