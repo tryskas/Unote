@@ -1,0 +1,22 @@
+{% load static %}
+
+<div id="room-nav">
+    <h2>Profils utilisateurs</h2>
+</div>
+
+<div>
+    <div>
+        <form id="search-user-form">
+            <input type="text" id="search-user-input"
+                   placeholder="Rechercher par nom, prénom ou identifiant">
+            <input type="submit" value="Rechercher"/>
+        </form>
+        <div id="search-user-results"></div>
+    </div>
+
+    <p><a href="{% url 'users:register' %}">Enregistrer nouvel
+        utilisateur</a></p>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/profiles_script.js' %}"></script>
