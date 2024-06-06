@@ -144,10 +144,38 @@ def attendance_student(request):
 
     return render(request,'attendance/attendance_student.html',context)
 
+def attendance_admin(request):
+    
+    if request.method == 'POST':
+         username= request.POST['student']
+         return HttpResponseRedirect('/attendance_of/%s/'% username)
+    
+
+    return render(request,'attendance/attendance_admin.html')
+
+def attendance_of(request,username):
+    user=get_object_or_404(CustomUser,username=username)
+    
+    
+    if request.method == 'POST':
+        presence_id = request.POST.get('presence_id')
+        presence = get_object_or_404(Presence, id=presence_id)
+        presence.justified = not presence.justified
+        presence.save()
+    
+    
+    
+    presence = Presence.objects.filter(user=user).exclude(presence="Present")
+
+    presence=presence.order_by('-session__date')
+    context ={'user':user, 'presence':presence}
+    return render(request,'attendance/attendance_of.html',context)
+
+
 def class_call(request, id):
     user = request.user
     
-     
+    
     session = get_object_or_404(Session, pk=id)
     lesson= session.lesson
     group=lesson.group
@@ -174,3 +202,6 @@ def class_call(request, id):
     context = {'user': user, 'session':session, 'student_list':student_list}
 
     return render(request,'attendance/class_call.html',context)
+
+
+ 

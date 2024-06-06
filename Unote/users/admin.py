@@ -64,6 +64,6 @@ class SessionAdmin(admin.ModelAdmin):
 
 @admin.register(Presence)
 class PresenceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'session', 'presence', 'Room')
+    list_display = ('user', 'session','justified', 'presence', 'Room')
     search_fields = ('user__username', 'session__start_time',
                      'session__end_time', 'Room__name')

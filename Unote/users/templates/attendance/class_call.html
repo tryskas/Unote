@@ -4,7 +4,7 @@
     <h3>Appel pour {{session.lesson.name}} par {{user.username}} :</h3>
     <table>
     <thead>
-    <tbody>
+    
     
         <tr>
             <th scope="col">Eleve</th>
@@ -13,6 +13,7 @@
             <th scope="col">Présence</th>
         </tr>
     </thead>
+    <tbody>
     <form method="POST">
     {% csrf_token %}
     {% for s in student_list %}
