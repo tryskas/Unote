@@ -89,9 +89,7 @@ def profview_grades(request):
     user = request.user
 
     if request.method == "POST":
-        subject = request.POST.get('subject')
         group = request.POST.get('group')
-        coefficient = request.POST.get('coefficient')
         group=Group.objects.filter(name=group).first()
         students = group.users.filter(user_type='student').order_by('last_name')
 
@@ -102,9 +100,7 @@ def profview_grades(request):
 
         context = {
             'user':user,
-            'subject': subject,
             'group': group,
-            'coefficient': coefficient,
             'students':students,
             'grades': grades,
         }
