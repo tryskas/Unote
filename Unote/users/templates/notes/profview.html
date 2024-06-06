@@ -1,6 +1,7 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
+{% if user.user_type == 'teacher' %}
 <table>
   <thead>
   <tr>
@@ -16,10 +17,6 @@
       <td>Numéro professeur</td>
       <td> {{ user.username }} </td>
   </tr>
-  <tr>
-    <td>Classe</td>
-    <td>{{ user.email }}</td>
-</tr>
   </tbody>
 </table>
 
@@ -27,51 +24,34 @@
   <table>
     <thead>
     <tr>
-        <th colspan="6">Matière</span></th>
-        <th>Coefficient</th>
+        <th colspan="7">Ajouter une note</span></th>
     </tr>
     </thead>
     <tbody>
-    <td rowspan="2"><select id="menu-deroulant" name="menu-deroulant">
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
+    <td rowspan="2"><select id="menu-deroulant" name="menu-deroulant" required>
+        <option value="" disabled selected hidden>Matière</option>
+        <option value="option1">Maths et signal</option>
+        <option value="option2">Stats</option>
+        <option value="option3">Projet maths</option>
     </select> </td>
   
    
     <tr>
-        <td colspan="5"><select id="menu-deroulant" name="menu-deroulant">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+        <td colspan="5"><select id="menu-deroulant" name="menu-deroulant" required>
+            <option value="" disabled selected hidden>Classe</option>
+            <option value="option1">1A-IR</option>
+            <option value="option2">1A-ASE</option>
+            <option value="option3">1A-TEXT</option>
         </select></td>
-        <td><input type="number" id="positive-integer" name="positive-integer" min="0" max="50" step="1"></td>
-    </tr>
-    
-    <thead>
-      <th colspan="6">Eleve</th>
-      <th>Note</th>
-    </thead>
-
-    <tr>
-      <td colspan="6">mike mike</td>
-      <td><input type="number" id="positive-float" name="positive-float" min="0" max="20" step="0.01"></td>
+        <td><input type="number" id="positive-integer" name="positive-integer" min="1" step="1" required placeholder="Coefficient"></td>
     </tr>
     <tr>
-        <td colspan="6">mike mike</td>
-        <td><input type="number" id="positive-float" name="positive-float" min="0" max="20" step="0.01"></td>
-      </tr>
-    
-   
-  </tbody>
+        <th colspan="7"> <button onclick="window.location.href='../prof/entergrades'">Valider</button></span></th>
+    </tr>
   </table>
-
-<table>
-  <thead>
-  <tr>
-      <th colspan="5">Observations</th>
-  </tr>
-  </thead>
-</table>
-text
+  {% else %}
+  <div>
+    Vous n'êtes pas autorisé à accéder à cette page ! 
+    </div>
+{% endif %}
 {% endblock %}

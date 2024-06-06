@@ -1,6 +1,7 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
+{% if user.user_type == 'student' %}
 <table>
   <thead>
   <tr>
@@ -72,4 +73,9 @@
   </thead>
 </table>
 text
+{% else %}
+  <div>
+    Vous n'êtes pas autorisé à accéder à cette page ! 
+    </div>
+{% endif %}
 {% endblock %}

@@ -82,3 +82,7 @@ tr:nth-child(even) {
     font-weight: bold;
     font-size: 1.2rem;
 }
+
+.hidden {
+    display:none;
+}
