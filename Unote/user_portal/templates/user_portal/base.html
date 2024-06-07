@@ -45,16 +45,16 @@
                         {% if user.is_authenticated %}
                             {% if user.user_type == 'student' or user.user_type == 'teacher' %}
                                 <a href="{% url 'user_portal:dashboard' %}">
-                                    <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+                                    <img src="{% static 'images/logo.png' %}" alt="Logo"  height="40" width="40" class="logos"/>
                                 </a>
                             {% elif user.user_type == 'admin' %}
                                 <a href="{% url 'administration:dashboard' %}">
-                                    <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+                                    <img src="{% static 'images/logo.png' %}" alt="Logo" height="40" width="40" class="logos"/>
                                 </a>
                             {% endif %}
                         {% else %}
                             <a href="{% url 'users:login' %}">
-                                <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+                                <img src="{% static 'images/logo.png' %}" alt="Logo" height="40" width="40" class="logos"/>
                             </a>
                         {% endif %}
 
