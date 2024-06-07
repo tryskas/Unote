@@ -245,52 +245,7 @@ def delete_grade(request, grade_id):
     
     return render(request, 'notes/delete_grade.html', {'grade_id': grade_id})
 
-@login_required
-def modifygrades(request):
-    user = request.user
-    lessons = Lesson.objects.filter(teacher=user)
-    subjects = [lesson.subject for lesson in lessons]
-    groups= []
-    allsubj = Subject.objects.all()
-    allgroups = Group.objects.filter(type="promo").all()
-    for l in lessons:
-        for g in Group.objects.filter(type="promo"):
-            if (l.group==g):
-                groups.append(g)
-    print(groups)
-    context = {
-        'user': user,
-        'subjects':subjects,
-        'groups':groups,
-        'allsubj':allsubj,
-        'allgroups':allgroups
-        }
-
-    
-    return render(request,'notes/profmodify.html',context)
-
-@login_required
-def profview_entermodifs(request):
-    user = request.user
-    if request.method == "POST":
-        subject = request.POST.get('subject')
-        group = request.POST.get('class')
-        group=Group.objects.filter(name=group).first()
-        students = group.users.filter(user_type='student').order_by('last_name')
-        context = {
-            'user':user,
-            'subject': subject,
-            'group': group,
-            'students':students,
-        }
-
-        return render(request, 'notes/profentermodif.html', context)
-    else:
-        return render(request, 'notes/profentermodif.html')
-
-
-
-
+#afficher les notes avec moy etc
 @login_required
 def modify_grades(request):
     user = request.user
