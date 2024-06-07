@@ -1,0 +1,16 @@
+{% extends "notes/base.html" %}
+
+{% block content %}
+{% if user.user_type == 'teacher' %}
+
+<form  action="{% url 'users:profview_grades' %}"  method="post">
+  {% csrf_token %}
+ <div> les notes ont été ajoutées avec succès</div>
+{% else %}
+  <div>
+    Vous n'êtes pas autorisé à accéder à cette page ! 
+    </div>
+{% endif %}
+
+
+{% endblock %}

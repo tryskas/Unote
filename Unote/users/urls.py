@@ -25,4 +25,5 @@ urlpatterns = [
     path('notes/prof/', views.profview, name='profview'),
     path('notes/prof/entergrades', views.profview_entergrades, name='profview_entergrades'),
     path('notes/prof/grades', views.profview_grades, name='profview_grades'),
+    path('notes/prof/success', views.success_grades, name='success_grades'),
 ]

@@ -96,6 +96,7 @@ def profview(request):
     print(groups)
     context = {'user': user,'subjects':subjects,'groups':groups}
 
+    
     return render(request,'notes/profview.html',context)
 
 @login_required
@@ -119,8 +120,9 @@ def profview_entergrades(request):
     else:
         return render(request, 'notes/entergrades.html')
 
+
 @login_required
-def profview_grades(request):
+def success_grades(request):
     user = request.user
 
     if request.method == "POST":
@@ -143,9 +145,49 @@ def profview_grades(request):
             'group': group,
         }
 
-        return render(request, 'notes/profview.html', context)
+        return render(request, 'notes/successgrades.html', context)
     else:
-        return render(request, 'notes/profviewgrades.html')
+        return render(request, 'notes/successgrades.html')
+
+def profview_grades(request):
+    user = request.user
+    groups = Group.objects.filter(type="promo").all()
+    subjects = Subject.objects.all()
+    context = {
+            'user':user,
+            'groups': groups,
+            'subjects':subjects
+    }
+    if request.method == "POST":
+        group = Group.objects.filter(name=request.POST.get('group')).first()
+        students = group.users.filter(user_type='student').order_by('last_name')
+        subject =Subject.objects.filter(name=request.POST.get('subj')).first()
+        grades=[[] for _ in range(len(students))]
+        
+        for i,student in enumerate(students):
+            for g in Grade.objects.filter(subject=subject,user=student):
+                grades[i].append(g)
+
+        max_grades = max(len(student_grades) for student_grades in grades)
+        
+        #Remplir les endroits vides du tableau
+        for student_grades in grades:
+            while len(student_grades) < max_grades:
+                student_grades.append(None)
+        grade_range = range(max_grades)
+        context = {
+            'user':user,
+            'groups': groups,
+            'subjects':subjects,
+            'students':students,
+            'grades':grades,
+            'grade_range':grade_range
+        }
+        
+
+        return render(request, 'notes/profviewgrades.html', context)
+    else:
+        return render(request, 'notes/profviewgrades.html',context)
 
 class UserCreationView(CreateView):
     template_name = 'users/register.html'

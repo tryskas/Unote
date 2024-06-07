@@ -1,87 +1,49 @@
 {% extends "notes/base.html" %}
-
 {% block content %}
 {% if user.user_type == 'teacher' %}
-
+<form  action="{% url 'users:profview_grades' %}"  method="post">
+  {% csrf_token %}
 
   <table>
     <thead>
-        <th colspan="7"><select  name="subject" required>
+        <th colspan="7"><select  name="subj" required>
           <option value="" disabled selected hidden>Matière</option>
           {% for subject in subjects %}
           <option value="{{ subject }}">{{ subject }}</option>
           {% endfor %}
       </select></th>
-        <th><select  name="subject" required>
+        <th><select  name="group" required>
           <option value="" disabled selected hidden>Classe</option>
-          {% for subject in subjects %}
-          <option value="{{ subject }}">{{ subject }}</option>
+          {% for g in groups %}
+          <option value="{{ g }}">{{ g }}</option>
           {% endfor %}
       </select></th>
     </thead>
     <tbody>
       <tr>
         <td></td>
-        <td>Note 1</td>
-          <td>Note 2</td>
-          <td>Note 3</td>
-          <td>Note 4</td>
-          <td>Moyenne</td>
+        {% for i in grade_range %}
+        <td>Note {{ forloop.counter }}</td>
+        {% endfor %}
+        <td>Moyenne</td>
       </tr>
+      {% for s in students %}
+      {% with i=forloop.counter %}
         <tr>
-          <td>eleve 1</td>
-          <td>cell2_1</td>
-          <td>cell3_1</td>
-          <td>cell4_1</td>
-          <td>cell5_1</td>
-          <td>Moyenne</td>
+          <td>{{ s.first_name }} {{ s.last_name }} </td>
+          {% for g in grades|slice:i|last %}
+          <td>{{ g.grade }}</td>
+          {% endfor %}
+          <td>moy</td>
         </tr>
-        <tr>
-          <td>eleve 2</td>
-          <td>cell2_2</td>
-          <td>cell3_2</td>
-          <td>cell4_2</td>
-          <td>cell5_2</td>
-          <td>Moyenne</td>
-        </tr>
-        <tr>
-          <td>eleve 3</td>
-          <td>cell2_3</td>
-          <td>cell3_3</td>
-          <td>cell4_3</td>
-          <td>cell5_3</td>
-          <td>Moyenne</td>
-        </tr>
-        <tr>
-          <td>eleve 4</td>
-          <td>cell2_4</td>
-          <td>cell3_4</td>
-          <td>cell4_4</td>
-          <td>cell5_4</td>
-          <td>Moyenne</td>
-        </tr>
-        <tr>
-          <td>eleve 5</td>
-          <td>cell2_5</td>
-          <td>cell3_5</td>
-          <td>cell4_5</td>
-          <td>cell5_5</td>
-          <td>Moyenne</td>
-        </tr>
-        <tr>
-          <td>Moyenne</td>
-          <td>cell2_5</td>
-          <td>cell3_5</td>
-          <td>cell4_5</td>
-          <td>cell5_5</td>
-          <td>Moyenne</td>
-        </tr>
-    
+      {% endwith %}
+      {% endfor %}
     </tbody>
     
   </table>
 
-  <button>Chercher</button>
+  <button type="submit" >Chercher</button>
+</form>
 {% else %}
   <div>
     Vous n'êtes pas autorisé à accéder à cette page ! 
