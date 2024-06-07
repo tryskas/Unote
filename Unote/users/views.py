@@ -89,12 +89,20 @@ def profview(request):
     lessons = Lesson.objects.filter(teacher=user)
     subjects = [lesson.subject for lesson in lessons]
     groups= []
+    allsubj = Subject.objects.all()
+    allgroups = Group.objects.filter(type="promo").all()
     for l in lessons:
         for g in Group.objects.filter(type="promo"):
             if (l.group==g):
                 groups.append(g)
     print(groups)
-    context = {'user': user,'subjects':subjects,'groups':groups}
+    context = {
+        'user': user,
+        'subjects':subjects,
+        'groups':groups,
+        'allsubj':allsubj,
+        'allgroups':allgroups
+        }
 
     
     return render(request,'notes/profview.html',context)

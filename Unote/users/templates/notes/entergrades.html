@@ -1,7 +1,7 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
-{% if user.user_type == 'teacher' %}
+{% if user.user_type == 'teacher' or user.user_type == 'admin'%}
 
 <form  action="{% url 'users:success_grades' %}"  method="post">
   {% csrf_token %}
