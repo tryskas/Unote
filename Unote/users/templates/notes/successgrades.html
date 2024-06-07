@@ -5,6 +5,7 @@
 
  <div> Les notes ont été ajoutées avec succès</div>
  <button onclick="window.location.href='{% url 'users:profview_grades' %}'">Voir les notes</button>
+ <button onclick="window.location.href='{% url 'users:profviewhome' %}'">Retour</button>
  {% else %}
   <div>
     Vous n'êtes pas autorisé à accéder à cette page ! 

@@ -1,7 +1,7 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
-{% if user.user_type == 'teacher' %}
+{% if user.user_type == 'teacher'%}
 
 <form  action="{% url 'users:profview_entergrades' %}"  method="post">
     {% csrf_token %}
@@ -53,6 +53,8 @@
     </tr>
   </table>
 </form>
+<button type="button" onclick="window.location.href='{% url 'users:profviewhome' %}'">Retour</button>
+
   {% elif user.user_type == 'admin' %}
   <form  action="{% url 'users:profview_entergrades' %}"  method="post">
     {% csrf_token %}
@@ -85,6 +87,8 @@
     </tr>
   </table>
   </form>
+
+
   {% else %}
   <div>
     Vous n'êtes pas autorisé à accéder à cette page ! 

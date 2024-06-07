@@ -26,6 +26,7 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('notes/', views.studentview, name='studentview'),
     path('notes/prof/', views.profview, name='profview'),
+    path('notes/prof/home/', views.profviewhome, name='profviewhome'),
     path('notes/prof/entergrades', views.profview_entergrades, name='profview_entergrades'),
     path('notes/prof/grades', views.profview_grades, name='profview_grades'),
     path('notes/prof/success', views.success_grades, name='success_grades'),

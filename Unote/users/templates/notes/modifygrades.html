@@ -84,10 +84,10 @@
   <button type="submit" formnovalidate>Supprimer les notes sélectionnées</button>
 </form>
 {% else %}
-<p>Aucune note trouvée.</p>
+<p></p>
 {% endif %}
 
-<button type="button" onclick="window.location.href='{% url 'users:profview' %}'">Ajouter une note</button>
+<button type="button" onclick="window.location.href='{% url 'users:profviewhome' %}'">Retour</button>
 
 {% else %}
 <div>

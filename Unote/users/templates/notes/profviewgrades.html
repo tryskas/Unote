@@ -27,7 +27,7 @@
     <tbody>
     {% if no_grades %}
       <tr>
-        <td></td>
+        <td colspan="4"></td>
       </tr>
     {% else %}
       <tr>
@@ -66,8 +66,7 @@
 
 
   <button type="submit" >Chercher</button>
-  <button onclick="window.location.href='{% url 'users:profview' %}'">Ajouter une note</button>
-  <button onclick="window.location.href='{% url 'users:modify_grades' %}'">Modifier</button>
+  <button onclick="window.location.href='{% url 'users:profviewhome' %}'">Retour</button>
 </form>
 {% else %}
   <div>

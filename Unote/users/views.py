@@ -109,6 +109,15 @@ def profview(request):
     return render(request,'notes/profview.html',context)
 
 @login_required
+def profviewhome(request):
+    user = request.user
+    context = {
+        'user':user,
+    }
+    return render(request,'notes/profviewhome.html',context)
+
+
+@login_required
 def profview_entergrades(request):
     user = request.user
     if request.method == "POST":
