@@ -252,16 +252,6 @@ def delete_selected_grades(request):
     return redirect('users:modify_grades')
 
 
-@login_required
-def delete_grade(request, grade_id):
-    grade = get_object_or_404(Grade, pk=grade_id)
-    
-    if request.method == 'POST':
-        grade.delete()
-        return redirect('users:modify_grades')
-    
-    return render(request, 'notes/delete_grade.html', {'grade_id': grade_id})
-
 #afficher les notes avec moy etc
 @login_required
 def modify_grades(request):
