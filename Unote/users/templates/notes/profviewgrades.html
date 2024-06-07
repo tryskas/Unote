@@ -6,6 +6,10 @@
 
   <table>
     <thead>
+      <th >Matière : {{ subject }}</th>
+      <th>Classe : {{ group }}</th>
+  </thead>
+    <thead>
         <th colspan="{{ grade_range|length|add:1 }}"><select  name="subj" required>
           <option value="" disabled selected hidden>Matière</option>
           {% for subject in subjects %}
@@ -63,7 +67,7 @@
 
   <button type="submit" >Chercher</button>
   <button onclick="window.location.href='{% url 'users:profview' %}'">Ajouter une note</button>
-
+  <button onclick="window.location.href='{% url 'users:modify_grades' %}'">Modifier</button>
 </form>
 {% else %}
   <div>

@@ -11,8 +11,9 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfileForm
-from django.shortcuts import render, redirect
 from .models import Subject, Grade, UE, Group, Lesson
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 @login_required
 def studentview(request):
@@ -215,6 +216,8 @@ def profview_grades(request):
             print(tot_stud)
         context = {
             'user':user,
+            'group':group,
+            'subject':subject,
             'groups': groups,
             'subjects':subjects,
             'students':students,
@@ -229,6 +232,143 @@ def profview_grades(request):
         return render(request, 'notes/profviewgrades.html', context)
     else:
         return render(request, 'notes/profviewgrades.html',context)
+
+@login_required
+def delete_grade(request, grade_id):
+    grade=Grade.objects.filter(pk=grade_id).first()
+    print(grade.grade)
+    #grade = get_object_or_404(Grade, id=grade_id)
+    
+    if request.method == 'POST':
+        grade.delete()
+        return Httpresponseredirect('modify_grades')
+    
+    return render(request, 'notes/delete_grade.html', {'grade_id': grade_id})
+
+@login_required
+def modifygrades(request):
+    user = request.user
+    lessons = Lesson.objects.filter(teacher=user)
+    subjects = [lesson.subject for lesson in lessons]
+    groups= []
+    allsubj = Subject.objects.all()
+    allgroups = Group.objects.filter(type="promo").all()
+    for l in lessons:
+        for g in Group.objects.filter(type="promo"):
+            if (l.group==g):
+                groups.append(g)
+    print(groups)
+    context = {
+        'user': user,
+        'subjects':subjects,
+        'groups':groups,
+        'allsubj':allsubj,
+        'allgroups':allgroups
+        }
+
+    
+    return render(request,'notes/profmodify.html',context)
+
+@login_required
+def profview_entermodifs(request):
+    user = request.user
+    if request.method == "POST":
+        subject = request.POST.get('subject')
+        group = request.POST.get('class')
+        group=Group.objects.filter(name=group).first()
+        students = group.users.filter(user_type='student').order_by('last_name')
+        context = {
+            'user':user,
+            'subject': subject,
+            'group': group,
+            'students':students,
+        }
+
+        return render(request, 'notes/profentermodif.html', context)
+    else:
+        return render(request, 'notes/profentermodif.html')
+
+
+
+
+@login_required
+def modify_grades(request):
+    user = request.user
+    groups = Group.objects.filter(type="promo").all()
+    subjects = Subject.objects.all()
+    no_grades=True
+    context = {
+            'user':user,
+            'groups': groups,
+            'subjects':subjects,
+            'no_grades':no_grades
+    }
+    if request.method == "POST":
+        group = Group.objects.filter(name=request.POST.get('group')).first()
+        students = group.users.filter(user_type='student').order_by('last_name')
+        subject =Subject.objects.filter(name=request.POST.get('subj')).first()
+        grades=[[] for _ in range(len(students))]
+        
+        for i,student in enumerate(students):
+            for g in Grade.objects.filter(subject=subject,user=student):
+                no_grades=False    
+                grades[i].append(g)
+
+        max_grades = max(len(student_grades) for student_grades in grades)
+        
+        #Remplir les endroits vides du tableau
+        for student_grades in grades:
+            while len(student_grades) < max_grades:
+                student_grades.append(None)
+        grade_range = range(max_grades)
+        stud_ave=[[] for _ in range(len(students))]
+        class_ave=[[] for _ in range(max_grades)]
+        if (no_grades==False):
+            #Calcul des moyennes de chaque eleves et de chaque notes
+            for i,s in enumerate(students):
+                stu_ave=0
+                coeff_stu_ave=0
+                for g in grades[i]:
+                    if g:
+                        stu_ave+=g.grade*g.coeff
+                        coeff_stu_ave+=g.coeff
+                if (coeff_stu_ave!=0):
+                    stud_ave[i]=round(stu_ave/coeff_stu_ave,2)
+                else :
+                    stud_ave[i]=" "
+            
+            for i in range(max_grades):
+                tot_stud=len(students)
+                clas_ave=0
+                for j in range(tot_stud):
+                    if (grades[j][i]):
+                        clas_ave+=grades[j][i].grade
+                    else :
+                        tot_stud-=1
+                class_ave[i]=round(clas_ave/tot_stud,2)
+            print(class_ave)
+            print(tot_stud)
+        context = {
+            'user':user,
+            'group':group,
+            'subject':subject,
+            'groups': groups,
+            'subjects':subjects,
+            'students':students,
+            'grades':grades,
+            'grade_range':grade_range,
+            'no_grades':no_grades,
+            'stud_ave':stud_ave,
+            'class_ave':class_ave
+        }
+        
+
+        return render(request, 'notes/modifygrades.html', context)
+    else:
+        return render(request, 'notes/modifygrades.html',context)
+
+
+
 
 class UserCreationView(CreateView):
     template_name = 'users/register.html'

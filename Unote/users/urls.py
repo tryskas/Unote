@@ -1,5 +1,8 @@
 from django.urls import path, include
 from . import views
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from .models import Grade
 
 app_name = "users"
 urlpatterns = [
@@ -23,7 +26,12 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('notes/', views.studentview, name='studentview'),
     path('notes/prof/', views.profview, name='profview'),
+    path('notes/modifygrades/', views.modifygrades, name='modifygrades'),
+    path('notes/prof/entermodifs', views.profview_entermodifs, name='profview_entermodifs'),
     path('notes/prof/entergrades', views.profview_entergrades, name='profview_entergrades'),
     path('notes/prof/grades', views.profview_grades, name='profview_grades'),
-    path('notes/prof/success', views.success_grades, name='success_grades'),
+    #path('notes/prof/grades/review', views.profview_gradesreview, name='profview_gradesreview'),
+    #path('notes/prof/success', views.success_grades, name='success_grades'),
+    path('delete_grade/<int:grade_id>/', views.delete_grade, name='delete_grade'),
+    path('modify_grades/', views.modify_grades, name='modify_grades'),
 ]
