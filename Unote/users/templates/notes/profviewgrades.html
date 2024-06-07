@@ -19,7 +19,13 @@
           {% endfor %}
       </select></th>
     </thead>
+    
     <tbody>
+    {% if no_grades %}
+      <tr>
+        <td></td>
+      </tr>
+    {% else %}
       <tr>
         <td></td>
         {% for i in grade_range %}
@@ -34,19 +40,30 @@
           {% for g in grades|slice:i|last %}
           <td>{{ g.grade }}</td>
           {% endfor %}
-          <td>moy</td>
+          {% with j=forloop.counter %}
+              <td style="font-weight:900;" >{{ stud_ave|slice:j|last }}</td>
+          {% endwith %}
         </tr>
       {% endwith %}
       {% endfor %}
       <tr>
-        <td>moyenne</td>
+        <td>Moyenne</td>
+        {% for c in class_ave %}
+        
+            <td style="font-weight:900;">{{ c }}</td>
+        {% endfor %}
+        <td></td>
       </tr>
         
     </tbody>
-    
+  
+  {% endif %}
   </table>
 
+
   <button type="submit" >Chercher</button>
+  <button onclick="window.location.href='{% url 'users:profview' %}'">Ajouter une note</button>
+
 </form>
 {% else %}
   <div>

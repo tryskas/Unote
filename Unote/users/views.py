@@ -153,10 +153,12 @@ def profview_grades(request):
     user = request.user
     groups = Group.objects.filter(type="promo").all()
     subjects = Subject.objects.all()
+    no_grades=True
     context = {
             'user':user,
             'groups': groups,
-            'subjects':subjects
+            'subjects':subjects,
+            'no_grades':no_grades
     }
     if request.method == "POST":
         group = Group.objects.filter(name=request.POST.get('group')).first()
@@ -166,6 +168,7 @@ def profview_grades(request):
         
         for i,student in enumerate(students):
             for g in Grade.objects.filter(subject=subject,user=student):
+                no_grades=False    
                 grades[i].append(g)
 
         max_grades = max(len(student_grades) for student_grades in grades)
@@ -175,13 +178,40 @@ def profview_grades(request):
             while len(student_grades) < max_grades:
                 student_grades.append(None)
         grade_range = range(max_grades)
+        stud_ave=[[] for _ in range(len(students))]
+        class_ave=[[] for _ in range(max_grades)]
+        if (no_grades==False):
+            #Calcul des moyennes de chaque eleves et de chaque notes
+            for i,s in enumerate(students):
+                stu_ave=0
+                coeff_stu_ave=0
+                for g in grades[i]:
+                    if g:
+                        stu_ave+=g.grade*g.coeff
+                        coeff_stu_ave+=g.coeff
+                stud_ave[i]=round(stu_ave/coeff_stu_ave,2)
+            
+            for i in range(max_grades):
+                tot_stud=len(students)
+                clas_ave=0
+                for j in range(tot_stud):
+                    if (grades[j][i]):
+                        clas_ave+=grades[j][i].grade
+                    else :
+                        tot_stud-=1
+                class_ave[i]=round(clas_ave/tot_stud,2)
+            print(class_ave)
+            print(tot_stud)
         context = {
             'user':user,
             'groups': groups,
             'subjects':subjects,
             'students':students,
             'grades':grades,
-            'grade_range':grade_range
+            'grade_range':grade_range,
+            'no_grades':no_grades,
+            'stud_ave':stud_ave,
+            'class_ave':class_ave
         }
         
 
