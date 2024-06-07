@@ -22,24 +22,33 @@ def studentview(request):
     subj_average=[]
     teachers=[]
     subj_list =[]
-    no_note=False
+    no_note=True
+    ues_list=[]
 
     i=0
     if (user.user_type == 'student'):
         if user_promo is not None:
-            subj_average = [[] for _ in range(user_promo.ues.count())]
-            teachers = [[] for _ in range(user_promo.ues.count())]
-            subj_list = [[] for _ in range(user_promo.ues.count())]
-            for ue in user_promo.ues.all() :
+            
+            for unite in user_promo.ues.all():
+                subj = unite.Subjects.all()
+                for j in range(len(subj)):    
+                    if (Grade.objects.filter(subject=subj[j],user=user) and unite not in ues_list):
+                        ues_list.append(unite)
+            print(ues_list)
+            subj_list = [[] for _ in range(len(ues_list))]
+            subj_average = [[] for _ in range(len(ues_list))]
+            teachers = [[] for _ in range(len(ues_list))]
+            for ue in  ues_list:
                 ave = 0.0
                 sum=0
+                
                 for subj in ue.Subjects.all():
-                    if (Grade.objects.filter(subject=subj,user=user)):
+                   if (Grade.objects.filter(subject=subj,user=user)):
                         subj_list[i].append(subj)
-                if not any(subj_list):
-                    no_note = True
+                print(subj_list)
+                print(ues_list)
                 if (subj_list[i]):
-                    print("PASSER")
+                    no_note = False
                     for s in subj_list[i]:
                         ave_s=0.0
                         sum_coeff_s=0
@@ -66,8 +75,10 @@ def studentview(request):
             'subj_average':subj_average, 
             'teachers':teachers,
             'subj_list':subj_list,
+            'ues_list':ues_list,
             'no_note':no_note
         }
+        
     else :
         context = {'user': user}
     return render(request,'notes/studentview.html',context)
