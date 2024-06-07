@@ -1,0 +1,94 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'user_portal/css/style_notes.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<table>
+  <thead>
+  <tr>
+      <th colspan="2">Informations sur l'étudiant</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>Nom Prénom</td>
+      <td>{{ user.last_name }} {{ user.first_name }} </td>
+  </tr>
+  <tr>
+      <td>Numéro étudiant</td>
+      <td> {{ user.username }} </td>
+  </tr>
+  <tr>
+    <td>Classe</td>
+    <td>{{ user_promo }}</td>
+</tr>
+  </tbody>
+</table>
+
+{% for unite in user_promo.ues.all %}
+  <table>
+    <thead>
+    <tr>
+        <th colspan="2">UE</span></th>
+        <th>Professeur</th>
+        <th>Coefficient</th>
+        <th>Average</th>
+    </tr>
+    </thead>
+    <tbody>
+    <td rowspan="50"> {{ unite.name }} </td>
+    {% for mat in unite.Subjects.all %}
+    <tr>
+        <td> {{ mat.name }} </td>
+        <td>Moyenne d'unité</td>
+        <td>{{ mat.coeff }}</td>
+        <td> {{ mat.name }} </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3">Total</td>
+      <td class="total"></td>
+    </tr>
+  </tbody>
+  </table>
+{% endfor %}
+<table>
+  <thead>
+  <tr>
+      <th colspan="5">Controls Continues</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>First control</td>
+      <td>Moyenne Note</td>
+      <td>7</td>
+      <td>Student</td>
+       
+  </tr>
+  <tr>
+      <td>Second control</td>
+      <td>Moyenne Note</td>
+      <td>5.5</td>
+      <td>Student</td>
+       
+  </tr>
+  <tr><td>Third control</td>
+      <td>Moyenne Note</td>
+      <td>-</td>
+      <td>Student</td>
+       
+  </tr>
+  <tr>
+      <td>Fourth control</td>
+      <td>Moyenne Note</td>
+      <td>-</td>
+      <td>Student</td>
+       
+  </tr>
+  </tbody>
+</table>
+{% endblock %}

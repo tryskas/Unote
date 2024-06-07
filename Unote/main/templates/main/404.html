@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h2>Erreur 404</h2>
+</div>
+<div>
+    <p>Cette page n'existe pas.</p>
+    <img src="{% static 'images/404.jpg' %}" alt="Error 404" width="100%"/>
+</div>
+{% endblock %}

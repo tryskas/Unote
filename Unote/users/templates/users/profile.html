@@ -1,0 +1,22 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h2>Profil de {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items">
+            <form method="post">
+                {% csrf_token %}
+                {{form}}
+                <input type="submit" value="Sauvegarder">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="{% url 'administration:attendance_of' profile_user.id %}"
+       class="internal-link">Gérer les absences</a>
+</div>
+{% endblock %}

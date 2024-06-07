@@ -1,0 +1,45 @@
+{% extends "administration/base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h2>Bonjour {{ user.first_name }} !</h2>
+</div>
+
+<div id="admin-content">
+    <div id="left-panel">
+        <h3>Utilisateurs</h3>
+        <ul>
+            <li><a href="{% url 'administration:profiles' %}"
+                   class="internal-link">Profils et absences</a></li>
+            <li><a href="{% url 'administration:groups' %}"
+                   class="internal-link">Groupes</a></li>
+            <li><a href="{% url 'administration:courses' %}"
+                   class="internal-link">Cours</a></li>
+        </ul>
+
+        <h3>Maquettes</h3>
+        <ul>
+            <li><a href="{% url 'administration:eus' %}"
+                   class="internal-link">UE</a></li>
+            <li><a href="{% url 'administration:subjects' %}"
+                   class="internal-link">Matières</a></li>
+        </ul>
+
+        <h3>Bâtiments</h3>
+        <ul>
+            <li><a href="{% url 'administration:rooms' %}"
+                   class="internal-link">Salles</a></li>
+        </ul>
+
+        <a href="{% url 'users:password_change' %}">Modifier mot de passe</a>
+    </div>
+
+    <div id="right-panel">Emploi du temps + évènements (page d'accueil
+        des administrateurs)</div>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/home_script.js' %}">
+</script>
+{% endblock %}
