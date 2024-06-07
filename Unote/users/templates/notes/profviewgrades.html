@@ -6,7 +6,7 @@
 
   <table>
     <thead>
-        <th colspan="7"><select  name="subj" required>
+        <th colspan="{{ grade_range|length|add:1 }}"><select  name="subj" required>
           <option value="" disabled selected hidden>Matière</option>
           {% for subject in subjects %}
           <option value="{{ subject }}">{{ subject }}</option>
@@ -27,11 +27,11 @@
       </tr>
     {% else %}
       <tr>
-        <td></td>
+        <th></th>
         {% for i in grade_range %}
         <td>Note {{ forloop.counter }}</td>
         {% endfor %}
-        <td>Moyenne</td>
+        <td style="font-weight: bold;">Moyenne</td>
       </tr>
       {% for s in students %}
       {% with i=forloop.counter %}
@@ -41,18 +41,18 @@
           <td>{{ g.grade }}</td>
           {% endfor %}
           {% with j=forloop.counter %}
-              <td style="font-weight:900;" >{{ stud_ave|slice:j|last }}</td>
+              <td>{{ stud_ave|slice:j|last }}</td>
           {% endwith %}
         </tr>
       {% endwith %}
       {% endfor %}
       <tr>
-        <td>Moyenne</td>
+        <td style="font-weight: bold;">Moyenne</td>
         {% for c in class_ave %}
         
-            <td style="font-weight:900;">{{ c }}</td>
+            <td>{{ c }}</td>
         {% endfor %}
-        <td></td>
+        <th></th>
       </tr>
         
     </tbody>

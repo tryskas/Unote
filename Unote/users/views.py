@@ -189,7 +189,10 @@ def profview_grades(request):
                     if g:
                         stu_ave+=g.grade*g.coeff
                         coeff_stu_ave+=g.coeff
-                stud_ave[i]=round(stu_ave/coeff_stu_ave,2)
+                if (coeff_stu_ave!=0):
+                    stud_ave[i]=round(stu_ave/coeff_stu_ave,2)
+                else :
+                    stud_ave[i]=" "
             
             for i in range(max_grades):
                 tot_stud=len(students)
