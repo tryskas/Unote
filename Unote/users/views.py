@@ -234,14 +234,22 @@ def profview_grades(request):
         return render(request, 'notes/profviewgrades.html',context)
 
 @login_required
+def delete_selected_grades(request):
+    if request.method == 'POST':
+        grades_to_delete = request.POST.getlist('grades_to_delete')
+        if grades_to_delete:
+            Grade.objects.filter(pk__in=grades_to_delete).delete()
+        return redirect('users:modify_grades')
+    return redirect('users:modify_grades')
+
+
+@login_required
 def delete_grade(request, grade_id):
-    grade=Grade.objects.filter(pk=grade_id).first()
-    print(grade.grade)
-    #grade = get_object_or_404(Grade, id=grade_id)
+    grade = get_object_or_404(Grade, pk=grade_id)
     
     if request.method == 'POST':
         grade.delete()
-        return Httpresponseredirect('modify_grades')
+        return redirect('users:modify_grades')
     
     return render(request, 'notes/delete_grade.html', {'grade_id': grade_id})
 

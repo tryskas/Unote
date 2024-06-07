@@ -30,5 +30,6 @@ urlpatterns = [
     path('notes/prof/grades', views.profview_grades, name='profview_grades'),
     path('notes/prof/success', views.success_grades, name='success_grades'),
     path('delete_grade/<int:grade_id>/', views.delete_grade, name='delete_grade'),
+     path('delete_selected_grades/', views.delete_selected_grades, name='delete_selected_grades'),
     path('modify_grades/', views.modify_grades, name='modify_grades'),
 ]
