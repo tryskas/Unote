@@ -4,11 +4,11 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ensisingerie</title>
+        <title>Unote</title>
         {% block styles %}
             <link rel="stylesheet" href="{% static 'style.css' %}"/>
             <link rel="stylesheet" href="{% static 'users/css/style.css' %}"/>
-            <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
+
         {% endblock %}
     </head>
 
@@ -20,34 +20,46 @@
                     crossorigin="anonymous"></script>
         {% endblock %}
         <header>
-            {% comment %}
-            <a href="{% url 'main:home' %}" id="home-link-logo">
-                <img src="{% static 'images/logo.png' %}" alt="Logo"
-                     id="logo"/>
-            </a>
+            {% if user.is_authenticated %}
+                {% if user.user_type == 'student' or user.user_type == 'teacher' %}
+                    <a href="{% url 'user_portal:dashboard' %}">
 
-            <h1 id="title">
-                <a href="{% url 'main:home' %}">Unote</a>
-            </h1>{% endcomment %}
+                    </a>
+                {% elif user.user_type == 'admin' %}
+                    <a href="{% url 'administration:dashboard' %}">
 
-            <nav id="header-menu" {% if not user.is_authenticated %}
-                 class="header-not-auth" {% endif %}>
-                {% if not user.is_authenticated %}
-                    <a href="{% url 'users:login' %}"><span class="border-link connection-color">Se connecter / Créer
-                        un compte</span></a>
-                {% else %}
-                    <a href="{% url 'users:profil' %}"><span class="border-link my-profile-color">Mon profil</span></a>
-                    {% if user.is_superuser %}
-                        {% comment %}<a href="{% url 'main:administration' %}"><span class="border-link admin-color">Admin</span></a>{% endcomment %}
+                    </a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'users:login' %}">
+
+                </a>
+            {% endif %}
+
+            <h1>
+                {% if user.is_authenticated %}
+                    {% if user.user_type == 'student' or user.user_type == 'teacher' %}
+                        <a href="{% url 'user_portal:dashboard' %}">
+                            Unote</a>
+                    {% elif user.user_type == 'admin' %}
+                        <a href="{% url 'administration:dashboard' %}">
+                            Unote</a>
                     {% endif %}
+                {% else %}
+                    <a href="{% url 'users:login' %}">Unote</a>
+                {% endif %}
+            </h1>
+
+            <nav>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'users:login' %}">Se connecter</a>
+                {% else %}
                     <form action="{% url 'users:logout' %}" method="post">
                         {% csrf_token %}
-                        <button type="submit"><span
-                                class="border-link connection-color">
-                            Se déconnecter</span></button>
+                        <button type="submit">Se déconnecter</button>
                     </form>
                 {% endif %}
-                {% comment %}<a href="{% url 'main:help' %}"><span class="border-link support-color">Support</span></a>{% endcomment %}
+                <a href="{% url 'main:help' %}">Support</a>
             </nav>
             <div class="theme-switch day">
                 <div class="sun">
@@ -55,7 +67,7 @@
             </div>
         </header>
 
-        <section id="main-content">
+        <section>
             {% block content %} {% endblock %}
         </section>
 
