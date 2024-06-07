@@ -1,7 +1,7 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
-{% if user.user_type == 'teacher' %}
+{% if user.user_type == 'teacher' or user.user_type == 'admin' %}
 
  <div> Les notes ont été ajoutées avec succès</div>
  <button onclick="window.location.href='{% url 'users:profview_grades' %}'">Voir les notes</button>
