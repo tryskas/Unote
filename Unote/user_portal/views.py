@@ -12,7 +12,6 @@ class DashboardView(TemplateView):
     template_name = "user_portal/dashboard.html"
 
 
-@login_required
 def student_view(request):
     user = request.user
     ues = UE.objects.all()
@@ -22,14 +21,14 @@ def student_view(request):
 
     context = {'user': user, 'subjects': subjects, 'grades': grades,
                'ues': ues, 'user_promo': user_promo}
-    return render(request, 'user_portal/student_view.html',
-                  context)
+    return render(request, 'user_portal/student_view.html', context)
 
 
 def attendance_student(request):
     user = request.user
-    absences = Presence.objects.filter(user=user, presence="Absent")
-    lates = Presence.objects.filter(user=user, presence="Late",
+    absences = Presence.objects.filter(user=user, presence="absent",
+                                       justified=False)
+    lates = Presence.objects.filter(user=user, presence="late",
                                     justified=False)
 
     context = {'user': user, 'absences': absences, 'lates': lates}

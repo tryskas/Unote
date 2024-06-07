@@ -8,8 +8,7 @@
         {% block styles %}
             <link rel="stylesheet" href="{% static 'style.css' %}"/>
             <link rel="stylesheet" href="{% static 'main/css/style.css' %}"/>
-            <link rel="icon" type="image/ico"
-                  href="{% static 'images/favicon.ico' %}">
+
         {% endblock %}
     </head>
 
@@ -24,16 +23,16 @@
             {% if user.is_authenticated %}
                 {% if user.user_type == 'student' or user.user_type == 'teacher' %}
                     <a href="{% url 'user_portal:dashboard' %}">
-                        <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+
                     </a>
                 {% elif user.user_type == 'admin' %}
                     <a href="{% url 'administration:dashboard' %}">
-                        <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+
                     </a>
                 {% endif %}
             {% else %}
                 <a href="{% url 'users:login' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+
                 </a>
             {% endif %}
 

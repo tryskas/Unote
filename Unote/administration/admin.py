@@ -48,9 +48,9 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    list_display = ('start_time', 'end_time', 'exam', 'date', 'is_called_done',
+    list_display = ('date', 'duration', 'exam', 'is_called_done',
                     'room', 'course')
-    search_fields = ('start_time', 'end_time', 'room__name', 'course__name')
+    search_fields = ('date', 'room__name', 'course__name')
 
 
 @admin.register(Presence)
