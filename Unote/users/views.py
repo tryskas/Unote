@@ -11,8 +11,11 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView,
                                        PasswordResetCompleteView)
 from .forms import CustomUserCreationForm, UserProfileForm
-from .models import Subject, Grade, UE, Group, Lesson
+from .models import Subject, Grade, UE, Group, Lesson, CustomUser
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+
 
 
 @login_required
@@ -77,7 +80,7 @@ def studentview(request):
             'teachers':teachers,
             'subj_list':subj_list,
             'ues_list':ues_list,
-            'no_note':no_note
+            'no_note':no_note,
         }
         
     else :
@@ -329,7 +332,109 @@ def modify_grades(request):
     else:
         return render(request, 'notes/modifygrades.html',context)
 
+@login_required
+def new_studentreport(request):
+    user=request.user
+    allgroups = Group.objects.filter(type="promo").all()
+    context={
+        'user':user,
+        'allgroups':allgroups,
+    }
+    return render(request, 'notes/newstudentreport.html',context)
 
+@login_required
+def getnew_studentreport(request):
+    user=request.user
+    allgroups = Group.objects.filter(type="promo").all()
+    context={
+        'user':user,
+        'allgroups':allgroups,
+    }
+    if request.method == "POST":
+        group = Group.objects.filter(name=request.POST.get('class')).first()
+        students = group.users.filter(user_type='student').order_by('last_name')
+        context={
+            'user':user,
+            'allgroups':allgroups,
+            'students':students,
+        }
+        return render(request, 'notes/getreport.html', context)
+    else:
+        return render(request, 'notes/newstudentreport.html',context)
+
+def generate_student_view(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        user = CustomUser.objects.get(id=student_id)
+        user_promo= Group.objects.filter(type="promo",users=user).first()
+        ues_average=[]
+        subj_average=[]
+        teachers=[]
+        subj_list =[]
+        no_note=True
+        ues_list=[]
+
+        i=0
+        if (user.user_type == 'student'):
+            if user_promo is not None:
+                
+                for unite in user_promo.ues.all():
+                    subj = unite.Subjects.all()
+                    for j in range(len(subj)):    
+                        if (Grade.objects.filter(subject=subj[j],user=user) and unite not in ues_list):
+                            ues_list.append(unite)
+                print(ues_list)
+                subj_list = [[] for _ in range(len(ues_list))]
+                subj_average = [[] for _ in range(len(ues_list))]
+                teachers = [[] for _ in range(len(ues_list))]
+                for ue in  ues_list:
+                    ave = 0.0
+                    sum=0
+                
+                    for subj in ue.Subjects.all():
+                        if (Grade.objects.filter(subject=subj,user=user)):
+                            subj_list[i].append(subj)
+                    print(subj_list)
+                    print(ues_list)
+                    if (subj_list[i]):
+                        no_note = False
+                        for s in subj_list[i]:
+                            ave_s=0.0
+                            sum_coeff_s=0
+                            lesson = Lesson.objects.filter(subject=s).first()
+                            if lesson:
+                                teacher = lesson.teacher
+                                teachers[i].append(teacher.last_name)
+                            else : 
+                                teachers[i].append("-")
+                            for g in Grade.objects.filter(subject=s,user=user):
+                                ave_s+=g.grade*g.coeff
+                                sum_coeff_s+=g.coeff
+                            ave_s/=sum_coeff_s
+                            ave+=ave_s*s.coeff
+                            sum+=s.coeff
+                            subj_average[i].append(round(ave_s,2))
+                        i+=1
+                        ave/=sum
+                        ues_average.append(round(ave,2))
+            
+            context = {
+                'user': user, 
+                'user_promo':user_promo, 
+                'ues_average':ues_average, 
+                'subj_average':subj_average, 
+                'teachers':teachers,
+                'subj_list':subj_list,
+                'ues_list':ues_list,
+                'no_note':no_note,
+            }
+        
+            html_content = render_to_string('notes/reportpage.html', context)
+            filename=''+user.first_name+'-'+user.last_name+'-report.html'
+            
+            response = HttpResponse(html_content, content_type='text/html')
+            response['Content-Disposition'] = 'attachment; filename='+filename+''
+        return response
 
 
 class UserCreationView(CreateView):

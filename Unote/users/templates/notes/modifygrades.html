@@ -7,13 +7,13 @@
   <table>
     <thead>
         <tr>
-            <th>Matière : {{ subject }}</th>
-            <th>Classe : {{ group }}</th>
+            <th colspan="2">Matière : {{ subject }}</th>
+            <th colspan="2" >Classe : {{ group }}</th>
         </tr>
     </thead>
     <thead>
         <tr>
-            <th colspan="2">
+            <th>
                 <select id="subj" name="subj" required>
                     <option value="" disabled selected hidden>Matière</option>
                     {% for subject in subjects %}

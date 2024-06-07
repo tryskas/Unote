@@ -32,5 +32,10 @@ urlpatterns = [
     path('notes/prof/view_grades', views.profview_grades, name='profview_grades'),
     path('notes/prof/modify_grades/', views.modify_grades, name='modify_grades'),
     path('notes/prof/modify_grades/delete_selected_grades/', views.delete_selected_grades, name='delete_selected_grades'),
+    path('notes/prof/new_report/', views.new_studentreport, name='new_studentreport'),
+    path('notes/prof/new_report/get/', views.getnew_studentreport, name='getnew_studentreport'),
+    path('notes/prof/new_report/get/generate/', views.generate_student_view, name='generate_student_view'),
+
+
     
 ]

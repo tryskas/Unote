@@ -53,18 +53,13 @@
     </tr>
     {% endfor %}
     </tbody>
-    <thead>
-        <th colspan="6">Moyenne de classe</th>
-        <th class="total">16,8</th>
-    </thead>
-    </div>
   </table>
   <input type="hidden" name="group" value="{{ group }}">
   <input type="hidden" name="coefficient" value="{{ coefficient }}">
   <input type="hidden" name="subject" value="{{ subject }}">
 
 
-  <button type="submit" id="valider-btn">Valider</button>
+  <button type="submit" class="valider-btn">Valider</button>
 </form>
 
 <button type="button" onclick="window.location.href='{% url 'users:profview' %}'">Retour</button>
