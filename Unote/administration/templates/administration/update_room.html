@@ -1,0 +1,36 @@
+{% load static %}
+
+{% block jquery %}
+    <!-- Script jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+{% endblock %}
+
+<div>
+    <h2>Page de {{ room.name }}</h2>
+</div>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items">
+            <form method="post">
+                {% csrf_token %}
+                {{form}}
+                <input type="submit" value="Modifier">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="form-items">
+    <form method="post"
+          action="{% url 'administration:delete_room' room.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="ue_id" value="{{ room.id }}">
+        <input type="submit" value="Supprimer la salle">
+    </form>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/rooms_script.js' %}"></script>
