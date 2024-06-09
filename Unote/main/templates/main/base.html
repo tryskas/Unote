@@ -20,49 +20,51 @@
                     crossorigin="anonymous"></script>
         {% endblock %}
         <header>
-            {% if user.is_authenticated %}
-                {% if user.user_type == 'student' or user.user_type == 'teacher' %}
-                    <a href="{% url 'user_portal:dashboard' %}">
-
-                    </a>
-                {% elif user.user_type == 'admin' %}
-                    <a href="{% url 'administration:dashboard' %}">
-
-                    </a>
-                {% endif %}
-            {% else %}
-                <a href="{% url 'users:login' %}">
-
-                </a>
-            {% endif %}
-
-            <h1>
+            <div class="header-content"></div>
                 {% if user.is_authenticated %}
                     {% if user.user_type == 'student' or user.user_type == 'teacher' %}
                         <a href="{% url 'user_portal:dashboard' %}">
-                            Unote</a>
+
+                        </a>
                     {% elif user.user_type == 'admin' %}
                         <a href="{% url 'administration:dashboard' %}">
-                            Unote</a>
+
+                        </a>
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'users:login' %}">Unote</a>
-                {% endif %}
-            </h1>
+                    <a href="{% url 'users:login' %}">
 
-            <nav>
-                {% if not user.is_authenticated %}
-                    <a href="{% url 'users:login' %}">Se connecter</a>
-                {% else %}
-                    <form action="{% url 'users:logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Se déconnecter</button>
-                    </form>
+                    </a>
                 {% endif %}
-                <a href="{% url 'main:help' %}">Support</a>
-            </nav>
-            <div class="theme-switch day">
-                <div class="sun">
+
+                <h1>
+                    {% if user.is_authenticated %}
+                        {% if user.user_type == 'student' or user.user_type == 'teacher' %}
+                            <a href="{% url 'user_portal:dashboard' %}">
+                                Unote</a>
+                        {% elif user.user_type == 'admin' %}
+                            <a href="{% url 'administration:dashboard' %}">
+                                Unote</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'users:login' %}">Unote</a>
+                    {% endif %}
+                </h1>
+
+                <nav>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'users:login' %}">Se connecter</a>
+                    {% else %}
+                        <form action="{% url 'users:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Se déconnecter</button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'main:help' %}">Support</a>
+                </nav>
+                <div class="theme-switch day">
+                    <div class="sun">
+                    </div>
                 </div>
             </div>
         </header>

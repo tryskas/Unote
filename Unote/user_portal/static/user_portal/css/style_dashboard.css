@@ -10,6 +10,19 @@ body {
     display: flex;
 }
 
+/* Logo Styles */
+.logos {
+    border-radius: 50%;
+    overflow: hidden;
+    display: block;
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    float: right;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+
 .container {
     display: flex;
 }

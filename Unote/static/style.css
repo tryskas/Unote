@@ -50,6 +50,31 @@ html, body {
     flex-direction: column;
 }
 
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #0044cc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.logos {
+    border-radius: 50%;
+    overflow: hidden;
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    margin-left: 20px;
+}
+
 /* Navigation Styles */
 nav {
     display: flex;
