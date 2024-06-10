@@ -11,6 +11,8 @@ urlpatterns = [
     path("search_group/", views.search_group, name="search_group"),
     path("create_group/", views.GroupCreationView.as_view(),
          name="create_group"),
+    path('create_groups_csv/', views.create_groups_csv,
+         name='create_groups_csv'),
     path("update_group/<int:pk>/", views.GroupUpdateView.as_view(),
          name="update_group"),
     path('delete_group/<int:group_id>/', views.delete_group,

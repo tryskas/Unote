@@ -9,8 +9,15 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 
-class DashboardView(TemplateView):
-    template_name = "user_portal/dashboard.html"
+def dashboard_view(request):
+    user = request.user
+    absence_late = Presence.objects.filter(user=user, justified=False).exclude(
+        presence="present").order_by('-session__date')[:3]
+    grades = Grade.objects.filter(user=user)[:3]
+
+    context = {'user': user, 'absence_late': absence_late, 'grades': grades}
+
+    return render(request, 'user_portal/dashboard.html', context)
 
 
 class MyAccountView(TemplateView):
@@ -38,7 +45,6 @@ def studentview(request):
                     if (Grade.objects.filter(subject=subj[j],
                                              user=user) and unite not in ues_list):
                         ues_list.append(unite)
-            print(ues_list)
             subj_list = [[] for _ in range(len(ues_list))]
             subj_average = [[] for _ in range(len(ues_list))]
             teachers = [[] for _ in range(len(ues_list))]
@@ -49,8 +55,6 @@ def studentview(request):
                 for subj in ue.subjects.all():
                     if Grade.objects.filter(subject=subj, user=user):
                         subj_list[i].append(subj)
-                print(subj_list)
-                print(ues_list)
                 if subj_list[i]:
                     no_note = False
                     for s in subj_list[i]:

@@ -10,15 +10,18 @@
 
     {% for a in absences %}
 
-            <div >
-                <a>Absent à {{a.session.course.name}} le {{a.course.date}} </a>
+            <div>
+                <a>Absent à {{a.session.course.name}} le {{a.session.date}}
+                    (à justifier auprès de la scolarité)
+                </a>
             </div>
 
     {% endfor %}
     {% for l in lates %}
 
-            <div >
-                <a>En retard à {{l.session.course.name}} le {{l.course.date}} </a>
+            <div>
+                <a>En retard à {{l.session.course.name}} le {{l.session.date}}
+                </a>
             </div>
         
     {% endfor %}

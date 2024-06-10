@@ -3,8 +3,7 @@ from . import views
 
 app_name = "user_portal"
 urlpatterns = [
-    path("dashboard/", views.DashboardView.as_view(),
-         name="dashboard"),
+    path("dashboard/", views.dashboard_view, name="dashboard"),
     path("my_account/", views.MyAccountView.as_view(),
          name="my_account"),
     path('notes/', views.studentview, name="notes"),

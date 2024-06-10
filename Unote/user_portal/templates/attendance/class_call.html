@@ -1,14 +1,21 @@
-{% block content %}
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'user_portal/css/style_notes.css' %}"/>
+{% endblock %}{% block content %}
 
 <div class="class_call">
-    <h3>Appel pour {{session.course.name}} par {{user.username}} :</h3>
     <table>
     <thead>
-    
-    
+        <tr>
+            <th colspan="4">
+                Appel pour {{session.course.name}} par {{user.username}} :
+            </th>
+        </tr>
         <tr>
             <th scope="col">Eleve</th>
-            <th scope="col">préom</th>
+            <th scope="col">Prénom</th>
             <th scope="col">Nom</th>
             <th scope="col">Présence</th>
         </tr>
@@ -17,39 +24,39 @@
     <form method="POST">
     {% csrf_token %}
     {% for s in student_list %}
-   
+
         <tr>
             <th scope="row">{{s.username}}</th>
             <td>{{s.first_name}}</td>
             <td>{{s.last_name}}</td>
             <td><fieldset>
-                
-              
+
+
                 <div>
-                  <input type="radio" id="{{s.username}}"
+                  <input type="radio" classe="{{s.username}}"
                          name="{{s.username}}" value="present" checked />
                   <label for="present">présent</label>
-                
-                  <input type="radio" id="{{s.username}}"
+
+                  <input type="radio" classe="{{s.username}}"
                          name="{{s.username}}" value="absent"  />
                   <label for="absent">absent</label>
-                
-                  <input type="radio" id="{{s.username}}"
+
+                  <input type="radio" classe="{{s.username}}"
                          name="{{s.username}}" value="late"  />
                   <label for="late">en retard</label>
                 </div>
             </fieldset>
             </td>
-       
+
         </tr>
-       
-            
-        
-        
+
+
+
+
     {% endfor %}
     </tbody>
     </table>
-    <button type="submit" href="{% url 'user_portal:attendance_teacher' %}">
+    <button type="submit" href="{% url 'user_portal:attendance_teacher' %}" class="button">
         Valider </button>
 </form>
 </div>

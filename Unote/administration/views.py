@@ -12,13 +12,15 @@ from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
 from users.models import CustomUser
 from .forms import (SubjectForm, UEForm, GroupForm, CourseForm, RoomForm,
-                    SessionForm)
+                    SessionForm, GroupFormCSV)
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from administration.models import (Subject, Grade, UE, Group, Presence, Course,
                                    Session, Room)
 from datetime import timedelta
+from users.forms import CSVUploadForm
+import csv
 
 
 @method_decorator(login_required, name='dispatch')
@@ -107,6 +109,71 @@ class GroupCreationView(CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Le groupe a bien été créée.')
         return super().form_valid(form)
+
+
+def create_groups_csv(request):
+    if request.method == "POST":
+        form = CSVUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = form.cleaned_data['csv_file']
+            decoded_file = csv_file.read().decode('utf-8').splitlines()
+            reader = csv.DictReader(decoded_file)
+            groups_created = 0
+            for row in reader:
+                form = CustomUserCreationForm({
+                    'first_name': row['first_name'],
+                    'last_name': row['last_name'],
+                    'email': row['email'],
+                    'user_type': row['user_type']
+                })
+                if form.is_valid():
+                    groups_created += 1
+                else:
+                    messages.error(request, f"Erreur lors de la création du groupe {row['email']}")
+            messages.success(request, f"{groups_created} groupes ont été créés avec succès.")
+            return redirect(reverse_lazy('users:register'))
+    else:
+        form = CSVUploadForm()
+    return render(request, 'users/upload_csv.html', {'form': form})
+
+
+def create_groups_csv(request):
+    if request.method == "POST":
+        form = CSVUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = form.cleaned_data['csv_file']
+            decoded_file = csv_file.read().decode('utf-8').splitlines()
+            reader = csv.DictReader(decoded_file)
+            groups_created = 0
+            for row in reader:
+                group_form = GroupFormCSV({
+                    'name': row['name'],
+                    'type': row['type']
+                })
+
+                if group_form.is_valid():
+                    group = group_form.save(commit=False)
+                    group.save()
+                    groups_created += 1
+
+                    # Ajout des utilisateurs au groupe
+                    user_emails = row['users'].split(';')
+                    users = CustomUser.objects.filter(email__in=user_emails)
+                    group.users.set(users)
+
+                    # Ajout des UEs au groupe
+                    ue_names = row['ues'].split(';')
+                    ues = UE.objects.filter(name__in=ue_names)
+                    group.ues.set(ues)
+                else:
+                    messages.error(request, f"Erreur lors de la création du groupe {row['name']}")
+
+            messages.success(request, f"{groups_created} groupes ont été créés avec succès.")
+            return redirect(reverse_lazy('administration:dashboard'))
+    else:
+        form = CSVUploadForm()
+    return render(request, 'administration/create_groups_csv.html',
+                  {'form': form})
 
 
 class GroupUpdateView(UpdateView):

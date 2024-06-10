@@ -20,45 +20,45 @@
                     <tr>
                         <th></th>
                         <th>Lun</th>
-                        
-                    
+
+
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>8:00 - 10:00</td>
                         <td>Math</td>
-                        
-                    
+
+
                     </tr>
                     <tr>
                         <td>10:00 - 12:00</td>
                         <td>Math</td>
-                    
+
                     </tr>
                     <tr>
                         <td>12:00 - 14:00</td>
                         <td></td>
-                    
+
                     </tr>
                     <tr>
                         <td>14:00 - 16:00</td>
                         <td>Math</td>
-                    
+
                     </tr>
                     <tr>
                         <td>16:00 - 18:00</td>
                         <td>Math</td>
-                    
+
                     </tr>
-            
-            
-            
-            
+
+
+
+
                 </tbody>
             </table>
         </div>
-        
+
     </div>
     <div class="evaluation">
         <a href="next_exams.html">
@@ -75,16 +75,30 @@
         {% if user.user_type == "student" %}
             <a href="{% url 'user_portal:attendance_student' %}">
                 <h2>Absence</h2>
+                {% for a in absence_late %}
+
+
+                    <div >
+
+                    {% if a.presence == "absent" %}
+                        <a>Absent à {{a.session.lesson.name}} le {{a.session.date}} </a>
+                    {% endif%}
+                    {% if a.presence == "late" %}
+                        <a>En retard à {{a.session.lesson.name}} le {{a.session.date}} </a>
+                    {% endif %}
+                    </div>
+
+                {% endfor %}
             </a>
         {% else %}
             <a href="{% url 'user_portal:attendance_teacher' %}">
                 <h2>Absence</h2>
+
             </a>
         {% endif %}
         <ul>
-            <li>absence 1</li>
-            <li>absence 2</li>
-            <li>absence 3</li>
+
+
 
         </ul>
     </div>
@@ -93,14 +107,14 @@
             <h2>Dernières notes</h2>
         </a>
         <ul>
-            <li>note 1</li>
-            <li>note 2</li>
-            <li>note 3</li>
+            {% for g in grades %}
+            <li>{{ g.subject }} | {{ g.grade }}/20 |</li>
+            {% endfor %}
 
         </ul>
-    
+
 
     </div>
-    
+
 </section>
 {% endblock %}

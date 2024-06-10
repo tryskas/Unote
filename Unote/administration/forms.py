@@ -44,6 +44,17 @@ class GroupForm(forms.ModelForm):
             'username')
 
 
+class GroupFormCSV(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ['name', 'type']
+        labels = {
+            'name': 'Nom du groupe',
+            'type': 'Type',
+        }
+
+
 class CourseForm(forms.ModelForm):
 
     class Meta:

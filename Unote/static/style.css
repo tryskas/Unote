@@ -138,6 +138,10 @@ footer p {
     font-size: 14px;
 }
 
+form div {
+    margin-top: 0.5rem;
+}
+
 /*------------------------------Theme switch---------------------------------*/
 
 body {
