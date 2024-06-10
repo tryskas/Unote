@@ -11,12 +11,14 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
 from users.models import CustomUser
-from .forms import SubjectForm, UEForm, GroupForm, CourseForm, RoomForm
+from .forms import (SubjectForm, UEForm, GroupForm, CourseForm, RoomForm,
+                    SessionForm)
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from administration.models import (Subject, Grade, UE, Group, Presence, Course,
                                    Session, Room)
+from datetime import timedelta
 
 
 @method_decorator(login_required, name='dispatch')
@@ -102,6 +104,10 @@ class GroupCreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Le groupe a bien été créée.')
+        return super().form_valid(form)
+
 
 class GroupUpdateView(UpdateView):
     model = Group
@@ -123,6 +129,10 @@ class GroupUpdateView(UpdateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Le groupe a bien été mis à jour.')
+        return super().form_valid(form)
+
 
 @login_required
 @require_POST
@@ -133,9 +143,9 @@ def delete_group(request, group_id):
     try:
         group = Group.objects.get(pk=group_id)
         group.delete()
-        messages.success(request, 'La matière a été supprimée avec succès.')
+        messages.success(request, 'Le groupe a été supprimée.')
     except Group.DoesNotExist:
-        messages.error(request, 'La matière n\'existe pas.')
+        messages.error(request, 'Le groupe n\'existe pas.')
 
     return redirect('administration:dashboard')
 
@@ -183,6 +193,10 @@ class CourseCreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Le cours a bien été créé.')
+        return super().form_valid(form)
+
 
 class CourseUpdateView(UpdateView):
     model = Course
@@ -204,6 +218,10 @@ class CourseUpdateView(UpdateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Le cours a bien été mis à jour.')
+        return super().form_valid(form)
+
 
 @login_required
 @require_POST
@@ -214,7 +232,7 @@ def delete_course(request, course_id):
     try:
         course = Course.objects.get(pk=course_id)
         course.delete()
-        messages.success(request, 'Le cours a été supprimée avec succès.')
+        messages.success(request, 'Le cours a été supprimé.')
     except Course.DoesNotExist:
         messages.error(request, 'Le cours n\'existe pas.')
 
@@ -264,6 +282,10 @@ class UECreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'L\'UE a bien été créée.')
+        return super().form_valid(form)
+
 
 class UEUpdateView(UpdateView):
     model = UE
@@ -285,6 +307,10 @@ class UEUpdateView(UpdateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'L\'UE a bien été mise à jour.')
+        return super().form_valid(form)
+
 
 @login_required
 @require_POST
@@ -295,7 +321,7 @@ def delete_ue(request, ue_id):
     try:
         ue = UE.objects.get(pk=ue_id)
         ue.delete()
-        messages.success(request, 'L\'UE a été supprimée avec succès.')
+        messages.success(request, 'L\'UE a été supprimée.')
     except UE.DoesNotExist:
         messages.error(request, 'L\'UE n\'existe pas.')
 
@@ -346,6 +372,10 @@ class SubjectCreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'La matière a bien été créée.')
+        return super().form_valid(form)
+
 
 class SubjectUpdateView(UpdateView):
     model = Subject
@@ -367,6 +397,10 @@ class SubjectUpdateView(UpdateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'La matière a bien été mise à jour.')
+        return super().form_valid(form)
+
 
 @login_required
 @require_POST
@@ -377,7 +411,7 @@ def delete_subject(request, subject_id):
     try:
         subject = Subject.objects.get(pk=subject_id)
         subject.delete()
-        messages.success(request, 'La matière a été supprimée avec succès.')
+        messages.success(request, 'La matière a été supprimée.')
     except Subject.DoesNotExist:
         messages.error(request, 'La matière n\'existe pas.')
 
@@ -428,6 +462,10 @@ class RoomCreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'La salle a bien été créée.')
+        return super().form_valid(form)
+
 
 class RoomUpdateView(UpdateView):
     model = Room
@@ -449,6 +487,10 @@ class RoomUpdateView(UpdateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'La salle a bien été mise à jour.')
+        return super().form_valid(form)
+
 
 @login_required
 @require_POST
@@ -459,9 +501,123 @@ def delete_room(request, room_id):
     try:
         room = Room.objects.get(pk=room_id)
         room.delete()
-        messages.success(request, 'La salle a été supprimée avec succès.')
+        messages.success(request, 'La salle a été supprimée.')
     except Room.DoesNotExist:
         messages.error(request, 'La salle n\'existe pas.')
+
+    return redirect('administration:dashboard')
+
+
+@login_required
+def sessions(request):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    sessions = Session.objects.all()
+
+    context = {'sessions': sessions}
+
+    return render(request, 'administration/sessions.html',
+                  context)
+
+
+@login_required
+@require_GET
+def search_session(request):
+    search_term = request.GET.get('search_term', '')
+
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    sessions = Session.objects.filter(
+        Q(course__name__icontains=search_term) |
+        Q(course__group__name__icontains=search_term) |
+        Q(course__teacher__first_name__icontains=search_term) |
+        Q(course__teacher__last_name__icontains=search_term) |
+        Q(course__subject__name__icontains=search_term))
+
+    search_results_html = render_to_string(
+        'administration/search_session_results.html',
+        {'search_results': sessions})
+
+    return JsonResponse({'search_session_results_html':
+                         search_results_html})
+
+
+class SessionCreationView(CreateView):
+    template_name = 'administration/session_creation.html'
+    form_class = SessionForm
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        repeat = form.cleaned_data.get('repeat')
+        repeat_interval = form.cleaned_data.get('repeat_interval')
+        repeat_duration = form.cleaned_data.get('repeat_duration')
+
+        if repeat and repeat_interval and repeat_duration:
+            end_date = self.object.date + timedelta(days=repeat_duration)
+            current_date = self.object.date + timedelta(days=repeat_interval)
+            while current_date <= end_date:
+                Session.objects.create(
+                    course=self.object.course,
+                    date=current_date,
+                    duration=self.object.duration,
+                    room=self.object.room,
+                    exam=self.object.exam,
+                )
+                current_date += timedelta(days=repeat_interval)
+
+        messages.success(self.request, 'La session a bien été créée.')
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+
+class SessionUpdateView(UpdateView):
+    model = Session
+    template_name = 'administration/update_session.html'
+    form_class = SessionForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        session = self.get_object()
+        context['session'] = session
+        return context
+
+    def get_success_url(self):
+        user_type = self.request.user.user_type
+        if user_type == 'student' or user_type == 'teacher':
+            return reverse_lazy('user_portal:dashboard')
+        elif user_type == 'admin':
+            return reverse_lazy('administration:dashboard')
+        else:
+            return reverse_lazy('main:error_400')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'La session a bien été mise à jour.')
+        return super().form_valid(form)
+
+
+@login_required
+@require_POST
+def delete_session(request, session_id):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
+    try:
+        session = Session.objects.get(pk=session_id)
+        session.delete()
+        messages.success(request, 'La session a été supprimée.')
+    except Session.DoesNotExist:
+        messages.error(request, 'La session n\'existe pas.')
 
     return redirect('administration:dashboard')
 

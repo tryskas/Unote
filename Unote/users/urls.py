@@ -20,6 +20,9 @@ urlpatterns = [
     path('reset/done/', views.CustomPasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
     path("register/", views.UserCreationView.as_view(), name="register"),
+    path('upload_csv/', views.upload_csv, name='upload_csv'),
+    path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('delete_csv/', views.delete_csv, name='delete_csv'),
     path('profile/<int:user_id>/', views.ProfileView.as_view(),
          name='profile'),
 ]

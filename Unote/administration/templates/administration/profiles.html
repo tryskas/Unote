@@ -16,6 +16,14 @@
 
     <p><a href="{% url 'users:register' %}">Enregistrer nouvel
         utilisateur</a></p>
+
+    <h2>Supprimer des utilisateurs à partir d'un fichier CSV</h2>
+    <form method="post" enctype="multipart/form-data"
+          action="{% url 'users:delete_csv' %}">
+        {% csrf_token %}
+        <input type="file" name="csv_file" accept=".csv">
+        <input type="submit" value="Supprimer à partir du CSV">
+    </form>
 </div>
 
 <script type="text/javascript"

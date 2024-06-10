@@ -54,14 +54,14 @@ class Room(models.Model):
 
 class Session(models.Model):
     date = models.DateTimeField()
-    duration = models.IntegerField()
+    duration = models.DurationField()
     exam = models.BooleanField()
     is_called_done = models.BooleanField(default=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Session du {self.date} (durée : {self.duration} heure(s)))"
+        return f"Session du {self.date} (durée : {self.duration} minute(s)))"
 
 
 class Grade(models.Model):

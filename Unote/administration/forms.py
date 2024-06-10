@@ -1,7 +1,9 @@
 from django import forms
 from .models import Subject, UE, Group
 from users.models import CustomUser
-from .models import Course, Room
+from .models import Course, Room, Session
+from django.utils import timezone
+from datetime import timedelta, datetime
 
 
 class SubjectForm(forms.ModelForm):
@@ -67,3 +69,32 @@ class RoomForm(forms.ModelForm):
         labels = {
             'name': 'Nom de la salle',
         }
+
+
+class SessionForm(forms.ModelForm):
+    repeat = forms.BooleanField(required=False, label='Répéter cette session')
+    repeat_interval = forms.IntegerField(required=False,
+                                         label='Intervalle (jours)')
+    repeat_duration = forms.IntegerField(required=False, label='Durée (jours)')
+
+    class Meta:
+        model = Session
+        fields = ['course', 'date', 'duration', 'room', 'exam']
+        labels = {
+            'course': 'Cours',
+            'date': 'Date et heure de la session',
+            'duration': 'Durée (hh:mm:ss)',
+            'room': 'Salle',
+            'exam': 'Examen ?',
+        }
+        widgets = {
+            'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.date:
+            self.initial['date'] = self.instance.date.strftime(
+                '%Y-%m-%dT%H:%M')
+        else:
+            self.fields['duration'].initial = "02:00:00"  # 2 hours default

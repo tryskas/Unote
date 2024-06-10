@@ -50,6 +50,15 @@ urlpatterns = [
     path('delete_room/<int:room_id>/', views.delete_room,
          name='delete_room'),
 
+    path("sessions/", views.sessions, name="sessions"),
+    path("search_session/", views.search_session, name="search_session"),
+    path("create_session/", views.SessionCreationView.as_view(),
+         name="create_session"),
+    path("update_session/<int:pk>/", views.SessionUpdateView.as_view(),
+         name="update_session"),
+    path('delete_session/<int:session_id>/', views.delete_session,
+         name='delete_session'),
+
     path('attendance_of/<int:user_id>/', views.attendance_of,
          name='attendance_of'),
 ]

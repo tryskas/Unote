@@ -29,7 +29,7 @@
                        class="sidebar-button">Home</a>
                     <a href="{% url 'user_portal:dashboard' %}"
                        class="sidebar-button">Messagerie</a>
-                    <a href="{% url 'user_portal:dashboard' %}"
+                    <a href="{% url 'user_portal:my_account' %}"
                        class="sidebar-button">Mon Compte</a>
                 </div>
                 <aside class="sidebar">
@@ -87,6 +87,15 @@
                     </header>
 
                     {% block content %} {% endblock %}
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </main>
             </div>
         </div>
