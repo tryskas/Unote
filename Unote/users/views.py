@@ -15,6 +15,15 @@ from .models import Subject, Grade, UE, Group, Lesson, CustomUser
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+
+
+
 
 #Display the students average grades
 @login_required
@@ -258,35 +267,67 @@ def getnew_studentreport(request):
 def generate_student_view(request):
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
-        user = CustomUser.objects.get(id=student_id)
-        user_promo = get_user_promo(user)
+        user = get_object_or_404(CustomUser, id=student_id)
+        user_promo = Group.objects.filter(type="promo", users=user).first()
 
-        if user.user_type != 'student' or not user_promo:
-            return HttpResponse("User is not a student or no promo group found.", status=400)
+        if user.user_type == 'student' and user_promo:
+            ues_list = get_ues_list(user, user_promo)
+            subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
 
-        ues_list = get_ues_list(user, user_promo)
-        subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
+            if not no_note:
+                response = HttpResponse(content_type='application/pdf')
+                filename = f"{user.first_name}_{user.last_name}_report.pdf"
+                response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
-        context = {
-            'user': user,
-            'user_promo': user_promo,
-            'ues_average': ues_average,
-            'subj_average': subj_average,
-            'teachers': teachers,
-            'subj_list': subj_list,
-            'ues_list': ues_list,
-            'no_note': no_note,
-        }
+                doc = SimpleDocTemplate(response, pagesize=letter)
+                elements = []
 
-        html_content = render_to_string('notes/reportpage.html', context)
-        filename = f'{user.first_name}-{user.last_name}-report.html'
+                title_style = getSampleStyleSheet()["Heading1"]
+                title = Paragraph("Student Report", title_style)
+                elements.append(title)
 
-        response = HttpResponse(html_content, content_type='text/html')
-        response['Content-Disposition'] = f'attachment; filename={filename}'
+                user_info_data = [
+                    ["Nom Prénom", user.last_name + " " + user.first_name],
+                    ["Numéro étudiant", user.username]
+                ]
+                user_info_table = Table(user_info_data, colWidths=[200, 200])
+                user_info_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ]))
+                elements.append(user_info_table)
 
-        return response
+                for ue_index, ue in enumerate(ues_list):
+                    ue_title = Paragraph(f"UE: {ue.name}", getSampleStyleSheet()["Heading2"])
+                    elements.append(ue_title)
 
-    return HttpResponse("Invalid request method.", status=405)
+                    data = [["UE", "Sujet", "Professeur", "Note Moyenne"]]
+                    for subj_index, subj in enumerate(subj_list[ue_index]):
+                        if subj_index == 0:
+                            data.append([ue.name, subj.name, teachers[ue_index][subj_index], subj_average[ue_index][subj_index]])
+                        else:
+                            data.append(["", subj.name, teachers[ue_index][subj_index], subj_average[ue_index][subj_index]])
+
+                    ue_table = Table(data, colWidths=[100, 200, 200, 100])
+                    ue_table.setStyle(TableStyle([
+                        ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
+                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                    ]))
+                    elements.append(ue_table)
+
+                doc.build(elements)
+                return response
+
+    return HttpResponse(status=400)
+
 
 """ Helper functions
 """
