@@ -5,7 +5,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    
     align-items: center;
     height: 90vh;
 }
@@ -15,11 +15,11 @@ body {
     border-radius: 50%;
     overflow: hidden;
     display: block;
-    height: 100px;
-    width: 100px;
+    height: 110px;
+    width: 110px;
     object-fit: cover;
     float: right;
-    margin-left: 10px;
+    margin-left: 5px;
     margin-bottom: 15px;
 }
 

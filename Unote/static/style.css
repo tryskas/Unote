@@ -55,16 +55,32 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 40px 100%;
     background-color: #0044cc;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
-.header-content {
+.header-left {
+    float: left;
+    flex: 1;
+}
+
+.header-center {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex: 2;
 }
+
+.header-right {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+
 
 .logos {
     border-radius: 50%;
@@ -72,17 +88,59 @@ header {
     height: 100px;
     width: 100px;
     object-fit: cover;
-    margin-left: 20px;
+}
+
+.title {
+    font-family: 'Courier New', Courier, monospace; /* Changez la police selon vos besoins */
+    font-size: 3em; /* Taille du titre */
+    font-weight: bold; /* Épaisseur du texte */
+    text-align: center; /* Centrer le titre */
+    color: #fff; /* Couleur de base du texte */
+
+    /* Effet néon */
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px #ff00ff,
+        0 0 30px #ff00ff,
+        0 0 40px #ff00ff,
+        0 0 50px #ff00ff,
+        0 0 60px #ff00ff;
+
+    /* Animation néon */
+    animation: neon 1.5s infinite alternate;
+}
+
+@keyframes neon {
+    from {
+        text-shadow: 
+            0 0 5px #fff,
+            0 0 10px #fff,
+            0 0 20px #ff00ff,
+            0 0 30px #ff00ff,
+            0 0 40px #ff00ff,
+            0 0 50px #ff00ff,
+            0 0 60px #ff00ff;
+    }
+    to {
+        text-shadow: 
+            0 0 10px #fff,
+            0 0 20px #ff00ff,
+            0 0 30px #ff00ff,
+            0 0 40px #ff00ff,
+            0 0 50px #ff00ff,
+            0 0 60px #ff00ff,
+            0 0 70px #ff00ff;
+    }
 }
 
 /* Navigation Styles */
 nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background-color: #0044cc;
-    padding: 10px 20px;
-    border-radius: 5px;
+    justify-content: flex-end;
+
+
 }
 
 nav a {
@@ -105,7 +163,7 @@ nav button {
     background-color: #ffffff;
     color: #0044cc;
     border: none;
-    padding: 10px 12px;
+    padding: 10px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
@@ -153,12 +211,12 @@ body {
 }
 
 .theme-switch {
-    font-size: 10%; /* Changer cette propriété pour modifier la taille du
+    font-size: 2%; /* Changer cette propriété pour modifier la taille du
     bouton */
     position: relative;
     margin-right: 0;
-    height: var(--toggle_height);
-    width: var(--toggle_width);
+    height: 4em;
+    width: 8em;
     border-radius: var(--toggle_height);
     border-style: inset;
     border-color: #000000;
@@ -176,40 +234,41 @@ body {
     border-radius: 50%;
     transition: all 400ms ease-in-out;
 
-    top: 4.5em;
-    left: 18em;
+    top: 0.5em;
+    left: 4em;
     transform: rotate(0deg);
-    width: 7em;
-    height: 7em;
+    width: 3em;
+    height: 3em;
     background: #FFFFFF;
-    box-shadow: 3em 3em 0 5em #FBE61E inset,
-    0 -5em 0 -2.7em #FBE61E,
-    3.5em -3.5em 0 -3em #FBE61E,
-    5em 0 0 -2.7em #FBE61E,
-    3.5em 3.5em 0 -3em #FBE61E,
-    0 5em 0 -2.7em #FBE61E,
-    -3.5em 3.5em 0 -3em #FBE61E,
-    -5em 0 0 -2.7em #FBE61E,
-    -3.5em -3.5em 0 -3em #FBE61E;
+    box-shadow: 0.5em 0.5em 0 0.5em #FBE61E inset,
+    0 -0.7em 0 -0.4em #FBE61E,
+    0.7em -0.7em 0 -0.5em #FBE61E,
+    1em 0 0 -0.4em #FBE61E,
+    0.7em 0.7em 0 -0.5em #FBE61E,
+    0 1em 0 -0.4em #FBE61E,
+    -0.7em 0.7em 0 -0.5em #FBE61E,
+    -1em 0 0 -0.4em #FBE61E,
+    -0.7em -0.7em 0 -0.5em #FBE61E;
 }
 
 .moon {
-    top: 3em;
-    left: 3em;
+    top: 0.2em;
+    left: 0.2em;
     transform: rotate(-75deg);
-    width: var(--toggle_btn_radius);
-    height: var(--toggle_btn_radius);
+    width: 3em;
+    height: 3em;
     background: var(--background-color-night);
     box-shadow:
-    3em 2.5em 0 0em var(--moon_color) inset,
-    rgba(255, 255, 255, 0.1) 0em -7em 0 -4.5em,
-    rgba(255, 255, 255, 0.1) 3em 7em 0 -4.5em,
-    rgba(255, 255, 255, 0.1) 2em 13em 0 -4em,
-    rgba(255, 255, 255, 0.1) 6em 2em 0 -4.1em,
-    rgba(255, 255, 255, 0.1) 8em 8em 0 -4.5em,
-    rgba(255, 255, 255, 0.1) 6em 13em 0 -4.5em,
-    rgba(255, 255, 255, 0.1) -4em 7em 0 -4.5em,
-    rgba(255, 255, 255, 0.1) -1em 10em 0 -4.5em;
+    0.5em 0.5em 0 0em var(--moon_color) inset,
+        rgba(255, 255, 255, 0.1) 0em -1em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) 0.5em 1em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) 0.3em 2em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) 1em 0.3em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) 1.3em 1.3em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) 1em 2em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) -0.6em 1em 0 -0.6em,
+        rgba(255, 255, 255, 0.1) -0.2em 1.5em 0 -0.6em;
+
 }
 
 .no-transition {

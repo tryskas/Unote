@@ -20,53 +20,57 @@
                     crossorigin="anonymous"></script>
         {% endblock %}
         <header>
-            {% if user.is_authenticated %}
-                {% if user.user_type == 'student' or user.user_type == 'teacher' %}
-                    <a href="{% url 'user_portal:dashboard' %}">
-                        <img class="logos" src="{% static 'images/logo.png' %}" alt="Logo"/>
-                    </a>
-                {% elif user.user_type == 'admin' %}
-                    <a href="{% url 'administration:dashboard' %}">
-                        <img class="logos" src="{% static 'images/logo.png' %}" alt="Logo"/>
-                    </a>
-                {% endif %}
-            {% else %}
-                <a href="{% url 'users:login' %}">
-                    <img class="logos" src="{% static 'images/logo.png' %}" alt="Logo"/>
-                </a>
-            {% endif %}
-
-            <h1>
+            <div class="header-left">
                 {% if user.is_authenticated %}
                     {% if user.user_type == 'student' or user.user_type == 'teacher' %}
                         <a href="{% url 'user_portal:dashboard' %}">
-                            Unote</a>
+                            <img class="logos" src="{% static 'users/images/logo.png' %}" alt="Logo"/>
+                        </a>
                     {% elif user.user_type == 'admin' %}
                         <a href="{% url 'administration:dashboard' %}">
-                            Unote</a>
+                            <img class="logos" src="{% static 'users/images/logo.png' %}" alt="Logo"/>
+                        </a>
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'users:login' %}">Unote</a>
+                    <a href="{% url 'users:login' %}">
+                        <img class="logos" src="{% static 'users/images/logo.png' %}" alt="Logo"/>
+                    </a>
                 {% endif %}
-            </h1>
-
-            <nav>
-                {% if not user.is_authenticated %}
-                    <a href="{% url 'users:login' %}">Se connecter</a>
-                {% else %}
-                    <form action="{% url 'users:logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Se déconnecter</button>
-                    </form>
-                {% endif %}
-                <a href="{% url 'main:help' %}">Support</a>
-            </nav>
-            <div class="theme-switch day">
-                <div class="sun">
-                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="title">
+                    {% if user.is_authenticated %}
+                        {% if user.user_type == 'student' or user.user_type == 'teacher' %}
+                            <a href="{% url 'user_portal:dashboard' %}">
+                                Unote</a>
+                        {% elif user.user_type == 'admin' %}
+                            <a href="{% url 'administration:dashboard' %}">
+                                Unote</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'users:login' %}">Unote</a>
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="header-right">
+                <nav>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'users:login' %}">Se connecter</a>
+                    {% else %}
+                        <form action="{% url 'users:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Se déconnecter</button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'main:help' %}">Support</a>
+                </nav>
             </div>
         </header>
-
+        <div class="theme-switch day">
+            <div class="sun">
+            </div>
+        </div>
+        
         <section>
             {% block content %} {% endblock %}
         </section>
