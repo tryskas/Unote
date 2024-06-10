@@ -16,101 +16,58 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
-
-
+#Display the students average grades
 @login_required
 def studentview(request):
     user = request.user
-    user_promo= Group.objects.filter(type="promo",users=user).first()
-    ues_average=[]
-    subj_average=[]
-    teachers=[]
-    subj_list =[]
-    no_note=True
-    ues_list=[]
 
-    i=0
-    if (user.user_type == 'student'):
-        if user_promo is not None:
-            
-            for unite in user_promo.ues.all():
-                subj = unite.Subjects.all()
-                for j in range(len(subj)):    
-                    if (Grade.objects.filter(subject=subj[j],user=user) and unite not in ues_list):
-                        ues_list.append(unite)
-            print(ues_list)
-            subj_list = [[] for _ in range(len(ues_list))]
-            subj_average = [[] for _ in range(len(ues_list))]
-            teachers = [[] for _ in range(len(ues_list))]
-            for ue in  ues_list:
-                ave = 0.0
-                sum=0
-                
-                for subj in ue.Subjects.all():
-                   if (Grade.objects.filter(subject=subj,user=user)):
-                        subj_list[i].append(subj)
-                print(subj_list)
-                print(ues_list)
-                if (subj_list[i]):
-                    no_note = False
-                    for s in subj_list[i]:
-                        ave_s=0.0
-                        sum_coeff_s=0
-                        lesson = Lesson.objects.filter(subject=s).first()
-                        if lesson:
-                            teacher = lesson.teacher
-                            teachers[i].append(teacher.last_name)
-                        else : 
-                            teachers[i].append("-")
-                        for g in Grade.objects.filter(subject=s,user=user):
-                            ave_s+=g.grade*g.coeff
-                            sum_coeff_s+=g.coeff
-                        ave_s/=sum_coeff_s
-                        ave+=ave_s*s.coeff
-                        sum+=s.coeff
-                        subj_average[i].append(round(ave_s,2))
-                    i+=1
-                    ave/=sum
-                    ues_average.append(round(ave,2))
-        context = {
-            'user': user, 
-            'user_promo':user_promo, 
-            'ues_average':ues_average, 
-            'subj_average':subj_average, 
-            'teachers':teachers,
-            'subj_list':subj_list,
-            'ues_list':ues_list,
-            'no_note':no_note,
-        }
-        
-    else :
-        context = {'user': user}
-    return render(request,'notes/studentview.html',context)
+    if user.user_type != 'student':
+        return render(request, 'notes/studentview.html', {'user': user})
 
+    user_promo = get_user_promo(user)
+    if not user_promo:
+        return render(request, 'notes/studentview.html', {'user': user})
+
+    ues_list = get_ues_list(user, user_promo)
+    subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
+
+    context = {
+        'user': user,
+        'user_promo': user_promo,
+        'ues_average': ues_average,
+        'subj_average': subj_average,
+        'teachers': teachers,
+        'subj_list': subj_list,
+        'ues_list': ues_list,
+        'no_note': no_note,
+    }
+
+    return render(request, 'notes/studentview.html', context)
+
+
+#Choose options for the new grade
 @login_required
 def profview(request):
     user = request.user
     lessons = Lesson.objects.filter(teacher=user)
     subjects = [lesson.subject for lesson in lessons]
-    groups= []
-    allsubj = Subject.objects.all()
-    allgroups = Group.objects.filter(type="promo").all()
-    for l in lessons:
-        for g in Group.objects.filter(type="promo"):
-            if (l.group==g):
-                groups.append(g)
-    print(groups)
+
+    groups = list({lesson.group for lesson in lessons if lesson.group.type == "promo"})
+
+    all_subjects = Subject.objects.all()
+    all_groups = Group.objects.filter(type="promo")
+
     context = {
         'user': user,
-        'subjects':subjects,
-        'groups':groups,
-        'allsubj':allsubj,
-        'allgroups':allgroups
-        }
+        'subjects': subjects,
+        'groups': groups,
+        'allsubj': all_subjects,
+        'allgroups': all_groups,
+    }
 
-    
-    return render(request,'notes/profview.html',context)
+    return render(request, 'notes/profview.html', context)
 
+#Home page for teachers
 @login_required
 def profviewhome(request):
     user = request.user
@@ -119,16 +76,21 @@ def profviewhome(request):
     }
     return render(request,'notes/profviewhome.html',context)
 
-
+#Enter grades for each student
 @login_required
 def profview_entergrades(request):
     user = request.user
     if request.method == "POST":
         subject = request.POST.get('subject')
-        group = request.POST.get('class')
+        group_name = request.POST.get('class')
         coefficient = request.POST.get('coefficient')
-        group=Group.objects.filter(name=group).first()
-        students = group.users.filter(user_type='student').order_by('last_name')
+
+        group=Group.objects.filter(name=group_name).first()
+        if group:
+            students = group.users.filter(user_type='student').order_by('last_name')
+        else:
+            students = []   
+
         context = {
             'user':user,
             'subject': subject,
@@ -141,110 +103,79 @@ def profview_entergrades(request):
     else:
         return render(request, 'notes/entergrades.html')
 
-
+#Saving the grades
 @login_required
 def success_grades(request):
     user = request.user
 
     if request.method == "POST":
-        group = request.POST.get('group')
-        group=Group.objects.filter(name=group).first()
+        group_name = request.POST.get('group')
+        subject_name = request.POST.get('subject')
+        coefficient = request.POST.get('coefficient')
+
+        group = get_object_or_404(Group, name=group_name)
+        subject = get_object_or_404(Subject, name=subject_name)
+
         students = group.users.filter(user_type='student').order_by('last_name')
 
         for student in students:
             grade_value = request.POST.get(str(student.id))
-            if grade_value is not None:
-                grade = Grade.objects.create(
+            if grade_value:
+                grade=Grade.objects.create(
                     grade=grade_value,
-                    coeff=request.POST.get('coefficient'),
+                    coeff=coefficient,
                     user=student,
-                    subject=Subject.objects.filter(name=request.POST.get('subject')).first()
+                    subject=subject
                 )
                 grade.save()
         context = {
-            'user':user,
+            'user': user,
             'group': group,
         }
-
         return render(request, 'notes/successgrades.html', context)
-    else:
-        return render(request, 'notes/successgrades.html')
+    
+    return render(request, 'notes/successgrades.html')
 
+#Display all students grades
+@login_required
 def profview_grades(request):
     user = request.user
     groups = Group.objects.filter(type="promo").all()
     subjects = Subject.objects.all()
-    no_grades=True
+    no_grades = True
     context = {
-            'user':user,
-            'groups': groups,
-            'subjects':subjects,
-            'no_grades':no_grades
+        'user': user,
+        'groups': groups,
+        'subjects': subjects,
+        'no_grades': no_grades,
     }
+
     if request.method == "POST":
-        group = Group.objects.filter(name=request.POST.get('group')).first()
-        students = group.users.filter(user_type='student').order_by('last_name')
-        subject =Subject.objects.filter(name=request.POST.get('subj')).first()
-        grades=[[] for _ in range(len(students))]
-        
-        for i,student in enumerate(students):
-            for g in Grade.objects.filter(subject=subject,user=student):
-                no_grades=False    
-                grades[i].append(g)
-
-        max_grades = max(len(student_grades) for student_grades in grades)
-        
-        #Remplir les endroits vides du tableau
-        for student_grades in grades:
-            while len(student_grades) < max_grades:
-                student_grades.append(None)
+        group, subject = get_group_and_subject(request)
+        students, grades, no_grades, max_grades = get_students_and_grades(group, subject)
         grade_range = range(max_grades)
-        stud_ave=[[] for _ in range(len(students))]
-        class_ave=[[] for _ in range(max_grades)]
-        if (no_grades==False):
-            #Calcul des moyennes de chaque eleves et de chaque notes
-            for i,s in enumerate(students):
-                stu_ave=0
-                coeff_stu_ave=0
-                for g in grades[i]:
-                    if g:
-                        stu_ave+=g.grade*g.coeff
-                        coeff_stu_ave+=g.coeff
-                if (coeff_stu_ave!=0):
-                    stud_ave[i]=round(stu_ave/coeff_stu_ave,2)
-                else :
-                    stud_ave[i]=" "
-            
-            for i in range(max_grades):
-                tot_stud=len(students)
-                clas_ave=0
-                for j in range(tot_stud):
-                    if (grades[j][i]):
-                        clas_ave+=grades[j][i].grade
-                    else :
-                        tot_stud-=1
-                class_ave[i]=round(clas_ave/tot_stud,2)
-            print(class_ave)
-            print(tot_stud)
-        context = {
-            'user':user,
-            'group':group,
-            'subject':subject,
-            'groups': groups,
-            'subjects':subjects,
-            'students':students,
-            'grades':grades,
-            'grade_range':grade_range,
-            'no_grades':no_grades,
-            'stud_ave':stud_ave,
-            'class_ave':class_ave
-        }
-        
 
-        return render(request, 'notes/profviewgrades.html', context)
-    else:
-        return render(request, 'notes/profviewgrades.html',context)
+        if not no_grades:
+            stud_ave, class_ave = calculate_averages(students, grades, max_grades)
+        else:
+            stud_ave = []
+            class_ave = []
 
+        context.update({
+            'group': group,
+            'subject': subject,
+            'students': students,
+            'grades': grades,
+            'grade_range': grade_range,
+            'no_grades': no_grades,
+            'stud_ave': stud_ave,
+            'class_ave': class_ave,
+        })
+
+    return render(request, 'notes/profviewgrades.html', context)
+
+
+#Delete selected grades
 @login_required
 def delete_selected_grades(request):
     if request.method == 'POST':
@@ -255,82 +186,43 @@ def delete_selected_grades(request):
     return redirect('users:modify_grades')
 
 
-#afficher les notes avec moy etc
+#Display grades, possibility to delete
 @login_required
 def modify_grades(request):
     user = request.user
     groups = Group.objects.filter(type="promo").all()
     subjects = Subject.objects.all()
-    no_grades=True
+    no_grades = True
     context = {
-            'user':user,
-            'groups': groups,
-            'subjects':subjects,
-            'no_grades':no_grades
+        'user': user,
+        'groups': groups,
+        'subjects': subjects,
+        'no_grades': no_grades,
     }
+
     if request.method == "POST":
-        group = Group.objects.filter(name=request.POST.get('group')).first()
-        students = group.users.filter(user_type='student').order_by('last_name')
-        subject =Subject.objects.filter(name=request.POST.get('subj')).first()
-        grades=[[] for _ in range(len(students))]
-        
-        for i,student in enumerate(students):
-            for g in Grade.objects.filter(subject=subject,user=student):
-                no_grades=False    
-                grades[i].append(g)
-
-        max_grades = max(len(student_grades) for student_grades in grades)
-        
-        #Remplir les endroits vides du tableau
-        for student_grades in grades:
-            while len(student_grades) < max_grades:
-                student_grades.append(None)
+        group, subject = get_group_and_subject(request)
+        students, grades, no_grades, max_grades = get_students_and_grades(group, subject)
         grade_range = range(max_grades)
-        stud_ave=[[] for _ in range(len(students))]
-        class_ave=[[] for _ in range(max_grades)]
-        if (no_grades==False):
-            #Calcul des moyennes de chaque eleves et de chaque notes
-            for i,s in enumerate(students):
-                stu_ave=0
-                coeff_stu_ave=0
-                for g in grades[i]:
-                    if g:
-                        stu_ave+=g.grade*g.coeff
-                        coeff_stu_ave+=g.coeff
-                if (coeff_stu_ave!=0):
-                    stud_ave[i]=round(stu_ave/coeff_stu_ave,2)
-                else :
-                    stud_ave[i]=" "
-            
-            for i in range(max_grades):
-                tot_stud=len(students)
-                clas_ave=0
-                for j in range(tot_stud):
-                    if (grades[j][i]):
-                        clas_ave+=grades[j][i].grade
-                    else :
-                        tot_stud-=1
-                class_ave[i]=round(clas_ave/tot_stud,2)
-            print(class_ave)
-            print(tot_stud)
-        context = {
-            'user':user,
-            'group':group,
-            'subject':subject,
-            'groups': groups,
-            'subjects':subjects,
-            'students':students,
-            'grades':grades,
-            'grade_range':grade_range,
-            'no_grades':no_grades,
-            'stud_ave':stud_ave,
-            'class_ave':class_ave
-        }
         
+        if not no_grades:
+            stud_ave, class_ave = calculate_averages(students, grades, max_grades)
+        else:
+            stud_ave = []
+            class_ave = []
 
-        return render(request, 'notes/modifygrades.html', context)
-    else:
-        return render(request, 'notes/modifygrades.html',context)
+        context.update({
+            'group': group,
+            'subject': subject,
+            'students': students,
+            'grades': grades,
+            'grade_range': grade_range,
+            'no_grades': no_grades,
+            'stud_ave': stud_ave,
+            'class_ave': class_ave,
+        })
+
+    return render(request, 'notes/modifygrades.html', context)
 
 @login_required
 def new_studentreport(request):
@@ -362,79 +254,176 @@ def getnew_studentreport(request):
     else:
         return render(request, 'notes/newstudentreport.html',context)
 
+@login_required
 def generate_student_view(request):
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
         user = CustomUser.objects.get(id=student_id)
-        user_promo= Group.objects.filter(type="promo",users=user).first()
-        ues_average=[]
-        subj_average=[]
-        teachers=[]
-        subj_list =[]
-        no_note=True
-        ues_list=[]
+        user_promo = get_user_promo(user)
 
-        i=0
-        if (user.user_type == 'student'):
-            if user_promo is not None:
-                
-                for unite in user_promo.ues.all():
-                    subj = unite.Subjects.all()
-                    for j in range(len(subj)):    
-                        if (Grade.objects.filter(subject=subj[j],user=user) and unite not in ues_list):
-                            ues_list.append(unite)
-                print(ues_list)
-                subj_list = [[] for _ in range(len(ues_list))]
-                subj_average = [[] for _ in range(len(ues_list))]
-                teachers = [[] for _ in range(len(ues_list))]
-                for ue in  ues_list:
-                    ave = 0.0
-                    sum=0
-                
-                    for subj in ue.Subjects.all():
-                        if (Grade.objects.filter(subject=subj,user=user)):
-                            subj_list[i].append(subj)
-                    print(subj_list)
-                    print(ues_list)
-                    if (subj_list[i]):
-                        no_note = False
-                        for s in subj_list[i]:
-                            ave_s=0.0
-                            sum_coeff_s=0
-                            lesson = Lesson.objects.filter(subject=s).first()
-                            if lesson:
-                                teacher = lesson.teacher
-                                teachers[i].append(teacher.last_name)
-                            else : 
-                                teachers[i].append("-")
-                            for g in Grade.objects.filter(subject=s,user=user):
-                                ave_s+=g.grade*g.coeff
-                                sum_coeff_s+=g.coeff
-                            ave_s/=sum_coeff_s
-                            ave+=ave_s*s.coeff
-                            sum+=s.coeff
-                            subj_average[i].append(round(ave_s,2))
-                        i+=1
-                        ave/=sum
-                        ues_average.append(round(ave,2))
-            
-            context = {
-                'user': user, 
-                'user_promo':user_promo, 
-                'ues_average':ues_average, 
-                'subj_average':subj_average, 
-                'teachers':teachers,
-                'subj_list':subj_list,
-                'ues_list':ues_list,
-                'no_note':no_note,
-            }
-        
-            html_content = render_to_string('notes/reportpage.html', context)
-            filename=''+user.first_name+'-'+user.last_name+'-report.html'
-            
-            response = HttpResponse(html_content, content_type='text/html')
-            response['Content-Disposition'] = 'attachment; filename='+filename+''
+        if user.user_type != 'student' or not user_promo:
+            return HttpResponse("User is not a student or no promo group found.", status=400)
+
+        ues_list = get_ues_list(user, user_promo)
+        subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
+
+        context = {
+            'user': user,
+            'user_promo': user_promo,
+            'ues_average': ues_average,
+            'subj_average': subj_average,
+            'teachers': teachers,
+            'subj_list': subj_list,
+            'ues_list': ues_list,
+            'no_note': no_note,
+        }
+
+        html_content = render_to_string('notes/reportpage.html', context)
+        filename = f'{user.first_name}-{user.last_name}-report.html'
+
+        response = HttpResponse(html_content, content_type='text/html')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+
         return response
+
+    return HttpResponse("Invalid request method.", status=405)
+
+""" Helper functions
+"""
+#Retrieve the group and subject based on the POST data
+def get_group_and_subject(request):
+    group_name = request.POST.get('group')
+    subject_name = request.POST.get('subj')
+    group = get_object_or_404(Group, name=group_name)
+    subject = get_object_or_404(Subject, name=subject_name)
+    return group, subject
+
+#Retrieve students and their grades for a given group and subject
+def get_students_and_grades(group, subject):
+    students = group.users.filter(user_type='student').order_by('last_name')
+    grades = [[] for _ in range(len(students))]
+    no_grades = True
+    
+    for i, student in enumerate(students):
+        student_grades = Grade.objects.filter(subject=subject, user=student)
+        if student_grades.exists():
+            no_grades = False
+        grades[i] = list(student_grades)
+    
+    max_grades = max(len(student_grades) for student_grades in grades) if grades else 0
+    
+    # Fill empty grades slots with None
+    for student_grades in grades:
+        while len(student_grades) < max_grades:
+            student_grades.append(None)
+    
+    return students, grades, no_grades, max_grades
+
+#Calculate student averages and class averages
+def calculate_averages(students, grades, max_grades):
+    stud_ave = [calculate_student_average(student_grades) for student_grades in grades]
+    class_ave = calculate_class_averages(grades, max_grades)
+    return stud_ave, class_ave
+
+#Calculate the average grade for a student
+def calculate_student_average(grades):
+    total_grade = 0
+    total_coeff = 0
+    for grade in grades:
+        if grade:
+            total_grade += grade.grade * grade.coeff
+            total_coeff += grade.coeff
+    if total_coeff == 0:
+        return " "
+    return round(total_grade / total_coeff, 2)
+
+#Calculate the average grade for each grade column
+def calculate_class_averages(grades, max_grades):
+    class_averages = []
+    for i in range(max_grades):
+        total_grade = 0
+        count = 0
+        for student_grades in grades:
+            if student_grades[i]:
+                total_grade += student_grades[i].grade
+                count += 1
+        if count == 0:
+            class_averages.append(" ")
+        else:
+            class_averages.append(round(total_grade / count, 2))
+    return class_averages
+
+#Get the user promo
+def get_user_promo(user):
+    return Group.objects.filter(type="promo", users=user).first()
+
+#Get a list with all UEs
+def get_ues_list(user, user_promo):
+    ues_list = []
+    for unite in user_promo.ues.all():
+        for subj in unite.Subjects.all():
+            if Grade.objects.filter(subject=subj, user=user).exists() and unite not in ues_list:
+                ues_list.append(unite)
+                break
+    return ues_list
+
+#Get the subjects and averages
+def get_subjects_and_averages(user, ues_list):
+    subj_list = [[] for _ in range(len(ues_list))]
+    subj_average = [[] for _ in range(len(ues_list))]
+    teachers = [[] for _ in range(len(ues_list))]
+    ues_average = []
+    no_note = True
+
+    for i, ue in enumerate(ues_list):
+        ue_average = 0.0
+        total_ue_coeff = 0
+
+        for subj in ue.Subjects.all():
+            if Grade.objects.filter(subject=subj, user=user).exists():
+                subj_list[i].append(subj)
+
+        if subj_list[i]:
+            no_note = False
+            for subj in subj_list[i]:
+                subj_avg, total_subj_coeff, teacher = calculate_subject_average(user, subj)
+                if teacher:
+                    teachers[i].append(teacher)
+                else:
+                    teachers[i].append("-")
+                subj_average[i].append(round(subj_avg, 2))
+                ue_average += subj_avg * subj.coeff
+                total_ue_coeff += subj.coeff
+
+            if total_ue_coeff > 0:
+                ue_average /= total_ue_coeff
+                ues_average.append(round(ue_average, 2))
+
+    return subj_list, subj_average, teachers, ues_average, no_note
+
+#Calculate the subject average
+def calculate_subject_average(user, subject):
+    total_grade = 0
+    total_coeff = 0
+    teacher = None
+
+    lesson = Lesson.objects.filter(subject=subject).first()
+    if lesson:
+        teacher = lesson.teacher.last_name
+
+    for grade in Grade.objects.filter(subject=subject, user=user):
+        total_grade += grade.grade * grade.coeff
+        total_coeff += grade.coeff
+
+    if total_coeff > 0:
+        average = total_grade / total_coeff
+    else:
+        average = 0
+
+    return average, total_coeff, teacher
+"""
+"""
+
 
 
 class UserCreationView(CreateView):
