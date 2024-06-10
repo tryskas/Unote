@@ -1,0 +1,31 @@
+{% load static %}
+
+<div>
+    <h2>Salles</h2>
+</div>
+
+<div>
+    <div>
+        <form id="search-room-form">
+            <input type="text" id="search-room-input"
+                   placeholder="Rechercher par nom">
+            <input type="submit" value="Rechercher"/>
+        </form>
+        <div id="search-room-results">
+            <ul class="scrollable-list">
+                {% for room in rooms %}
+                    <li>
+                        <a href="{% url 'administration:update_room' room.id %}"
+                           >{{ room.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <p><a href="{% url 'administration:create_room' %}"
+          >Créer une salle</a></p>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/rooms_script.js' %}"></script>

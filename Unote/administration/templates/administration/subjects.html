@@ -1,0 +1,31 @@
+{% load static %}
+
+<div>
+    <h2>Matières</h2>
+</div>
+
+<div>
+    <div>
+        <form id="search-subject-form">
+            <input type="text" id="search-subject-input"
+                   placeholder="Rechercher par nom">
+            <input type="submit" value="Rechercher"/>
+        </form>
+        <div id="search-subject-results">
+            <ul class="scrollable-list">
+                {% for subject in subjects %}
+                    <li>
+                        <a href="{% url 'administration:update_subject' subject.id %}"
+                           >{{ subject.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <p><a href="{% url 'administration:create_subject' %}"
+          >Créer une matière</a></p>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/subjects_script.js' %}"></script>

@@ -1,0 +1,38 @@
+{% block content %}
+
+<div >
+    <h3>absence et retard de {{user.first_name}} {{user.last_name}}:</h3>
+    <table>
+    <thead>
+        
+        <th scope="col">Présence</th>
+        <th scope="col">seance</th>
+        <th scope="col">justifié</th>
+    </thead>
+    <tbody>
+    <form method="post">
+    {% csrf_token %}
+    {% for p in presence %}
+        <tr>
+            <th scope="row">{{p.presence}}</th>
+            <td>{{p.session.lesson.name}} {{p.session.date}}</td>
+           
+            <td>
+                
+                <input type="checkbox" value="on" name="{{ p.pk }}" {% if p.justified %} checked {% endif %}>
+               
+            </td>
+            
+        </tr>
+    
+            
+    {% endfor %}
+   
+    </tbody>
+    
+</table>
+<button type="submit" href="{% url 'users:profile' user_id=user.id %}">
+    Valider </button>
+</form>
+</div>
+{% endblock %}
