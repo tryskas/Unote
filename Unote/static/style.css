@@ -35,6 +35,23 @@
     scroll-behavior: var(--scroll-behavior);
 }
 
+.dark-theme {
+    --primary-color: #1E1E1E;
+    --secondary-color: #D2691E;
+
+    --color-blue: #5770ff;
+    --color-pink: #ff75b3;
+    --color-orange: #ff7c6b;
+    --color-purple: #b86bff;
+    --color-green: #87e3cf;
+
+    --type1-a-color: #AAB2B7;
+
+    --submit-button-color: rgb(192, 200, 205);
+    --submit-button-background-color: var(--primary-color);
+    --placeholder-color: #DDDDDD;
+}
+
 
 
 
