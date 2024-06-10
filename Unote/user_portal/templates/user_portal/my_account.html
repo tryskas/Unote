@@ -1,0 +1,15 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'user_portal/css/style_dashboard.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<h2>Mon compte</h2>
+
+<p>Prénom: {{ user.first_name }}</p>
+<p>Nom: {{ user.last_name }}</p>
+<p>E-mail: {{ user.mail }}</p>
+<p><a href="{% url 'users:password_change' %}">Modifier mot de passe</a></p>
+{% endblock %}

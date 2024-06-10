@@ -1,0 +1,35 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'user_portal/css/style_notes.css' %}"/>
+{% endblock %}{% block content %}
+
+<div>
+    <table>
+      <tbody>
+        <thead>
+            <tr>
+                <th>Appel à faire :</th>
+            </tr>
+
+        </thead>
+
+        {% for session in sessions %}
+            {% if session.course.teacher == user %}
+                {% if not session.is_called_done%}
+                    <tr>
+                        <td>
+                            <a href="{% url 'user_portal:class_call' session.id %}">
+                                {{session.course.name}} {{session.date}}
+                            </a></div>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+      </tbody>
+
+    </table>
+</div>
+{% endblock %}
