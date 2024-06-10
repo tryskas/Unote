@@ -1,7 +1,7 @@
 {% extends "notes/base.html" %}
 
 {% block content %}
-{% if user.user_type == 'teacher' %}
+{% if user.user_type == 'teacher' or user.user_type == 'admin' %}
 
 <p>Bienvenue {{ user.first_name }} !</p>
 
