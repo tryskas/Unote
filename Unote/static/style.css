@@ -1,0 +1,213 @@
+:root {
+    --primary-color: #A1E2ED;
+    --secondary-color: #000000;
+
+    --color-purple: #9c30ff;
+    --color-blue: #2a49ff;
+    --color-pink: #ff348f;
+    --color-orange: #ff270b;
+    --color-green: #1a9f30;
+
+    --type1-a-color: #9F0505;
+    --a-hover-color: #34495E;
+    --a-active-color: #0000FF;
+
+    --submit-button-color: var(--primary-color);
+    --submit-button-background-color: var(--secondary-color);
+
+    --chat-color1: #FF6F61;
+    --chat-color2: #1EAFB8;
+
+    --placeholder-color: #888888;
+
+    --font-size: 16px;
+
+    /* Theme switch */
+    --toggle_height: 16em;
+    --toggle_width: 30em;
+    --toggle_btn_radius: 10em;
+    --background-color-night: #080125;
+    --background-color-day: #A1D4ED;
+    --moon_color: #D9FBFF;
+
+    /* Scrolling behavior */
+    --scroll-behavior: smooth; /* permet un défilement de page plus doux */
+    scroll-behavior: var(--scroll-behavior);
+}
+
+.dark-theme {
+    --primary-color: #1E1E1E;
+    --secondary-color: #D2691E;
+
+    --color-blue: #5770ff;
+    --color-pink: #ff75b3;
+    --color-orange: #ff7c6b;
+    --color-purple: #b86bff;
+    --color-green: #87e3cf;
+
+    --type1-a-color: #AAB2B7;
+
+    --submit-button-color: rgb(192, 200, 205);
+    --submit-button-background-color: var(--primary-color);
+    --placeholder-color: #DDDDDD;
+}
+
+
+
+
+
+
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigation Styles */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0044cc;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+nav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #3498db;
+}
+
+nav form {
+    margin: 0;
+}
+
+nav button {
+    background-color: #ffffff;
+    color: #0044cc;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+nav button:hover {
+    background-color: #c0392b;
+}
+
+
+.wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+}
+
+footer {
+    margin-top: auto;
+    background-color: #0044cc;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 20px;
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    bottom: 0; left: 0; right: 0;
+
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+form div {
+    margin-top: 0.5rem;
+}
+
+/*------------------------------Theme switch---------------------------------*/
+
+body {
+    transition: all .2s ease-in-out;
+}
+
+.theme-switch {
+    font-size: 10%; /* Changer cette propriété pour modifier la taille du
+    bouton */
+    position: relative;
+    margin-right: 0;
+    height: var(--toggle_height);
+    width: var(--toggle_width);
+    border-radius: var(--toggle_height);
+    border-style: inset;
+    border-color: #000000;
+    transition: all 500ms ease-in-out;
+    background: var(--background-color-night);
+}
+
+.day {
+    background: var(--background-color-day);
+}
+
+.sun {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    transition: all 400ms ease-in-out;
+
+    top: 4.5em;
+    left: 18em;
+    transform: rotate(0deg);
+    width: 7em;
+    height: 7em;
+    background: #FFFFFF;
+    box-shadow: 3em 3em 0 5em #FBE61E inset,
+    0 -5em 0 -2.7em #FBE61E,
+    3.5em -3.5em 0 -3em #FBE61E,
+    5em 0 0 -2.7em #FBE61E,
+    3.5em 3.5em 0 -3em #FBE61E,
+    0 5em 0 -2.7em #FBE61E,
+    -3.5em 3.5em 0 -3em #FBE61E,
+    -5em 0 0 -2.7em #FBE61E,
+    -3.5em -3.5em 0 -3em #FBE61E;
+}
+
+.moon {
+    top: 3em;
+    left: 3em;
+    transform: rotate(-75deg);
+    width: var(--toggle_btn_radius);
+    height: var(--toggle_btn_radius);
+    background: var(--background-color-night);
+    box-shadow:
+    3em 2.5em 0 0em var(--moon_color) inset,
+    rgba(255, 255, 255, 0.1) 0em -7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 3em 7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 2em 13em 0 -4em,
+    rgba(255, 255, 255, 0.1) 6em 2em 0 -4.1em,
+    rgba(255, 255, 255, 0.1) 8em 8em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 6em 13em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) -4em 7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) -1em 10em 0 -4.5em;
+}
+
+.no-transition {
+    transition: none !important;
+}
