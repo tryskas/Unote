@@ -1,0 +1,9 @@
+<ul class="scrollable-list">
+    {% for user in search_results %}
+        <li>
+            <div>
+                <a href="{% url 'users:profile' user.id %}">{{ user.first_name }} {{ user.last_name }} - {{ user.username }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

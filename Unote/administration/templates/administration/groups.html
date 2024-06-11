@@ -1,0 +1,31 @@
+{% load static %}
+
+<div>
+    <h2>Groupes d'élèves</h2>
+</div>
+
+<div>
+    <div>
+        <form id="search-group-form">
+            <input type="text" id="search-group-input"
+                   placeholder="Rechercher par nom">
+            <input type="submit" value="Rechercher"/>
+        </form>
+        <div id="search-group-results">
+            <ul class="scrollable-list">
+                {% for group in groups %}
+                    <li>
+                        <a href="{% url 'administration:update_group' group.id %}"
+                           >{{ group.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <p><a href="{% url 'administration:create_group' %}"
+          >Créer un groupe</a></p>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/groups_script.js' %}"></script>

@@ -1,0 +1,31 @@
+{% load static %}
+
+<div id="room-nav">
+    <h2>Profils utilisateurs</h2>
+</div>
+
+<div>
+    <div>
+        <form id="search-user-form">
+            <input type="text" id="search-user-input"
+                   placeholder="Rechercher par nom, prénom ou identifiant">
+            <input type="submit" value="Rechercher"/>
+        </form>
+        <div id="search-user-results"></div>
+    </div>
+
+    <p><a href="{% url 'users:register' %}">Enregistrer nouvel
+        utilisateur</a></p>
+
+    <h2>Supprimer des utilisateurs à partir d'un fichier CSV</h2>
+    <p>(Champs: 'first_name,last_name,email,user_type')</p>
+    <form method="post" enctype="multipart/form-data"
+          action="{% url 'users:delete_csv' %}">
+        {% csrf_token %}
+        <input type="file" name="csv_file" accept=".csv">
+        <input type="submit" value="Supprimer à partir du CSV">
+    </form>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/profiles_script.js' %}"></script>
