@@ -1,6 +1,6 @@
 {% extends "user_portal/base.html" %}
 {% block content %}
-<div class="flex_full">
+<div class="flex_full notes_section">
     <h1>Université de Haute-Alsace</h1>
 
     {% if user.user_type == 'teacher' %}
@@ -15,7 +15,7 @@
                 <th colspan="2" >Classe : {{ group }}</th>
             </tr>
         </thead>
-        <thead>
+        <tbody>
             <tr>
                 <th>
                     <select id="subj" name="subj" required>
@@ -37,7 +37,7 @@
                     <button type="submit">Chercher</button>
                 </th>
             </tr>
-        </thead>
+        </tbody>
       </table>
     </form>
 
@@ -64,7 +64,8 @@
                 {% if g.grade %}
                 <div style="display: inline-flex; align-items: center;">
                 {{ g.grade }}
-                <input type="checkbox" name="grades_to_delete" value="{{ g.pk }}">
+                <input class="margin-left" type="checkbox"
+                       name="grades_to_delete" value="{{ g.pk }}">
                </div>
                 {% else %}
                 {{ g.grade }}
@@ -113,7 +114,7 @@
                 <th colspan="2" >Classe : {{ group }}</th>
             </tr>
         </thead>
-        <thead>
+        <tbody>
             <tr>
                 <th>
                     <select id="subj" name="subj" required>
@@ -135,7 +136,7 @@
                     <button type="submit">Chercher</button>
                 </th>
             </tr>
-        </thead>
+        </tbody>
       </table>
     </form>
 
@@ -162,7 +163,9 @@
                 {% if g.grade %}
                 <div style="display: inline-flex; align-items: center;">
                 {{ g.grade }}
-                <input type="checkbox" name="grades_to_delete" value="{{ g.pk }}">
+                <input class="margin-left" type="checkbox"
+                    name="grades_to_delete"
+                       value="{{ g.pk }}">
                </div>
                 {% else %}
                 {{ g.grade }}

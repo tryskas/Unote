@@ -2,22 +2,22 @@
 {% load static %}
 
 {% block content %}
-<div class="class_call flex_full">
+<div class="class_call flex_full notes_section">
     <table>
     <thead>
         <tr>
             <th colspan="4">
-                Appel pour {{session.course.name}} par {{user.username}} :
+                Appel pour {{session.course.name}} par {{user.first_name}} {{user.last_name}} :
             </th>
-        </tr>
-        <tr>
-            <th scope="col">Eleve</th>
-            <th scope="col">Prénom</th>
-            <th scope="col">Nom</th>
-            <th scope="col">Présence</th>
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td scope="col">Eleve</td>
+            <td scope="col">Prénom</td>
+            <td scope="col">Nom</td>
+            <td scope="col">Présence</td>
+        </tr>
     <form method="POST">
     {% csrf_token %}
     {% for s in student_list %}

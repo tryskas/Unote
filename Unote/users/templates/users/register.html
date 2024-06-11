@@ -5,11 +5,11 @@
 
 <div class="form-holder">
     <div class="form-content">
-        <div class="form-items">
+        <div class="form-items revert-colors">
             <form method="post">
                 {% csrf_token %}
                 {{form}}
-                <input type="submit" value="Enregistrer">
+                <input class="black-text" type="submit" value="Enregistrer">
             </form>
 
             <hr>
@@ -18,7 +18,8 @@
             <form method="post" enctype="multipart/form-data" action="{% url 'users:upload_csv' %}">
                 {% csrf_token %}
                 <input type="file" name="csv_file" accept=".csv">
-                <input type="submit" value="Enregistrer à partir du CSV">
+                <input class="black-text" type="submit"
+                       value="Enregistrer à partir du CSV">
             </form>
         </div>
     </div>

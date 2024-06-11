@@ -5,15 +5,16 @@
 
 <div class="form-holder">
     <div class="form-content">
-        <div class="form-items">
+        <div class="form-items revert-colors">
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="Connexion">
+                <input class="black-text" type="submit" value="Connexion">
             </form>
         </div>
     </div>
 </div>
 
-<p><a href="{% url 'users:password_reset' %}">Mot de passe perdu</a></p>
+<p><a class="link2" href="{% url 'users:password_reset' %}">Mot de passe
+    perdu</a></p>
 {% endblock %}

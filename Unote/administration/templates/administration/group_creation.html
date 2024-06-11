@@ -6,12 +6,12 @@
 
 <div class="form-holder">
     <div class="form-content">
-        <div class="form-items">
+        <div class="form-items revert-colors">
             <form method="post">
                 {% csrf_token %}
                 {{form}}
                 <input type="hidden" name="create_group" value="create">
-                <input type="submit" value="Créer">
+                <input class="black-text" type="submit" value="Créer">
             </form>
 
             <h2>Créer des groupes à partir d'un fichier CSV</h2>
@@ -23,7 +23,8 @@
                   action="{% url 'administration:create_groups_csv' %}">
                 {% csrf_token %}
                 <input type="file" name="csv_file" accept=".csv">
-                <input type="submit" value="Créer à partir du CSV">
+                <input class="black-text" type="submit"
+                       value="Créer à partir du CSV">
             </form>
         </div>
     </div>

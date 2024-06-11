@@ -6,12 +6,12 @@
 
 <div class="form-holder">
     <div class="form-content">
-        <div class="form-items">
+        <div class="form-items revert-colors">
             <form method="post">
                 {% csrf_token %}
                 {{form}}
                 <input type="hidden" name="create_course" value="create">
-                <input type="submit" value="Créer">
+                <input class="black-text" type="submit" value="Créer">
             </form>
         </div>
     </div>

@@ -1,24 +1,40 @@
 /*------------------------------Variables-----------------------------------*/
 
 :root {
-    --primary-color: #A1E2ED;
-    --secondary-color: #000000;
+    --secondary-color: #2c3e50;
+    --admin-menu-link-color: #2980b9;
+    --title-link-color: #2980b9;
 
-    --color-purple: #9c30ff;
-    --color-blue: #2a49ff;
-    --color-pink: #ff348f;
-    --color-orange: #ff270b;
-    --color-green: #1a9f30;
+    --title-color: #2c3e50;
 
-    --type1-a-color: #9F0505;
-    --a-hover-color: #34495E;
-    --a-active-color: #0000FF;
+    --button-color2: #fff;
+    --link2-color: #2980b9;
+    --submit-background-color1: #2980b9;
 
-    --submit-button-color: var(--primary-color);
-    --submit-button-background-color: var(--secondary-color);
+    --body-text-color: #333;
+    --main-text-color: #ecf0f1;
 
-    --chat-color1: #FF6F61;
-    --chat-color2: #1EAFB8;
+    --notes-section-color: #333;
+    --notes-section-button-color: #333;
+
+    --form-input-color: #fff;
+    --form-input-background-color: #ecf0f1;
+
+    --link-color: #2980b9;
+    --table-border-color: #ddd;
+    --link-hover-color: #732d91;
+    --lates-link-color: #2980b9;
+    --button-background-color: #3498db;
+    --button-link-color: #3498db;
+
+    --main-background-color: #f0f2f5;
+    --background-color-1: #f0f2f5;
+
+    --white-color: #fff;
+
+    --f2-color): #f2f2f2;
+
+
 
     --placeholder-color: #888888;
 
@@ -40,20 +56,29 @@
 /*------------------------------Global---------------------------------------*/
 
 .dark-theme {
-    --primary-color: #1E1E1E;
-    --secondary-color: #D2691E;
-
-    --color-blue: #5770ff;
-    --color-pink: #ff75b3;
-    --color-orange: #ff7c6b;
-    --color-purple: #b86bff;
-    --color-green: #87e3cf;
-
-    --type1-a-color: #AAB2B7;
-
-    --submit-button-color: rgb(192, 200, 205);
-    --submit-button-background-color: var(--primary-color);
-    --placeholder-color: #DDDDDD;
+    --button-link-color: #000;
+    --title-link-color: #fff;
+    --table-border-color: #151e3fff;
+    --submit-background-color1: #fff;
+    --button-color2: #000;
+    --secondary-color: #151e3fff;
+    --title-color: #fff;
+    --form-input-color: #000;
+    --link2-color: #fff;
+    --form-input-background-color: #ebebeb;
+    --notes-section-color: #fff;
+    --admin-menu-link-color: #000;
+    --main-background-color: #030027ff;
+    --notes-section-button-color: #000;
+    --background-color-1: #fff;
+    --body-text-color: #000;
+    --main-text-color: #ffc1da;
+    --link-color: #000000;
+    --link-hover-color: #dc9e82ff;
+    --lates-color: #fff;
+    --button-background-color: #ffc1da;
+    --white-color: #ebebeb;
+    --placeholder-color: #888888;
 }
 
 /* Scrollbar style */
@@ -79,15 +104,15 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f0f2f5;
+    background-color: var(--main-background-color);
     margin: 0;
     padding: 0;
-    color: #333;
+    color: var(--body-text-color);
 }
 
 header {
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
     padding: 1em 2em;
     display: flex;
     justify-content: space-between;
@@ -95,13 +120,21 @@ header {
 }
 
 header a {
-    color: #ecf0f1;
+    color: var(--main-text-color);
     text-decoration: none;
+}
+
+#left-panel ul li a {
+    color: var(--admin-menu-link-color);
 }
 
 header h1 {
     margin: 0;
     font-size: 1.5em;
+}
+
+#deleteform .margin-left {
+    margin-left: 1rem;
 }
 
 nav a {
@@ -115,7 +148,7 @@ nav form {
 .in_body_button {
     background: none;
     border: none;
-    color: white;
+    color: var(--white-color);
     cursor: pointer;
     font: inherit;
     margin: 0;
@@ -127,7 +160,7 @@ section {
 }
 
 .header-link:hover {
-    color: #2980b9;
+    color: var(--link-color);
 }
 
 ul {
@@ -140,14 +173,46 @@ ul li {
 }
 
 ul li a {
-    color: #2980b9;
+    color: var(--link-color);
     text-decoration: none;
 }
 
 h2, h3 {
     font-size: 1.5em;
-    color: #2c3e50;
+    color: var(--title-color);
     margin-bottom: 1em;
+}
+
+a.link2 {
+    color: var(--link2-color);
+}
+
+.lates-student {
+    color: var(--lates-color);
+}
+
+#my-account-content h2 {
+    color: var(--body-text-color);
+}
+
+.left-column h2, .right-column h2 {
+    color: var(--body-text-color);
+}
+
+.notes_section {
+    color: var(--notes-section-color);
+}
+
+.notes_section button, .notes_section button[type="submit"] {
+    color: var(--notes-section-button-color);
+}
+
+fieldset {
+    border: none;
+}
+
+.form-holder h2, .form-holder h3 {
+    color: var(--secondary-color);
 }
 
 a, a:hover {
@@ -155,11 +220,11 @@ a, a:hover {
 }
 
 a {
-    color: #2980b9;
+    color: var(--link-color);
 }
 
 a:hover {
-    color: #732d91;
+    color: var(--link-hover-color);
 }
 
 .flex_full {
@@ -172,9 +237,9 @@ a:hover {
 }
 
 button {
-    background-color: #3498db;
+    background-color: var(--button-background-color);
     border: none;
-    color: white;
+    color: var(--white-color);
     padding: 0.5em 1em;
     text-align: center;
     text-decoration: none;
@@ -186,8 +251,8 @@ button {
 }
 
 footer {
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -250,22 +315,26 @@ table {
 }
 
 table thead th {
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
     padding: 0.5em;
     text-align: left;
     font-weight: normal;
 }
 
+.schedule table thead th {
+    color: var(--secondary-color);
+}
+
 table tbody td,
 table tbody th {
-    border: 1px solid #ddd;
+    border: 1px solid var(--table-border-color);
     padding: 0.5em;
     text-align: left;
 }
 
 table tbody tr:nth-child(even) {
-    background-color: #f0f2f5;
+    background-color: var(--main-background-color);
 }
 
 /*------------------------------Forms----------------------------------------*/
@@ -276,17 +345,25 @@ input[type="checkbox"] {
 }
 
 button[type="submit"] {
-    background-color: #3498db;
+    background-color: var(--button-background-color);
     border: none;
-    color: white;
+    color: var(--white-color);
     padding: 0.5em 1em;
     font-size: 1em;
     cursor: pointer;
     border-radius: 4px;
 }
 
-button[type="submit"]:hover {
-    color: #2980b9;
+button[type="submit"]:hover, button[type="button"]:hover, .hover-white:hover {
+    background-color: var(--submit-background-color1);
+}
+
+.form-items input[type="submit"]:hover {
+    background-color: var(--submit-background-color1);
+}
+
+button.in_body_button:hover {
+    background: none;
 }
 
 input[type="text"], input[type="number"], select {
@@ -296,7 +373,7 @@ input[type="text"], input[type="number"], select {
 }
 
 .sidebar a:hover, .left-column a h2:hover, .right-column a h2:hover {
-    color: #2980b9;
+    color: var(--title-link-color);
 }
 
 .form-holder {
@@ -307,13 +384,27 @@ input[type="text"], input[type="number"], select {
     padding-top: 2em;
 }
 
+.form-items.revert-colors {
+    background-color: var(--form-input-background-color);
+}
+
+.form-items.revert-colors input.black-text, button.black-text {
+    color: var(--form-input-color);
+}
+
 .form-content {
     max-width: 800px;
     width: 100%;
 }
 
+#no-background {
+    background: none;
+    box-shadow: none;
+    padding-left: 0;
+}
+
 .form-items {
-    background-color: #ecf0f1;
+    background-color: var(--main-text-color);
     padding: 2em;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -335,17 +426,13 @@ input[type="text"], input[type="number"], select {
 }
 
 .form-items input[type="submit"] {
-    background-color: #3498db;
+    background-color: var(--button-background-color);
     border: none;
-    color: white;
+    color: var(--white-color);
     padding: 0.5em 1em;
     font-size: 1em;
     cursor: pointer;
     border-radius: 4px;
-}
-
-.form-items input[type="submit"]:hover {
-    background-color: #2980b9;
 }
 
 .form-items p {
@@ -365,9 +452,9 @@ input[type="text"], input[type="number"], select {
 }
 
 .form-items input[type="submit"] {
-    background-color: #3498db;
+    background-color: var(--button-background-color);
     border: none;
-    color: white;
+    color: var(--white-color);
     padding: 0.5em 1em;
     font-size: 1em;
     cursor: pointer;
@@ -375,7 +462,7 @@ input[type="text"], input[type="number"], select {
 }
 
 .form-items input[type="submit"]:hover {
-    background-color: #2980b9;
+    background-color: var(--submit-background-color1);
 }
 
 .form-items label {
@@ -415,7 +502,7 @@ input[type="password"] {
 button.in_body_button {
     background: none;
     border: none;
-    color: white;
+    color: var(--white-color);
     cursor: pointer;
     font: inherit;
     margin: 0;
@@ -424,7 +511,7 @@ button.in_body_button {
 
 #right-panel h2 {
     font-size: 1.5em;
-    color: #2c3e50;
+    color: var(--secondary-color);
     margin-bottom: 1em;
 }
 
@@ -444,9 +531,9 @@ button.in_body_button {
 }
 
 #right-panel input[type="submit"] {
-    background-color: #3498db;
+    background-color: var(--button-background-color);
     border: none;
-    color: white;
+    color: var(--button-color2);
     padding: 0.5em 1em;
     font-size: 1em;
     cursor: pointer;
@@ -454,7 +541,7 @@ button.in_body_button {
 }
 
 #right-panel input[type="submit"]:hover {
-    background-color: #2980b9;
+    background-color: var(--submit-background-color1);
 }
 
 #right-panel #search-user-results,
@@ -475,13 +562,13 @@ button.in_body_button {
 #right-panel .scrollable-list li {
     margin: 0.5em 0;
     padding: 0.5em;
-    background-color: #f0f2f5;
+    background-color: var(--background-color-1);
     border-bottom: 1px solid #ddd;
 }
 
 #right-panel .scrollable-list li a {
     text-decoration: none;
-    color: #2980b9;
+    color: var(--link-color);
 }
 
 #right-panel .scrollable-list li a:hover {
@@ -489,7 +576,7 @@ button.in_body_button {
 }
 
 #right-panel p a {
-    color: #3498db;
+    color: var(--button-link-color);
     text-decoration: none;
     font-weight: bold;
 }
@@ -506,13 +593,13 @@ button.in_body_button {
 #left-panel {
     width: 25%;
     padding: 1em;
-    background-color: #ecf0f1;
+    background-color: var(--main-text-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #left-panel h3 {
-    color: #2c3e50;
+    color: var(--secondary-color);
     margin-bottom: 0.5em;
 }
 
@@ -521,13 +608,13 @@ button.in_body_button {
 }
 
 .internal-link:hover {
-    color: #732d91;
+    color: var(--link-hover-color);
 }
 
 #right-panel {
     width: 75%;
     padding: 1em;
-    background-color: #fff;
+    background-color: var(--white-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -535,7 +622,7 @@ button.in_body_button {
 #my-account-content {
     width: 100%;
     padding: 1em;
-    background-color: #fff;
+    background-color: var(--white-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -549,7 +636,7 @@ button.in_body_button {
     width: 25%;
     padding: 0 15px;
     margin-right: 2em;
-    background-color: #ecf0f1;
+    background-color: var(--main-text-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
@@ -558,14 +645,14 @@ button.in_body_button {
 .right-column {
     width: 75%;
     padding: 0 15px;
-    background-color: #fff;
+    background-color: var(--white-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar {
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
     padding: 20px;
     width: 10rem;
     height: 100vh;
@@ -573,7 +660,7 @@ button.in_body_button {
 
 .sidebar a {
     display: block;
-    color: #ecf0f1;
+    color: var(--main-text-color);
     text-decoration: none;
     margin-bottom: 10px;
 }
@@ -594,11 +681,11 @@ button.in_body_button {
 }
 
 .schedule th {
-    background-color: #f2f2f2;
+    background-color: var(--f2-color);
 }
 
 .schedule td {
-    background-color: #fff;
+    background-color: var(--white-color);
 }
 
 .schedule td:first-child {

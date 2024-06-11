@@ -7,22 +7,22 @@
 
 <div class="form-holder">
     <div class="form-content">
-        <div class="form-items">
+        <div class="form-items revert-colors">
             <form method="post">
                 {% csrf_token %}
                 {{form}}
-                <input type="submit" value="Modifier">
+                <input class="black-text" type="submit" value="Modifier">
             </form>
         </div>
     </div>
 </div>
 
-<div class="form-items">
+<div id="no-background" class="form-items revert-colors">
     <form method="post"
           action="{% url 'administration:delete_group' group.id %}">
         {% csrf_token %}
         <input type="hidden" name="group_id" value="{{ group.id }}">
-        <input type="submit" value="Supprimer groupe">
+        <input class="black-text" type="submit" value="Supprimer groupe">
     </form>
 </div>
 {% endblock %}

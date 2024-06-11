@@ -1,7 +1,7 @@
 {% extends "user_portal/base.html" %}
 
 {% block content %}
-<div class="flex_full">
+<div class="flex_full notes_section">
     <h1>Université de Haute-Alsace</h1>
 
     {% if user.user_type == 'teacher' or user.user_type == 'admin' %}
@@ -43,11 +43,10 @@
                 {% endfor %}
             </select></td>
         </tr>
-        <tr>
-            <th colspan="7"> <button type="submit">Valider</button></th>
-        </tr>
       </table>
+        <button type="submit">Valider</button>
     </form>
+
     <button type="button"
             onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">
         Retour</button>

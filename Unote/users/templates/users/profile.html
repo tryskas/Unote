@@ -5,11 +5,11 @@
 
 <div class="form-holder">
     <div class="form-content">
-        <div class="form-items">
+        <div class="form-items revert-colors">
             <form method="post">
                 {% csrf_token %}
                 {{form}}
-                <input type="submit" value="Sauvegarder">
+                <input class="black-text" type="submit" value="Sauvegarder">
             </form>
         </div>
     </div>
@@ -17,15 +17,15 @@
 
 <div>
     <a href="{% url 'administration:attendance_of' profile_user.id %}"
-       class="internal-link">Gérer les absences</a>
+       class="internal-link link2">Gérer les absences</a>
 </div>
 
-<div class="form-items">
+<div id="no-background" class="form-items revert-colors">
     <form method="post"
           action="{% url 'users:delete_user' profile_user.id %}">
         {% csrf_token %}
         <input type="hidden" name="user_id" value="{{ profile_user.id }}">
-        <input type="submit" value="Supprimer utilisateur">
+        <input class="black-text" type="submit" value="Supprimer utilisateur">
     </form>
 </div>
 {% endblock %}

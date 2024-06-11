@@ -1,6 +1,6 @@
 {% extends "user_portal/base.html" %}
 {% block content %}
-<div class="flex_full">
+<div class="flex_full notes_section">
   <h1>Université de Haute-Alsace</h1>
 
   {% if user.user_type == 'teacher' %}
@@ -14,7 +14,7 @@
           <th colspan="2">Classe : {{ group }}</th>
         </tr>
     </thead>
-      <thead>
+      <tbody>
         <tr>
           <th colspan="2"><select  name="subj" required>
             <option value="" disabled selected hidden>Matière</option>
@@ -30,7 +30,7 @@
         </select></th>
         <th><button type="submit" >Chercher</button></th>
       </tr>
-      </thead>
+      </tbody>
     </table>
 
       {% if no_grades %}
@@ -73,7 +73,7 @@
     </table>
 
 
-    <button
+    <button class="hover-white"
             onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">Retour</button>
   </form>
 
@@ -154,7 +154,7 @@
     </table>
 
 
-    <button
+    <button class="hover-white"
             onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">Retour</button>
   </form>
 
