@@ -1,0 +1,24 @@
+.scrollable-list {
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+#admin-content {
+    display: flex;
+    margin: 0 2rem;
+    height: 100vh;
+}
+
+#left-panel {
+    width: 15rem;
+    background-color: #f0f0f0;
+    padding: 0 10px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+#right-panel {
+    width: 80%;
+    background-color: #ffffff;
+    padding: 0 10px;
+}
+

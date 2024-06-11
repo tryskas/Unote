@@ -1,12 +1,6 @@
-{% load static %}
+{% extends "administration/base.html" %}
 
-{% block jquery %}
-    <!-- Script jquery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-            crossorigin="anonymous"></script>
-{% endblock %}
-
+{% block content %}
 <div>
     <h2>Page de {{ course.name }}</h2>
 </div>
@@ -31,6 +25,4 @@
         <input type="submit" value="Supprimer cours">
     </form>
 </div>
-
-<script type="text/javascript"
-        src="{% static 'administration/js/courses_script.js' %}"></script>
+{% endblock %}
