@@ -19,6 +19,7 @@
 
     <h2>Supprimer des utilisateurs à partir d'un fichier CSV</h2>
     <p>(Champs: 'first_name,last_name,email,user_type')</p>
+    <p>user_type: 'student' ou 'teacher' ou 'admin'</p>
     <form method="post" enctype="multipart/form-data"
           action="{% url 'users:delete_csv' %}">
         {% csrf_token %}
