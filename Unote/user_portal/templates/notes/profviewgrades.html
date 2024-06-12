@@ -1,0 +1,173 @@
+{% extends "user_portal/base.html" %}
+{% block content %}
+<div class="flex_full notes_section">
+  <h1>Université de Haute-Alsace</h1>
+
+  {% if user.user_type == 'teacher' %}
+  <form  action="{% url 'user_portal:profview_grades' %}"  method="post">
+    {% csrf_token %}
+
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">Matière : {{ subject }}</th>
+          <th colspan="2">Classe : {{ group }}</th>
+        </tr>
+    </thead>
+      <tbody>
+        <tr>
+          <th colspan="2"><select  name="subj" required>
+            <option value="" disabled selected hidden>Matière</option>
+            {% for subject in subjects %}
+            <option value="{{ subject }}">{{ subject }}</option>
+            {% endfor %}
+        </select></th>
+          <th><select  name="group" required>
+            <option value="" disabled selected hidden>Classe</option>
+            {% for g in groups %}
+            <option value="{{ g }}">{{ g }}</option>
+            {% endfor %}
+        </select></th>
+        <th><button type="submit" >Chercher</button></th>
+      </tr>
+      </tbody>
+    </table>
+
+      {% if no_grades %}
+   <p></p>
+      {% else %}
+      <table>
+        <tbody>
+        <tr>
+          <th></th>
+          {% for i in grade_range %}
+          <td>Note {{ forloop.counter }}</td>
+          {% endfor %}
+          <td style="font-weight: bold;">Moyenne</td>
+        </tr>
+        {% for s in students %}
+        {% with i=forloop.counter %}
+          <tr>
+            <td>{{ s.first_name }} {{ s.last_name }} </td>
+            {% for g in grades|slice:i|last %}
+            <td>{{ g.grade }}</td>
+            {% endfor %}
+            {% with j=forloop.counter %}
+                <td>{{ stud_ave|slice:j|last }}</td>
+            {% endwith %}
+          </tr>
+        {% endwith %}
+        {% endfor %}
+        <tr>
+          <td style="font-weight: bold;">Moyenne</td>
+          {% for c in class_ave %}
+
+              <td>{{ c }}</td>
+          {% endfor %}
+          <th></th>
+        </tr>
+
+      </tbody>
+
+    {% endif %}
+    </table>
+
+
+    <button class="hover-white"
+            onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">Retour</button>
+  </form>
+
+  {% elif user.user_type == 'admin' %}
+
+
+
+
+
+
+
+    <form  action="{% url 'user_portal:profview_grades' %}"  method="post">
+    {% csrf_token %}
+
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">Matière : {{ subject }}</th>
+          <th colspan="2">Classe : {{ group }}</th>
+        </tr>
+    </thead>
+      <thead>
+        <tr>
+          <th colspan="2"><select  name="subj" required>
+            <option value="" disabled selected hidden>Matière</option>
+            {% for subject in all_subjects %}
+            <option value="{{ subject }}">{{ subject }}</option>
+            {% endfor %}
+        </select></th>
+          <th><select  name="group" required>
+            <option value="" disabled selected hidden>Classe</option>
+            {% for g in all_groups %}
+            <option value="{{ g }}">{{ g }}</option>
+            {% endfor %}
+        </select></th>
+        <th><button type="submit" >Chercher</button></th>
+      </tr>
+      </thead>
+    </table>
+
+      {% if no_grades %}
+   <p></p>
+      {% else %}
+      <table>
+        <tbody>
+        <tr>
+          <th></th>
+          {% for i in grade_range %}
+          <td>Note {{ forloop.counter }}</td>
+          {% endfor %}
+          <td style="font-weight: bold;">Moyenne</td>
+        </tr>
+        {% for s in students %}
+        {% with i=forloop.counter %}
+          <tr>
+            <td>{{ s.first_name }} {{ s.last_name }} </td>
+            {% for g in grades|slice:i|last %}
+            <td>{{ g.grade }}</td>
+            {% endfor %}
+            {% with j=forloop.counter %}
+                <td>{{ stud_ave|slice:j|last }}</td>
+            {% endwith %}
+          </tr>
+        {% endwith %}
+        {% endfor %}
+        <tr>
+          <td style="font-weight: bold;">Moyenne</td>
+          {% for c in class_ave %}
+
+              <td>{{ c }}</td>
+          {% endfor %}
+          <th></th>
+        </tr>
+
+      </tbody>
+
+    {% endif %}
+    </table>
+
+
+    <button class="hover-white"
+            onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">Retour</button>
+  </form>
+
+
+
+
+
+
+
+  {% else %}
+    <div>
+      Vous n'êtes pas autorisé à accéder à cette page !
+      </div>
+  {% endif %}
+</div>
+{% endblock %}

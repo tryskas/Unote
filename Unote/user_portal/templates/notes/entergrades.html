@@ -1,0 +1,80 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex_full notes_section">
+  <h1>Université de Haute-Alsace</h1>
+
+  {% if user.user_type == 'teacher' or user.user_type == 'admin'%}
+
+  <form  action="{% url 'user_portal:success_grades' %}"  method="post">
+    {% csrf_token %}
+  <table>
+    <thead>
+    <tr>
+        <th colspan="2">Informations complémentaires</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Nom Prénom</td>
+        <td>{{ user.last_name }} {{ user.first_name }} </td>
+    </tr>
+    <tr>
+        <td>Numéro professeur</td>
+        <td> {{ user.username }} </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+    <table>
+      <thead>
+          <th colspan="7">Note </th>
+        </thead>
+        <tr>
+          <td colspan="6">Matière</td>
+          <td>{{ subject }}</td>
+        </tr>
+        <tr>
+          <td colspan="6">Classe</td>
+          <td>{{ group }}</td>
+        </tr>
+        <tr>
+          <td colspan="6">Coefficient</td>
+          <td>{{ coefficient }}</td>
+        </tr>
+
+      <thead>
+        <th colspan="6">Eleve</th>
+        <th>Note</th>
+      </thead>
+      <tbody>
+        {% for student in students%}
+      <tr>
+        <td colspan="6">{{ student.last_name }} {{ student.first_name }} </td>
+        <td><input type="number" name="{{ student.id }}" min="0" max="20" step="0.01"></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <input type="hidden" name="group" value="{{ group }}">
+    <input type="hidden" name="coefficient" value="{{ coefficient }}">
+    <input type="hidden" name="subject" value="{{ subject }}">
+
+
+    <button type="submit" class="valider-btn">Valider</button>
+  </form>
+
+  <button type="button"
+          onclick="window.location.href='{% url 'user_portal:profview' %}'">
+    Retour</button>
+
+
+  {% else %}
+    <div>
+      Vous n'êtes pas autorisé à accéder à cette page !
+      </div>
+  {% endif %}
+</div>
+{% endblock %}

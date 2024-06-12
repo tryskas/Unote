@@ -1,0 +1,211 @@
+{% extends "user_portal/base.html" %}
+{% block content %}
+<div class="flex_full notes_section">
+    <h1>Université de Haute-Alsace</h1>
+
+    {% if user.user_type == 'teacher' %}
+    <!-- Formulaire de recherche -->
+    <form id="search-form" action="{% url 'user_portal:modify_grades' %}"
+          method="post">
+      {% csrf_token %}
+      <table>
+        <thead>
+            <tr>
+                <th colspan="2">Matière : {{ subject }}</th>
+                <th colspan="2" >Classe : {{ group }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    <select id="subj" name="subj" required>
+                        <option value="" disabled selected hidden>Matière</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject }}">{{ subject }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <select id="group" name="group" required>
+                        <option value="" disabled selected hidden>Classe</option>
+                        {% for g in groups %}
+                        <option value="{{ g }}">{{ g }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <button type="submit">Chercher</button>
+                </th>
+            </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <!-- Tableau des notes et formulaires de suppression -->
+    {% if not no_grades %}
+    <form id="deleteform" action="{% url 'user_portal:delete_selected_grades' %}"
+          method="post">
+      {% csrf_token %}
+      <table>
+        <tbody>
+          <tr>
+            <th></th>
+            {% for i in grade_range %}
+            <td>Note {{ forloop.counter }}</td>
+            {% endfor %}
+            <td style="font-weight: bold;">Moyenne</td>
+          </tr>
+          {% for s in students %}
+          {% with i=forloop.counter %}
+            <tr>
+              <td>{{ s.first_name }} {{ s.last_name }}</td>
+              {% for g in grades|slice:i|last %}
+              <td>
+                {% if g.grade %}
+                <div style="display: inline-flex; align-items: center;">
+                {{ g.grade }}
+                <input class="margin-left" type="checkbox"
+                       name="grades_to_delete" value="{{ g.pk }}">
+               </div>
+                {% else %}
+                {{ g.grade }}
+                {% endif %}
+              </td>
+              {% endfor %}
+              {% with j=forloop.counter %}
+              <td>{{ stud_ave|slice:j|last }}</td>
+              {% endwith %}
+            </tr>
+          {% endwith %}
+          {% endfor %}
+          <tr>
+            <td style="font-weight: bold;">Moyenne</td>
+            {% for c in class_ave %}
+            <td>{{ c }}</td>
+            {% endfor %}
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit" formnovalidate>Supprimer les notes sélectionnées</button>
+    </form>
+    {% else %}
+    <p></p>
+    {% endif %}
+
+    <button type="button"
+            onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">
+        Retour</button>
+
+    {% elif user.user_type == 'admin' %}
+
+
+
+
+
+        <!-- Formulaire de recherche -->
+    <form id="search-form" action="{% url 'user_portal:modify_grades' %}"
+          method="post">
+      {% csrf_token %}
+      <table>
+        <thead>
+            <tr>
+                <th colspan="2">Matière : {{ subject }}</th>
+                <th colspan="2" >Classe : {{ group }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    <select id="subj" name="subj" required>
+                        <option value="" disabled selected hidden>Matière</option>
+                        {% for subject in all_subjects %}
+                        <option value="{{ subject }}">{{ subject }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <select id="group" name="group" required>
+                        <option value="" disabled selected hidden>Classe</option>
+                        {% for g in all_groups %}
+                        <option value="{{ g }}">{{ g }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <button type="submit">Chercher</button>
+                </th>
+            </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <!-- Tableau des notes et formulaires de suppression -->
+    {% if not no_grades %}
+    <form id="deleteform" action="{% url 'user_portal:delete_selected_grades' %}"
+          method="post">
+      {% csrf_token %}
+      <table>
+        <tbody>
+          <tr>
+            <th></th>
+            {% for i in grade_range %}
+            <td>Note {{ forloop.counter }}</td>
+            {% endfor %}
+            <td style="font-weight: bold;">Moyenne</td>
+          </tr>
+          {% for s in students %}
+          {% with i=forloop.counter %}
+            <tr>
+              <td>{{ s.first_name }} {{ s.last_name }}</td>
+              {% for g in grades|slice:i|last %}
+              <td>
+                {% if g.grade %}
+                <div style="display: inline-flex; align-items: center;">
+                {{ g.grade }}
+                <input class="margin-left" type="checkbox"
+                    name="grades_to_delete"
+                       value="{{ g.pk }}">
+               </div>
+                {% else %}
+                {{ g.grade }}
+                {% endif %}
+              </td>
+              {% endfor %}
+              {% with j=forloop.counter %}
+              <td>{{ stud_ave|slice:j|last }}</td>
+              {% endwith %}
+            </tr>
+          {% endwith %}
+          {% endfor %}
+          <tr>
+            <td style="font-weight: bold;">Moyenne</td>
+            {% for c in class_ave %}
+            <td>{{ c }}</td>
+            {% endfor %}
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit" formnovalidate>Supprimer les notes sélectionnées</button>
+    </form>
+    {% else %}
+    <p></p>
+    {% endif %}
+
+    <button type="button"
+            onclick="window.location.href='{% url 'user_portal:profviewhome' %}'">
+        Retour</button>
+
+
+
+
+
+
+    {% else %}
+    <div>
+      Vous n'êtes pas autorisé à accéder à cette page !
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

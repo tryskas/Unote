@@ -1,0 +1,60 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="class_call flex_full notes_section">
+    <table>
+    <thead>
+        <tr>
+            <th colspan="4">
+                Appel pour {{session.course.name}} par {{user.first_name}} {{user.last_name}} :
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td scope="col">Eleve</td>
+            <td scope="col">Prénom</td>
+            <td scope="col">Nom</td>
+            <td scope="col">Présence</td>
+        </tr>
+    <form method="POST">
+    {% csrf_token %}
+    {% for s in student_list %}
+
+        <tr>
+            <th scope="row">{{s.username}}</th>
+            <td>{{s.first_name}}</td>
+            <td>{{s.last_name}}</td>
+            <td><fieldset>
+
+
+                <div>
+                  <input type="radio" classe="{{s.username}}"
+                         name="{{s.username}}" value="present" checked />
+                  <label for="present">présent</label>
+
+                  <input type="radio" classe="{{s.username}}"
+                         name="{{s.username}}" value="absent"  />
+                  <label for="absent">absent</label>
+
+                  <input type="radio" classe="{{s.username}}"
+                         name="{{s.username}}" value="late"  />
+                  <label for="late">en retard</label>
+                </div>
+            </fieldset>
+            </td>
+
+        </tr>
+
+
+
+
+    {% endfor %}
+    </tbody>
+    </table>
+    <button type="submit" href="{% url 'user_portal:attendance_teacher' %}" class="button">
+        Valider </button>
+</form>
+</div>
+{% endblock %}

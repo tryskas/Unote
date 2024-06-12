@@ -1,0 +1,25 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="lates-student">
+    <h3>Absences et retards non justifiés:</h3>
+
+    {% for a in absences %}
+
+            <div>Absent à {{a.session.course.name}} le {{a.session.date}}</div>
+
+    {% endfor %}
+    {% for l in lates %}
+
+            <div>En retard à {{l.session.course.name}} le {{l.session.date}}
+            </div>
+        
+    {% endfor %}
+    
+    </br>
+
+    <div>Les éventuels retards/absences sont à justifier auprès de la
+        scolarité)</div>
+</div>
+{% endblock %}

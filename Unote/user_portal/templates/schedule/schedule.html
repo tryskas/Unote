@@ -1,0 +1,66 @@
+
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h1>Weekly Timetable</h1>
+    <form action="{% url 'user_portal:weekly_schedule' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="start_of_week" value="{{ start_of_week }}">
+        <input type="hidden" name="week" value="past_week">
+        <button type="submit">Chercher Semaine Précédente</button>
+    </form>
+
+    <form action="{% url 'user_portal:weekly_schedule' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="start_of_week" value="{{ start_of_week }}"">
+        <input type="hidden" name="week" value="next_week">
+        <button type="submit">Chercher Semaine Suivante</button>
+    </form>
+   
+    <table id="timetable">
+        
+        <thead>
+            <tr>
+                <th>Heure</th>
+                {% for day in days %}
+                {% for key, value in day_date_mapping.items %}
+                {% if key == day %}
+                    <th>{{ day }} {{ value }}</th>
+                    {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for hour in hours %}
+                <tr>
+                    <td>{{ hour }}:00</td>
+
+                    {% for day in days %}
+                        
+                            {% if timetable.items %}
+                                {% for key, value in timetable.items %}
+                                    {% if key == day %}
+                                        {% for h, session in value.items %}
+                                            {% if h == hour %}
+                                            <td id="{{ session.id }}">
+                                                {{ session.course.subject }}<br>
+                                                {{ session.room }}
+                                            </td>  
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                
+                        {% endif %}
+                        
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

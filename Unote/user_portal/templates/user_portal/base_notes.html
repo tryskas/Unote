@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Report Card</title>
+    {% block styles %}
+        <link rel="stylesheet"
+              href="{% static 'user_portal/css/style_notesv2.css' %}"/>
+        <link rel="icon" type="image/ico" href="{% static 'images/favicon.ico' %}">
+    {% endblock %}
+</head>
+<body>
+<div class="main-content">
+    <div class="container">
+        <div class="sidebar">
+            <a href="home.html" class="sidebar-button">Home</a>
+            <a href="messagerie.html" class="sidebar-button">Messagerie</a>
+            <a href="mon-compte.html" class="sidebar-button">Mon Compte</a>
+        </div>
+        <aside class="sidebar">
+            <div class="sidebar-item"><i class="icon-home"></i></div>
+            <div class="sidebar-item"><i class="icon-work"></i></div>
+            <div class="sidebar-item"><i class="icon-absence"></i></div>
+            <div class="sidebar-item"><i class="icon-exam"></i></div>
+            <div class="sidebar-item"><i class="icon-notes"></i></div>
+        </aside>
+        <div class="main-content">
+            <h1>Université de Haute-Alsace</h1>
+            {% block content %} {% endblock %}
+        </div>  
+    </div>
+</div>
+    {% block js %}
+        <script type="text/javascript"
+                src="{% static 'script.js' %}"></script>
+        <script type="text/javascript"
+                src="{% static 'notes/script.js' %}"></script>
+    {% endblock %}
+</body>
+</html>
