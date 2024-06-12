@@ -120,32 +120,6 @@ def create_groups_csv(request):
             reader = csv.DictReader(decoded_file)
             groups_created = 0
             for row in reader:
-                form = CustomUserCreationForm({
-                    'first_name': row['first_name'],
-                    'last_name': row['last_name'],
-                    'email': row['email'],
-                    'user_type': row['user_type']
-                })
-                if form.is_valid():
-                    groups_created += 1
-                else:
-                    messages.error(request, f"Erreur lors de la création du groupe {row['email']}")
-            messages.success(request, f"{groups_created} groupes ont été créés avec succès.")
-            return redirect(reverse_lazy('users:register'))
-    else:
-        form = CSVUploadForm()
-    return render(request, 'users/upload_csv.html', {'form': form})
-
-
-def create_groups_csv(request):
-    if request.method == "POST":
-        form = CSVUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            csv_file = form.cleaned_data['csv_file']
-            decoded_file = csv_file.read().decode('utf-8').splitlines()
-            reader = csv.DictReader(decoded_file)
-            groups_created = 0
-            for row in reader:
                 group_form = GroupFormCSV({
                     'name': row['name'],
                     'type': row['type']
@@ -580,7 +554,7 @@ def sessions(request):
     if request.user.user_type != "admin":
         return render(request, 'main/403.html', status=403)
 
-    sessions = Session.objects.all()
+    sessions = Session.objects.all().order_by('date')
 
     context = {'sessions': sessions}
 
@@ -601,7 +575,7 @@ def search_session(request):
         Q(course__group__name__icontains=search_term) |
         Q(course__teacher__first_name__icontains=search_term) |
         Q(course__teacher__last_name__icontains=search_term) |
-        Q(course__subject__name__icontains=search_term))
+        Q(course__subject__name__icontains=search_term)).order_by('date')
 
     search_results_html = render_to_string(
         'administration/search_session_results.html',
@@ -669,7 +643,26 @@ class SessionUpdateView(UpdateView):
             return reverse_lazy('main:error_400')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        repeat = form.cleaned_data.get('repeat')
+        repeat_interval = form.cleaned_data.get('repeat_interval')
+        repeat_duration = form.cleaned_data.get('repeat_duration')
+
+        if repeat and repeat_interval and repeat_duration:
+            end_date = self.object.date + timedelta(days=repeat_duration)
+            current_date = self.object.date + timedelta(days=repeat_interval)
+            while current_date <= end_date:
+                Session.objects.create(
+                    course=self.object.course,
+                    date=current_date,
+                    duration=self.object.duration,
+                    room=self.object.room,
+                    exam=self.object.exam,
+                )
+                current_date += timedelta(days=repeat_interval)
+
         messages.success(self.request, 'La session a bien été mise à jour.')
+
         return super().form_valid(form)
 
 

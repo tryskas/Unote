@@ -15,18 +15,48 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from django.db.models import Q, F, ExpressionWrapper,DateTimeField
+from datetime import timedelta , datetime
+import locale
 
 from users.models import CustomUser
 
 
 def dashboard_view(request):
     user = request.user
-    absence_late = Presence.objects.filter(user=user, justified=False).exclude(presence="present").order_by('-session__date')[:3]
-    grades = Grade.objects.filter(user=user)[:3]
+    today = timezone.now().replace(hour=7)
     user_groups = Group.objects.filter(users=user)
-    future_exams = Session.objects.filter( date__gt=timezone.now(), exam=True, course__group__in=user_groups).distinct().order_by('date')[:3]
 
-    context = { 'user': user, 'absence_late': absence_late, 'grades': grades, 'future_exams': future_exams }
+    courses = Course.objects.filter(group__in=user_groups)
+
+    today_sessions = Session.objects.filter(date__date=today,
+                                            course__in=courses)
+    tomorrow = today + timedelta(days=1)
+    tomorrow_sessions = Session.objects.filter(date__date=tomorrow,
+                                               course__in=courses)
+
+    today_sessions_with_end_time = [(session, session.date + session.duration)
+                                    for session in today_sessions]
+    tomorrow_sessions_with_end_time = [
+        (session, session.date + session.duration) for session in
+        tomorrow_sessions]
+
+    absence_late = Presence.objects.filter(user=user, justified=False).exclude(
+        presence="present").order_by('-session__date')[:3]
+    grades = Grade.objects.filter(user=user)[:3]
+
+    future_exams = Session.objects.filter(date__gt=timezone.now(), exam=True,
+                                          course__in=courses).distinct().order_by(
+        'date')[:3]
+
+    context = {
+        'user': user,
+        'today_sessions': today_sessions_with_end_time,
+        'tomorrow_sessions': tomorrow_sessions_with_end_time,
+        # Utilisez la liste modifiée avec l'heure de fin
+        'absence_late': absence_late,
+        'grades': grades,
+        'future_exams': future_exams
+    }
 
     return render(request, 'user_portal/dashboard.html', context)
 
@@ -312,56 +342,14 @@ def generate_student_view(request):
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
         user = get_object_or_404(CustomUser, id=student_id)
-        user_promo = Group.objects.filter(type="promo", users=user).first()
-        ues_average = []
-        subj_average = []
-        teachers = []
-        subj_list = []
-        no_note = True
-        ues_list = []
+        user_promo = get_user_promo(user)
 
-        i = 0
         if user.user_type == 'student' and user_promo is not None:
-            for unite in user_promo.ues.all():
-                subj = unite.subjects.all()
-                for j in range(len(subj)):
-                    if Grade.objects.filter(subject=subj[j], user=user) and unite not in ues_list:
-                        ues_list.append(unite)
-
-            subj_list = [[] for _ in range(len(ues_list))]
-            subj_average = [[] for _ in range(len(ues_list))]
-            teachers = [[] for _ in range(len(ues_list))]
-            for ue in ues_list:
-                ave = 0.0
-                sum = 0
-                for subj in ue.subjects.all():
-                    if Grade.objects.filter(subject=subj, user=user):
-                        subj_list[i].append(subj)
-
-                if subj_list[i]:
-                    no_note = False
-                    for s in subj_list[i]:
-                        ave_s = 0.0
-                        sum_coeff_s = 0
-                        course = Course.objects.filter(subject=s).first()
-                        if course:
-                            teacher = course.teacher
-                            teachers[i].append(f"{teacher.first_name} {teacher.last_name}")
-                        else:
-                            teachers[i].append("-")
-                        for g in Grade.objects.filter(subject=s, user=user):
-                            ave_s += g.grade * g.coeff
-                            sum_coeff_s += g.coeff
-                        ave_s /= sum_coeff_s
-                        ave += ave_s * s.coeff
-                        sum += s.coeff
-                        subj_average[i].append(round(ave_s, 2))
-                    i += 1
-                    ave /= sum
-                    ues_average.append(round(ave, 2))
+            ues_list = get_ues_list(user, user_promo)
+            subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
 
             response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="{user.first_name}_{user.last_name}_report.pdf"'
+            response['Content-Disposition'] = f'attachment; filename="{user.first_name}{user.last_name}_report.pdf"'
 
             doc = SimpleDocTemplate(response, pagesize=letter)
             elements = []
@@ -383,7 +371,6 @@ def generate_student_view(request):
                         data.append([ue.name, subj.name, teachers[ue_index][subj_index], subj_average[ue_index][subj_index]])
                     else:
                         data.append(["", subj.name, teachers[ue_index][subj_index], subj_average[ue_index][subj_index]])
-
                 ue_table = Table(data, colWidths=[100, 200, 200, 100])
                 ue_table.setStyle(TableStyle([
                     ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
@@ -595,3 +582,87 @@ def calculate_subject_average(user, subject):
         average = 0
 
     return average, total_coeff, teacher
+
+
+def weekly_schedule(request):
+    user = request.user
+    today = timezone.now()
+    today = today.replace(hour=7)
+
+    if user.user_type == 'student':
+        group = Group.objects.filter(users=user).all()
+        course = Course.objects.filter(group__in=group).all()
+    else:
+        course = Course.objects.filter(teacher=user).all()
+
+    if request.method == "POST":
+        start = request.POST.get('start_of_week')
+        start = start.strip()
+        direction = request.POST.get('week')
+        format = "%d %B %Y %H:%M"
+
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+        print(start)
+        startofweek = datetime.strptime(start, format)
+        startofweek = timezone.make_aware(startofweek)
+        locale.setlocale(locale.LC_TIME, 'en_EN.UTF-8')
+
+        if direction == "past_week":
+            startofweek -= timedelta(days=7)
+        elif direction == "next_week":
+            startofweek += timedelta(days=7)
+
+        start_of_week = startofweek
+    else:
+        start_of_week = today - timedelta(days=today.weekday())
+
+    day_mapping = {
+        'monday': 'Lundi',
+        'tuesday': 'Mardi',
+        'wednesday': 'Mercredi',
+        'thursday': 'Jeudi',
+        'friday': 'Vendredi',
+        'saturday': 'Samedi',
+        'sunday': 'Dimanche'
+    }
+
+    days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+    hours = range(8, 21)
+    week_dates = [(start_of_week + timedelta(days=i)).strftime('%d/%m') for i in range(7)]
+    day_date_mapping = dict(zip(days, week_dates))
+
+    start_of_week = start_of_week.replace(hour=7)
+
+    end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
+    end_of_week = end_of_week.replace(hour=22)
+
+    sessions = Session.objects.filter(date__range=[start_of_week, end_of_week], course__in=course).order_by('date')
+
+    timetable = {day: {hour: None for hour in hours} for day in days}
+
+    for session in sessions:
+        session_date = timezone.localtime(session.date)
+        day_name = session_date.strftime('%A').lower()  # Convert to lowercase
+        try:
+            day_name_fr = day_mapping[day_name]
+            hour = session_date.hour
+
+            total_seconds = session.duration.total_seconds()
+            total_hours = int(total_seconds / 3600)
+
+            if 8 <= hour < 21:
+                for i in range(total_hours):
+                    if hour + i < 21:
+                        timetable[day_name_fr][hour + i] = session
+        except KeyError:
+            print("Day name not found in mapping:", day_name)
+
+    context = {
+        'timetable': timetable,
+        'hours': hours,
+        'days': days,
+        'day_date_mapping': day_date_mapping,
+        'start_of_week': start_of_week
+    }
+
+    return render(request, 'schedule/schedule.html', context)

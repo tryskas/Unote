@@ -1,7 +1,7 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-<h2>Connexion</h2>
+<h2 class="align-center">Connexion</h2>
 
 <div class="form-holder">
     <div class="form-content">
@@ -12,9 +12,9 @@
                 <input class="black-text" type="submit" value="Connexion">
             </form>
         </div>
+        <p><a class="link2" href="{% url 'users:password_reset' %}">Mot de passe
+            perdu</a></p>
     </div>
 </div>
 
-<p><a class="link2" href="{% url 'users:password_reset' %}">Mot de passe
-    perdu</a></p>
 {% endblock %}

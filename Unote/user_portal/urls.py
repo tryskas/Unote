@@ -28,4 +28,5 @@ urlpatterns = [
     path('notes/new_report/', views.new_studentreport, name='new_studentreport'),
     path('notes/new_report/get/', views.getnew_studentreport, name='getnew_studentreport'),
     path('notes/new_report/get/generate/', views.generate_student_view, name='generate_student_view'),
+    path('schedule/', views.weekly_schedule, name='weekly_schedule'),
 ]

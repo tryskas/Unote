@@ -4,6 +4,11 @@
     --secondary-color: #2c3e50;
     --admin-menu-link-color: #2980b9;
     --title-link-color: #2980b9;
+    --background-schedule-color: #f0f2f5;
+    --background-schedule-color2: #fff;
+    --schedule-title-color: #1285a1;
+    --taken-cells-background-color: #87d2ff;
+    --taken-cells-exam-background-color: #ff7777;
 
     --title-color: #2c3e50;
 
@@ -59,6 +64,11 @@
     --button-link-color: #000;
     --title-link-color: #fff;
     --table-border-color: #151e3fff;
+    --background-schedule-color: #fff;
+    --background-schedule-color2: #f0f2f5;
+    --taken-cells-background-color: #c0fdde;
+    --taken-cells-exam-background-color: #ff7777;
+    --schedule-title-color: #105095;
     --submit-background-color1: #fff;
     --button-color2: #000;
     --secondary-color: #151e3fff;
@@ -137,6 +147,14 @@ header h1 {
     margin-left: 1rem;
 }
 
+.margin-left{
+    margin-left: 1rem;
+}
+
+.schedule-title-color {
+    color: var(--schedule-title-color);
+}
+
 nav a {
     margin-left: 1em;
 }
@@ -175,6 +193,10 @@ ul li {
 ul li a {
     color: var(--link-color);
     text-decoration: none;
+}
+
+.display_flex {
+    display: flex;
 }
 
 h2, h3 {
@@ -298,13 +320,9 @@ footer {
     border-color: #bee5eb;
 }
 
-
-
-
-
-
-
-
+img {
+    width: 60px;
+}
 
 /*------------------------------Tables---------------------------------------*/
 
@@ -354,6 +372,10 @@ button[type="submit"] {
     border-radius: 4px;
 }
 
+.align-center {
+    text-align: center;
+}
+
 button[type="submit"]:hover, button[type="button"]:hover, .hover-white:hover {
     background-color: var(--submit-background-color1);
 }
@@ -374,6 +396,14 @@ input[type="text"], input[type="number"], select {
 
 .sidebar a:hover, .left-column a h2:hover, .right-column a h2:hover {
     color: var(--title-link-color);
+}
+
+.schedule_background tr:nth-child(even) {
+    background-color: var(--background-schedule-color);
+}
+
+.schedule_background tr:nth-child(odd) {
+    background-color: var(--background-schedule-color2);
 }
 
 .form-holder {
@@ -571,8 +601,8 @@ button.in_body_button {
     color: var(--link-color);
 }
 
-#right-panel .scrollable-list li a:hover {
-    text-decoration: underline;
+#right-panel .scrollable-list li a:hover, #right-panel p a:hover {
+    color: var(--link-hover-color);
 }
 
 #right-panel p a {
@@ -581,8 +611,16 @@ button.in_body_button {
     font-weight: bold;
 }
 
-#right-panel p a:hover {
-    text-decoration: underline;
+#left-panel ul li a.hover-active:hover {
+    color: var(--link-hover-color);
+}
+
+.background-cells-schedule {
+    background-color: var(--taken-cells-background-color);
+}
+
+.background-cells-schedule-exam {
+    background-color: var(--taken-cells-exam-background-color);
 }
 
 #admin-content {

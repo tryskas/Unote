@@ -11,32 +11,34 @@
         <h3>Utilisateurs</h3>
         <ul>
             <li><a href="{% url 'administration:profiles' %}"
-                   class="internal-link">Profils et absences</a></li>
-            <li><a href="{% url 'user_portal:profviewhome' %}">Notes</a></li>
+                   class="internal-link hover-active">Profils et
+                absences</a></li>
+            <li><a href="{% url 'user_portal:profviewhome' %}"
+                   class=" hover-active">Notes</a></li>
             <li><a href="{% url 'administration:groups' %}"
-                   class="internal-link">Groupes</a></li>
+                   class="internal-link hover-active">Groupes</a></li>
             <li><a href="{% url 'administration:courses' %}"
-                   class="internal-link">Cours</a></li>
+                   class="internal-link hover-active">Cours</a></li>
         </ul>
 
         <h3>Maquettes</h3>
         <ul>
             <li><a href="{% url 'administration:eus' %}"
-                   class="internal-link">UE</a></li>
+                   class="internal-link hover-active">UE</a></li>
             <li><a href="{% url 'administration:subjects' %}"
-                   class="internal-link">Matières</a></li>
+                   class="internal-link hover-active">Matières</a></li>
         </ul>
 
         <h3>Bâtiments</h3>
         <ul>
             <li><a href="{% url 'administration:rooms' %}"
-                   class="internal-link">Salles</a></li>
+                   class="internal-link hover-active">Salles</a></li>
         </ul>
 
         <h3>Emploi du temps</h3>
         <ul>
             <li><a href="{% url 'administration:sessions' %}"
-                   class="internal-link">Sessions de cours</a></li>
+                   class="internal-link hover-active">Sessions de cours</a></li>
         </ul>
 
         <a href="{% url 'users:password_change' %}">Modifier mot de passe</a>

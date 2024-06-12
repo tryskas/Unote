@@ -1,0 +1,89 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="flex_full">
+    <h2>Emploi du temps de la semaine</h2>
+        <div class="display_flex">
+            <form action="{% url 'user_portal:weekly_schedule' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="start_of_week" value="{{ start_of_week }}">
+                <input type="hidden" name="week" value="past_week">
+                <button class="black-text" type="submit">Chercher semaine
+                    précédente</button>
+            </form>
+
+            <form class="margin-left"
+                  action="{% url 'user_portal:weekly_schedule' %}"
+                  method="post">
+                {% csrf_token %}
+                <input type="hidden" name="start_of_week" value="{{ start_of_week }}"">
+                <input type="hidden" name="week" value="next_week">
+                <button class="black-text" type="submit">Chercher semaine
+                    suivante</button>
+            </form>
+        </div>
+        <table id="timetable">
+
+            <thead>
+                <tr>
+                    <th>Heure</th>
+                    {% for day in days %}
+                    {% for key, value in day_date_mapping.items %}
+                    {% if key == day %}
+                        <th>{{ day }} {{ value }}</th>
+                        {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody class="schedule_background">
+                {% for hour in hours %}
+                    <tr>
+                        <td>{{ hour }}:00</td>
+
+                        {% for day in days %}
+
+                                {% if timetable.items %}
+                                    {% for key, value in timetable.items %}
+                                        {% if key == day %}
+                                            {% for h, session in value.items %}
+                                                {% if h == hour %}
+                                                    {% if session != none %}
+                                                        {% if session.exam %}
+                                                <td id="{{ session.id }}"
+                                                    class="background-cells-schedule-exam">
+                                                    {{ session.course.subject }}<br>
+                                                    {{ session.room }}
+                                                </td>
+                                                        {% else %}
+                                                <td id="{{ session.id }}"
+                                                    class="background-cells-schedule">
+                                                    {{ session.course.subject }}<br>
+                                                    {{ session.room }}
+                                                </td>
+                                                        {% endif %}
+                                                    {% else %}
+                                                <td id="{{ session.id }}">
+                                                    {{ session.course.subject }}<br>
+                                                    {{ session.room }}
+                                                </td>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+
+                            {% endif %}
+
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+
+<script type="text/javascript" src="{% static 'user_portal/js/merge_cells.js' %}"></script>
+{% endblock %}

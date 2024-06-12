@@ -212,7 +212,7 @@ def delete_csv(request):
                 except Exception as e:
                     messages.error(request, f"Erreur lors de la suppression de l'utilisateur avec l'email {row['email']}: {str(e)}")
             messages.success(request, f"{users_deleted} utilisateurs ont été supprimés avec succès.")
-            return redirect(reverse_lazy('users:delete'))
+            return redirect(reverse_lazy('administration:dashboard'))
     else:
         form = CSVUploadForm()
     return render(request, 'users/delete_csv.html', {'form': form})
