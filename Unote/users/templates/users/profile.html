@@ -1,0 +1,31 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h2>Profil de {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items revert-colors">
+            <form method="post">
+                {% csrf_token %}
+                {{form}}
+                <input class="black-text" type="submit" value="Sauvegarder">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="{% url 'administration:attendance_of' profile_user.id %}"
+       class="internal-link link2">Gérer les absences</a>
+</div>
+
+<div id="no-background" class="form-items revert-colors">
+    <form method="post"
+          action="{% url 'users:delete_user' profile_user.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ profile_user.id }}">
+        <input class="black-text" type="submit" value="Supprimer utilisateur">
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h2 class="align-center">Connexion</h2>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items revert-colors">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="black-text" type="submit" value="Connexion">
+            </form>
+        </div>
+        <p><a class="link2" href="{% url 'users:password_reset' %}">Mot de passe
+            perdu</a></p>
+    </div>
+</div>
+
+{% endblock %}
