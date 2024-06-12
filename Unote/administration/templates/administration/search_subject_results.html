@@ -1,0 +1,10 @@
+<ul class="scrollable-list">
+    {% for subject in search_results %}
+        <li>
+            <div>
+                <a href="{% url 'administration:update_subject' subject.id %}"
+                   >{{ subject.name }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

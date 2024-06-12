@@ -1,0 +1,10 @@
+<ul class="scrollable-list">
+    {% for session in search_results %}
+        <li>
+            <div>
+                <a href="{% url 'administration:update_session' session.id %}"
+                   >{{ session.course }} - {{ session.date }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

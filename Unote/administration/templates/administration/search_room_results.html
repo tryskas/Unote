@@ -1,0 +1,10 @@
+<ul class="scrollable-list">
+    {% for room in search_results %}
+        <li>
+            <div>
+                <a href="{% url 'administration:update_room' room.id %}"
+                   >{{ room.name }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

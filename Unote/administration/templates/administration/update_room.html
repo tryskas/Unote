@@ -1,0 +1,28 @@
+{% extends "administration/base.html" %}
+
+{% block content %}
+<div>
+    <h2>Page de {{ room.name }}</h2>
+</div>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items revert-colors">
+            <form method="post">
+                {% csrf_token %}
+                {{form}}
+                <input class="black-text" type="submit" value="Modifier">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="no-background" class="form-items revert-colors">
+    <form method="post"
+          action="{% url 'administration:delete_room' room.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="ue_id" value="{{ room.id }}">
+        <input class="black-text" type="submit" value="Supprimer la salle">
+    </form>
+</div>
+{% endblock %}
