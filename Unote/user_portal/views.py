@@ -1,5 +1,5 @@
-from django.template.loader import render_to_string
 from django.views.generic.base import TemplateView
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from administration.models import (Subject, Grade, UE, Group, Presence,
                                    Session, Course)
@@ -8,8 +8,6 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from reportlab.pdfgen import canvas
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -21,7 +19,11 @@ import locale
 from users.models import CustomUser
 
 
+@login_required
 def dashboard_view(request):
+    if request.user.user_type == "admin":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     today = timezone.now().replace(hour=7)
     user_groups = Group.objects.filter(users=user)
@@ -42,7 +44,9 @@ def dashboard_view(request):
 
     absence_late = Presence.objects.filter(user=user, justified=False).exclude(
         presence="present").order_by('-session__date')[:3]
-    grades = Grade.objects.filter(user=user)[:3]
+    grades = list(Grade.objects.filter(user=user))
+    grades.reverse()
+    grades = grades[:3]
 
     future_exams = Session.objects.filter(date__gt=timezone.now(), exam=True,
                                           course__in=courses).distinct().order_by(
@@ -61,6 +65,7 @@ def dashboard_view(request):
     return render(request, 'user_portal/dashboard.html', context)
 
 
+@method_decorator(login_required, name='dispatch')
 class MyAccountView(TemplateView):
     template_name = "user_portal/my_account.html"
 
@@ -70,24 +75,27 @@ def studentview(request):
     user = request.user
 
     if user.user_type != 'student':
-        return render(request, 'user_portal/studentview.html', {'user': user})
+        return render(request, 'main/403.html', status=403)
 
     user_promo = get_user_promo(user)
     if not user_promo:
         return render(request, 'user_portal/studentview.html', {'user': user})
 
     ues_list = get_ues_list(user, user_promo)
-    subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
+    subj_list, subj_average, ues_average, no_note = get_subjects_and_averages(user, ues_list)
+
+    grades = list(Grade.objects.filter(user=user))
+    grades.reverse()
 
     context = {
         'user': user,
         'user_promo': user_promo,
         'ues_average': ues_average,
         'subj_average': subj_average,
-        'teachers': teachers,
         'subj_list': subj_list,
         'ues_list': ues_list,
         'no_note': no_note,
+        'grades': grades,
     }
 
     return render(request, 'user_portal/studentview.html', context)
@@ -95,6 +103,9 @@ def studentview(request):
 
 @login_required
 def profviewhome(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     context = {
         'user': user,
@@ -104,6 +115,9 @@ def profviewhome(request):
 
 @login_required
 def profview(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     courses = Course.objects.filter(teacher=user)
     subjects = [course.subject for course in courses]
@@ -126,6 +140,9 @@ def profview(request):
 
 @login_required
 def profview_entergrades(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     if request.method == "POST":
         subject = request.POST.get('subject')
@@ -153,6 +170,9 @@ def profview_entergrades(request):
 
 @login_required
 def success_grades(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
 
     if request.method == "POST":
@@ -187,6 +207,9 @@ def success_grades(request):
 
 @login_required
 def profview_grades(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     all_groups = Group.objects.filter(type="promo").all()
     all_subjects = Subject.objects.all()
@@ -235,6 +258,9 @@ def profview_grades(request):
 
 @login_required
 def delete_selected_grades(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     if request.method == 'POST':
         grades_to_delete = request.POST.getlist('grades_to_delete')
         if grades_to_delete:
@@ -245,6 +271,9 @@ def delete_selected_grades(request):
 
 @login_required
 def modify_grades(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     all_groups = Group.objects.filter(type="promo").all()
     all_subjects = Subject.objects.all()
@@ -295,6 +324,9 @@ def modify_grades(request):
 
 @login_required
 def new_studentreport(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user=request.user
     allgroups = Group.objects.filter(type="promo").all()
     context={
@@ -306,6 +338,9 @@ def new_studentreport(request):
 
 @login_required
 def getnew_studentreport(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     user=request.user
     allgroups = Group.objects.filter(type="promo").all()
     context={
@@ -325,7 +360,11 @@ def getnew_studentreport(request):
         return render(request, 'notes/newstudentreport.html',context)
 
 
+@login_required
 def attendance_student(request):
+    if request.user.user_type != "student":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
     absences = Presence.objects.filter(user=user, presence="absent",
                                        justified=False)
@@ -339,6 +378,9 @@ def attendance_student(request):
 
 @login_required
 def generate_student_view(request):
+    if request.user.user_type == "student":
+        return render(request, 'main/403.html', status=403)
+
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
         user = get_object_or_404(CustomUser, id=student_id)
@@ -346,7 +388,7 @@ def generate_student_view(request):
 
         if user.user_type == 'student' and user_promo is not None:
             ues_list = get_ues_list(user, user_promo)
-            subj_list, subj_average, teachers, ues_average, no_note = get_subjects_and_averages(user, ues_list)
+            subj_list, subj_average, ues_average, no_note = get_subjects_and_averages(user, ues_list)
 
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = f'attachment; filename="{user.first_name}{user.last_name}_report.pdf"'
@@ -365,12 +407,12 @@ def generate_student_view(request):
                 ue_title = Paragraph(f"UE: {ue.name}", getSampleStyleSheet()["Heading2"])
                 elements.append(ue_title)
 
-                data = [["UE", "Sujet", "Professeur", "Note Moyenne"]]
+                data = [["UE", "Sujet", "Note Moyenne"]]
                 for subj_index, subj in enumerate(subj_list[ue_index]):
                     if subj_index == 0:
-                        data.append([ue.name, subj.name, teachers[ue_index][subj_index], subj_average[ue_index][subj_index]])
+                        data.append([ue.name, subj.name, subj_average[ue_index][subj_index]])
                     else:
-                        data.append(["", subj.name, teachers[ue_index][subj_index], subj_average[ue_index][subj_index]])
+                        data.append(["", subj.name, subj_average[ue_index][subj_index]])
                 ue_table = Table(data, colWidths=[100, 200, 200, 100])
                 ue_table.setStyle(TableStyle([
                     ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
@@ -390,9 +432,13 @@ def generate_student_view(request):
     return HttpResponse(status=400)
 
 
+@login_required
 def attendance_teacher(request):
+    if request.user.user_type != "teacher":
+        return render(request, 'main/403.html', status=403)
+
     user = request.user
-    current_time = timezone.now()
+    current_time = timezone.now() + timezone.timedelta(hours=2)
     three_hours_ago = current_time - timezone.timedelta(hours=3)
 
     sessions = Session.objects.annotate(
@@ -411,7 +457,10 @@ def attendance_teacher(request):
     return render(request, 'attendance/attendance_teacher.html', context)
 
 
+@login_required
 def class_call(request, id):
+    if request.user.user_type != "teacher":
+        return render(request, 'main/403.html', status=403)
     user = request.user
     session = get_object_or_404(Session, pk=id)
     student_list = session.course.group.users.order_by('last_name')
@@ -435,6 +484,95 @@ def class_call(request, id):
                'presences_dict': presences_dict}
 
     return render(request, 'attendance/class_call.html', context)
+
+
+@login_required
+def weekly_schedule(request):
+    if request.user.user_type == "admin":
+        return render(request, 'main/403.html', status=403)
+
+    user = request.user
+    today = timezone.now()
+    today = today.replace(hour=7)
+
+    if user.user_type == 'student':
+        group = Group.objects.filter(users=user).all()
+        course = Course.objects.filter(group__in=group).all()
+    else:
+        course = Course.objects.filter(teacher=user).all()
+
+    if request.method == "POST":
+        start = request.POST.get('start_of_week')
+        start = start.strip()
+        direction = request.POST.get('week')
+        format = "%d %B %Y %H:%M"
+
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+        print(start)
+        startofweek = datetime.strptime(start, format)
+        startofweek = timezone.make_aware(startofweek)
+        locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
+
+        if direction == "past_week":
+            startofweek -= timedelta(days=7)
+        elif direction == "next_week":
+            startofweek += timedelta(days=7)
+
+        start_of_week = startofweek
+    else:
+        start_of_week = today - timedelta(days=today.weekday())
+
+    day_mapping = {
+        'monday': 'Lundi',
+        'tuesday': 'Mardi',
+        'wednesday': 'Mercredi',
+        'thursday': 'Jeudi',
+        'friday': 'Vendredi',
+        'saturday': 'Samedi',
+        'sunday': 'Dimanche'
+    }
+
+    days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+    hours = range(8, 21)
+    week_dates = [(start_of_week + timedelta(days=i)).strftime('%d/%m') for i in range(7)]
+    day_date_mapping = dict(zip(days, week_dates))
+
+    start_of_week = start_of_week.replace(hour=7)
+
+    end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
+    end_of_week = end_of_week.replace(hour=22)
+
+    sessions = Session.objects.filter(date__range=[start_of_week, end_of_week], course__in=course).order_by('date')
+
+    timetable = {day: {hour: None for hour in hours} for day in days}
+
+    for session in sessions:
+        session_date = timezone.localtime(session.date)
+        day_name = session_date.strftime('%A').lower()  # Convert to lowercase
+        try:
+            day_name_fr = day_mapping[day_name]
+            hour = session_date.hour
+
+            total_seconds = session.duration.total_seconds()
+            total_hours = int(total_seconds / 3600)
+
+            if 8 <= hour < 21:
+                for i in range(total_hours):
+                    if hour + i < 21:
+                        timetable[day_name_fr][hour + i] = session
+        except KeyError:
+            print("Day name not found in mapping:", day_name)
+
+    context = {
+        'timetable': timetable,
+        'hours': hours,
+        'days': days,
+        'day_date_mapping': day_date_mapping,
+        'start_of_week': start_of_week
+    }
+
+    return render(request, 'schedule/schedule.html', context)
+
 
 """ Helper functions
 """
@@ -530,7 +668,6 @@ def get_ues_list(user, user_promo):
 def get_subjects_and_averages(user, ues_list):
     subj_list = [[] for _ in range(len(ues_list))]
     subj_average = [[] for _ in range(len(ues_list))]
-    teachers = [[] for _ in range(len(ues_list))]
     ues_average = []
     no_note = True
 
@@ -547,10 +684,6 @@ def get_subjects_and_averages(user, ues_list):
             for subj in subj_list[i]:
                 subj_avg, total_subj_coeff, teacher = calculate_subject_average(
                     user, subj)
-                if teacher:
-                    teachers[i].append(teacher)
-                else:
-                    teachers[i].append("-")
                 subj_average[i].append(round(subj_avg, 2))
                 ue_average += subj_avg * subj.coeff
                 total_ue_coeff += subj.coeff
@@ -559,7 +692,7 @@ def get_subjects_and_averages(user, ues_list):
                 ue_average /= total_ue_coeff
                 ues_average.append(round(ue_average, 2))
 
-    return subj_list, subj_average, teachers, ues_average, no_note
+    return subj_list, subj_average, ues_average, no_note
 
 
 # Calculate the subject average
@@ -582,87 +715,3 @@ def calculate_subject_average(user, subject):
         average = 0
 
     return average, total_coeff, teacher
-
-
-def weekly_schedule(request):
-    user = request.user
-    today = timezone.now()
-    today = today.replace(hour=7)
-
-    if user.user_type == 'student':
-        group = Group.objects.filter(users=user).all()
-        course = Course.objects.filter(group__in=group).all()
-    else:
-        course = Course.objects.filter(teacher=user).all()
-
-    if request.method == "POST":
-        start = request.POST.get('start_of_week')
-        start = start.strip()
-        direction = request.POST.get('week')
-        format = "%d %B %Y %H:%M"
-
-        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
-        print(start)
-        startofweek = datetime.strptime(start, format)
-        startofweek = timezone.make_aware(startofweek)
-        locale.setlocale(locale.LC_TIME, 'en_EN.UTF-8')
-
-        if direction == "past_week":
-            startofweek -= timedelta(days=7)
-        elif direction == "next_week":
-            startofweek += timedelta(days=7)
-
-        start_of_week = startofweek
-    else:
-        start_of_week = today - timedelta(days=today.weekday())
-
-    day_mapping = {
-        'monday': 'Lundi',
-        'tuesday': 'Mardi',
-        'wednesday': 'Mercredi',
-        'thursday': 'Jeudi',
-        'friday': 'Vendredi',
-        'saturday': 'Samedi',
-        'sunday': 'Dimanche'
-    }
-
-    days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
-    hours = range(8, 21)
-    week_dates = [(start_of_week + timedelta(days=i)).strftime('%d/%m') for i in range(7)]
-    day_date_mapping = dict(zip(days, week_dates))
-
-    start_of_week = start_of_week.replace(hour=7)
-
-    end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
-    end_of_week = end_of_week.replace(hour=22)
-
-    sessions = Session.objects.filter(date__range=[start_of_week, end_of_week], course__in=course).order_by('date')
-
-    timetable = {day: {hour: None for hour in hours} for day in days}
-
-    for session in sessions:
-        session_date = timezone.localtime(session.date)
-        day_name = session_date.strftime('%A').lower()  # Convert to lowercase
-        try:
-            day_name_fr = day_mapping[day_name]
-            hour = session_date.hour
-
-            total_seconds = session.duration.total_seconds()
-            total_hours = int(total_seconds / 3600)
-
-            if 8 <= hour < 21:
-                for i in range(total_hours):
-                    if hour + i < 21:
-                        timetable[day_name_fr][hour + i] = session
-        except KeyError:
-            print("Day name not found in mapping:", day_name)
-
-    context = {
-        'timetable': timetable,
-        'hours': hours,
-        'days': days,
-        'day_date_mapping': day_date_mapping,
-        'start_of_week': start_of_week
-    }
-
-    return render(request, 'schedule/schedule.html', context)

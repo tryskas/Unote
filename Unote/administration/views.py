@@ -93,6 +93,7 @@ def search_group(request):
                          search_results_html})
 
 
+@method_decorator(login_required, name='dispatch')
 class GroupCreationView(CreateView):
     template_name = 'administration/group_creation.html'
     form_class = GroupForm
@@ -110,8 +111,17 @@ class GroupCreationView(CreateView):
         messages.success(self.request, 'Le groupe a bien été créée.')
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@login_required
 def create_groups_csv(request):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
     if request.method == "POST":
         form = CSVUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -150,6 +160,7 @@ def create_groups_csv(request):
                   {'form': form})
 
 
+@method_decorator(login_required, name='dispatch')
 class GroupUpdateView(UpdateView):
     model = Group
     template_name = 'administration/update_group.html'
@@ -173,6 +184,11 @@ class GroupUpdateView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Le groupe a bien été mis à jour.')
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required
@@ -221,6 +237,7 @@ def search_course(request):
                          search_results_html})
 
 
+@method_decorator(login_required, name='dispatch')
 class CourseCreationView(CreateView):
     template_name = 'administration/course_creation.html'
     form_class = CourseForm
@@ -238,7 +255,13 @@ class CourseCreationView(CreateView):
         messages.success(self.request, 'Le cours a bien été créé.')
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@method_decorator(login_required, name='dispatch')
 class CourseUpdateView(UpdateView):
     model = Course
     template_name = 'administration/update_course.html'
@@ -262,6 +285,11 @@ class CourseUpdateView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Le cours a bien été mis à jour.')
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required
@@ -310,6 +338,7 @@ def search_ue(request):
                          search_results_html})
 
 
+@method_decorator(login_required, name='dispatch')
 class UECreationView(CreateView):
     template_name = 'administration/ue_creation.html'
     form_class = UEForm
@@ -327,7 +356,13 @@ class UECreationView(CreateView):
         messages.success(self.request, 'L\'UE a bien été créée.')
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@method_decorator(login_required, name='dispatch')
 class UEUpdateView(UpdateView):
     model = UE
     template_name = 'administration/update_ue.html'
@@ -351,6 +386,11 @@ class UEUpdateView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'L\'UE a bien été mise à jour.')
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required
@@ -400,6 +440,7 @@ def search_subject(request):
                          search_results_html})
 
 
+@method_decorator(login_required, name='dispatch')
 class SubjectCreationView(CreateView):
     template_name = 'administration/subject_creation.html'
     form_class = SubjectForm
@@ -417,7 +458,13 @@ class SubjectCreationView(CreateView):
         messages.success(self.request, 'La matière a bien été créée.')
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@method_decorator(login_required, name='dispatch')
 class SubjectUpdateView(UpdateView):
     model = Subject
     template_name = 'administration/update_subject.html'
@@ -441,6 +488,11 @@ class SubjectUpdateView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'La matière a bien été mise à jour.')
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required
@@ -490,6 +542,7 @@ def search_room(request):
                          search_results_html})
 
 
+@method_decorator(login_required, name='dispatch')
 class RoomCreationView(CreateView):
     template_name = 'administration/room_creation.html'
     form_class = RoomForm
@@ -507,7 +560,13 @@ class RoomCreationView(CreateView):
         messages.success(self.request, 'La salle a bien été créée.')
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@method_decorator(login_required, name='dispatch')
 class RoomUpdateView(UpdateView):
     model = Room
     template_name = 'administration/update_room.html'
@@ -531,6 +590,11 @@ class RoomUpdateView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'La salle a bien été mise à jour.')
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required
@@ -585,6 +649,7 @@ def search_session(request):
                          search_results_html})
 
 
+@method_decorator(login_required, name='dispatch')
 class SessionCreationView(CreateView):
     template_name = 'administration/session_creation.html'
     form_class = SessionForm
@@ -621,7 +686,13 @@ class SessionCreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@method_decorator(login_required, name='dispatch')
 class SessionUpdateView(UpdateView):
     model = Session
     template_name = 'administration/update_session.html'
@@ -665,6 +736,11 @@ class SessionUpdateView(UpdateView):
 
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
+
 
 @login_required
 @require_POST
@@ -682,7 +758,11 @@ def delete_session(request, session_id):
     return redirect('administration:dashboard')
 
 
+@login_required
 def attendance_of(request, user_id):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
     user = get_object_or_404(CustomUser, pk=user_id)
     presence = Presence.objects.filter(user=user).exclude(presence="present")
     presence = presence.order_by('-session__date')

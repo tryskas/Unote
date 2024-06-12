@@ -34,6 +34,7 @@
 
     --main-background-color: #f0f2f5;
     --background-color-1: #f0f2f5;
+    --call-done-background-color: #c0fdde;
 
     --white-color: #fff;
 
@@ -68,6 +69,7 @@
     --background-schedule-color2: #f0f2f5;
     --taken-cells-background-color: #c0fdde;
     --taken-cells-exam-background-color: #ff7777;
+    --call-done-background-color: #0b6b44;
     --schedule-title-color: #105095;
     --submit-background-color1: #fff;
     --button-color2: #000;
@@ -599,6 +601,10 @@ button.in_body_button {
 #right-panel .scrollable-list li a {
     text-decoration: none;
     color: var(--link-color);
+}
+
+.background-green {
+    background-color: var(--call-done-background-color);
 }
 
 #right-panel .scrollable-list li a:hover, #right-panel p a:hover {

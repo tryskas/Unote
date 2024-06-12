@@ -26,6 +26,8 @@
 
     {% if no_note == False %}
 
+    <h2>Notes par UE</h2>
+
     {% for u in ues_list %}
     {% with j=forloop.counter %}
 
@@ -34,7 +36,6 @@
         <thead>
         <tr>
             <th colspan="2">UE</span></th>
-            <th>Professeur</th>
             <th>Coefficient</th>
             <th>Moyenne</th>
         </tr>
@@ -50,7 +51,6 @@
         {% with i=forloop.counter %}
         <tr>
             <td> {{ subj }} </td>
-            <td> {{ teachers|slice:j|last|slice:i|last }}</td>
             <td>{{ subj.coeff }}</td>
               <td>{{ subj_average|slice:j|last|slice:i|last }}</td>
         </tr>
@@ -58,7 +58,7 @@
         {% endfor %}
         {% endwith %}
         <tr>
-          <td colspan="3">Total</td>
+          <td colspan="2">Total</td>
           <td class="total">{{ ues_average|slice:j|last }}</td>
         </tr>
 
@@ -67,12 +67,27 @@
       </table>
       {% endwith %}
     {% endfor %}
+
+    <h2>Notes par matière</h2>
+
+
     <table>
-      <thead>
-      <tr>
-          <th colspan="5">Observations</th>
-      </tr>
-      </thead>
+        <thead>
+            <tr>
+                <th>Matière</span></th>
+                <th>Coefficient</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.subject }}</td>
+                    <td>{{ grade.coeff }}</td>
+                    <td>{{ grade.grade }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
     {% else %}

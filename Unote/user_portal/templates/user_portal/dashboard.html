@@ -55,7 +55,7 @@
 
             <ul>
                 {% for g in grades %}
-                <li>{{ g.subject }} : {{ g.grade }}/20 </li>
+                <li>{{ g.subject }} : <b>{{ g.grade }}/20</b> </li>
                 {% empty %}
                 <li> Aucune notes pour le moment.</li>
                 {% endfor %}
@@ -116,8 +116,8 @@
                     {% for session, end_time in tomorrow_sessions %}
                     <tr>
                         <td>{{ session.date|time:"H:i" }}</td>
-                        <td>{{ session.course.subject }}</td>
                         <td>{{ end_time|time:"H:i" }}</td>
+                        <td>{{ session.course.subject }}</td>
                         <td>{{ session.room }}</td>
                     </tr>
                     {% empty %}

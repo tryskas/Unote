@@ -50,6 +50,7 @@ def send_password_email(email, username, password):
               recipient_list)
 
 
+@method_decorator(login_required, name='dispatch')
 class UserCreationView(CreateView):
     template_name = 'users/register.html'
     form_class = CustomUserCreationForm
@@ -69,8 +70,17 @@ class UserCreationView(CreateView):
         else:
             return reverse_lazy('main:error_400')
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
 
+
+@login_required
 def upload_csv(request):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
     if request.method == "POST":
         form = CSVUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -117,6 +127,7 @@ class CustomLogoutView(LogoutView):
     next_page = 'users:login'
 
 
+@method_decorator(login_required, name='dispatch')
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'registration/password_change_form.html'
     success_url = reverse_lazy('users:password_change_done')  # reverse_lazy
@@ -124,6 +135,7 @@ class CustomPasswordChangeView(PasswordChangeView):
     # success_url.
 
 
+@method_decorator(login_required, name='dispatch')
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'registration/password_change_done.html'
 
@@ -146,6 +158,7 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'registration/password_reset_complete.html'
 
 
+@method_decorator(login_required, name='dispatch')
 class ProfileView(FormView):
     template_name = "users/profile.html"
     form_class = UserProfileForm
@@ -178,6 +191,11 @@ class ProfileView(FormView):
         form.save()
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.user_type == 'admin':
+            return redirect('main:error_403')
+        return super().dispatch(request, *args, **kwargs)
+
 
 @login_required
 @require_POST
@@ -192,7 +210,11 @@ def delete_user(request, user_id):
     return redirect('administration:dashboard')
 
 
+@login_required
 def delete_csv(request):
+    if request.user.user_type != "admin":
+        return render(request, 'main/403.html', status=403)
+
     if request.method == "POST":
         form = CSVUploadForm(request.POST, request.FILES)
         if form.is_valid():
