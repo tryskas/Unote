@@ -1,0 +1,10 @@
+<ul class="scrollable-list">
+    {% for ue in search_results %}
+        <li>
+            <div>
+                <a href="{% url 'administration:update_ue' ue.id %}"
+                   >{{ ue.name }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

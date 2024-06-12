@@ -1,0 +1,10 @@
+<ul class="scrollable-list">
+    {% for group in search_results %}
+        <li>
+            <div>
+                <a href="{% url 'administration:update_group' group.id %}"
+                   >{{ group.name }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

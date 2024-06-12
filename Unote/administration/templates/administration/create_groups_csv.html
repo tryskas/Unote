@@ -1,0 +1,25 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h2>Créer des groupes à partir d'un fichier CSV</h2>
+<p>(Champs: 'name,type,users,ues')</p>
+<p>type: 'promo' ou 'td_group' ou 'tp_group' ou 'generic_group'</p>
+<p>users: par exemple 'user1@example.com;user2@example.com'</p>
+<p>ues: 'UE1;UE2'</p>
+<p>Exemple complet:</p>
+<p>name,type,users,ues</p>
+<p>1A-IR,promo,john.doe@example.com;jane.smith@example.com,Anglais;Informatique base</p>
+<p>1A-ASE-TD1,td_group,bob.johnson@example.com;alice.williams@example.com;antropius.simon00@gmail.com,</p>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Enregistrer à partir du CSV">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

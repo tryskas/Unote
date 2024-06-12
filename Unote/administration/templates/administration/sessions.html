@@ -1,0 +1,31 @@
+{% load static %}
+
+<div>
+    <h2>Sessions de cours</h2>
+</div>
+
+<div>
+    <div>
+        <form id="search-session-form">
+            <input type="text" id="search-session-input"
+                   placeholder="Rechercher par nom">
+            <input type="submit" value="Rechercher"/>
+        </form>
+        <div id="search-session-results">
+            <ul class="scrollable-list">
+                {% for session in sessions %}
+                    <li>
+                        <a href="{% url 'administration:update_session' session.id %}"
+                           >{{ session.course }} - {{ session.date }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <p><a href="{% url 'administration:create_session' %}"
+          >Créer une session de cours</a></p>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/sessions_script.js' %}"></script>

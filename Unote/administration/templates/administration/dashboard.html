@@ -1,0 +1,55 @@
+{% extends "administration/base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h2>Bonjour {{ user.first_name }} !</h2>
+</div>
+
+<div id="admin-content">
+    <div id="left-panel">
+        <h3>Utilisateurs</h3>
+        <ul>
+            <li><a href="{% url 'administration:profiles' %}"
+                   class="internal-link hover-active">Profils et
+                absences</a></li>
+            <li><a href="{% url 'user_portal:profviewhome' %}"
+                   class=" hover-active">Notes</a></li>
+            <li><a href="{% url 'administration:groups' %}"
+                   class="internal-link hover-active">Groupes</a></li>
+            <li><a href="{% url 'administration:courses' %}"
+                   class="internal-link hover-active">Cours</a></li>
+        </ul>
+
+        <h3>Maquettes</h3>
+        <ul>
+            <li><a href="{% url 'administration:eus' %}"
+                   class="internal-link hover-active">UE</a></li>
+            <li><a href="{% url 'administration:subjects' %}"
+                   class="internal-link hover-active">Matières</a></li>
+        </ul>
+
+        <h3>Bâtiments</h3>
+        <ul>
+            <li><a href="{% url 'administration:rooms' %}"
+                   class="internal-link hover-active">Salles</a></li>
+        </ul>
+
+        <h3>Emploi du temps</h3>
+        <ul>
+            <li><a href="{% url 'administration:sessions' %}"
+                   class="internal-link hover-active">Sessions de cours</a></li>
+        </ul>
+
+        <a href="{% url 'users:password_change' %}">Modifier mot de passe</a>
+    </div>
+
+    <div id="right-panel"><h2>Vous êtes bien sur la page d'accueil
+        administrateur.</h2>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="{% static 'administration/js/home_script.js' %}">
+</script>
+{% endblock %}

@@ -1,0 +1,812 @@
+/*------------------------------Variables-----------------------------------*/
+
+:root {
+    --secondary-color: #2c3e50;
+    --admin-menu-link-color: #2980b9;
+    --title-link-color: #2980b9;
+    --background-schedule-color: #f0f2f5;
+    --background-schedule-color2: #fff;
+    --schedule-title-color: #1285a1;
+    --taken-cells-background-color: #87d2ff;
+    --taken-cells-exam-background-color: #ff7777;
+
+    --title-color: #2c3e50;
+
+    --button-color2: #fff;
+    --link2-color: #2980b9;
+    --submit-background-color1: #2980b9;
+
+    --body-text-color: #333;
+    --main-text-color: #ecf0f1;
+
+    --notes-section-color: #333;
+    --notes-section-button-color: #333;
+
+    --form-input-color: #fff;
+    --form-input-background-color: #ecf0f1;
+
+    --link-color: #2980b9;
+    --table-border-color: #ddd;
+    --link-hover-color: #732d91;
+    --lates-link-color: #2980b9;
+    --button-background-color: #3498db;
+    --button-link-color: #3498db;
+
+    --main-background-color: #f0f2f5;
+    --background-color-1: #f0f2f5;
+    --call-done-background-color: #c0fdde;
+
+    --white-color: #fff;
+
+    --f2-color): #f2f2f2;
+
+
+
+    --placeholder-color: #888888;
+
+    --font-size: 16px;
+
+    /* Theme switch */
+    --toggle_height: 16em;
+    --toggle_width: 30em;
+    --toggle_btn_radius: 10em;
+    --background-color-night: #080125;
+    --background-color-day: #A1D4ED;
+    --moon_color: #D9FBFF;
+
+    /* Scrolling behavior */
+    --scroll-behavior: smooth; /* permet un défilement de page plus doux */
+    scroll-behavior: var(--scroll-behavior);
+}
+
+/*------------------------------Global---------------------------------------*/
+
+.dark-theme {
+    --button-link-color: #000;
+    --title-link-color: #fff;
+    --table-border-color: #151e3fff;
+    --background-schedule-color: #fff;
+    --background-schedule-color2: #f0f2f5;
+    --taken-cells-background-color: #c0fdde;
+    --taken-cells-exam-background-color: #ff7777;
+    --call-done-background-color: #0b6b44;
+    --schedule-title-color: #105095;
+    --submit-background-color1: #fff;
+    --button-color2: #000;
+    --secondary-color: #151e3fff;
+    --title-color: #fff;
+    --form-input-color: #000;
+    --link2-color: #fff;
+    --form-input-background-color: #ebebeb;
+    --notes-section-color: #fff;
+    --admin-menu-link-color: #000;
+    --main-background-color: #030027ff;
+    --notes-section-button-color: #000;
+    --background-color-1: #fff;
+    --body-text-color: #000;
+    --main-text-color: #ffc1da;
+    --link-color: #000000;
+    --link-hover-color: #dc9e82ff;
+    --lates-color: #fff;
+    --button-background-color: #ffc1da;
+    --white-color: #ebebeb;
+    --placeholder-color: #888888;
+}
+
+/* Scrollbar style */
+::-webkit-scrollbar {
+    width: 0.5rem; /* largeur de la scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent; /* couleur de fond de la scrollbar */
+    border-radius: 10px; /* coins arrondis de la scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(140, 154, 165, 0.3); /* couleur de la poignée de la scrollbar */
+    border-radius: 10px; /* coins arrondis de la poignée de la scrollbar */
+}
+
+::placeholder {
+    color: var(--placeholder-color);
+}
+
+/*------------------------------Structure------------------------------------*/
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--main-background-color);
+    margin: 0;
+    padding: 0;
+    color: var(--body-text-color);
+}
+
+header {
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header a {
+    color: var(--main-text-color);
+    text-decoration: none;
+}
+
+#left-panel ul li a {
+    color: var(--admin-menu-link-color);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+#deleteform .margin-left {
+    margin-left: 1rem;
+}
+
+.margin-left{
+    margin-left: 1rem;
+}
+
+.schedule-title-color {
+    color: var(--schedule-title-color);
+}
+
+nav a {
+    margin-left: 1em;
+}
+
+nav form {
+    display: inline;
+}
+
+.in_body_button {
+    background: none;
+    border: none;
+    color: var(--white-color);
+    cursor: pointer;
+    font: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    padding: 2em;
+}
+
+.header-link:hover {
+    color: var(--link-color);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin: 0.5em 0;
+}
+
+ul li a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.display_flex {
+    display: flex;
+}
+
+h2, h3 {
+    font-size: 1.5em;
+    color: var(--title-color);
+    margin-bottom: 1em;
+}
+
+a.link2 {
+    color: var(--link2-color);
+}
+
+.lates-student {
+    color: var(--lates-color);
+}
+
+#my-account-content h2 {
+    color: var(--body-text-color);
+}
+
+.left-column h2, .right-column h2 {
+    color: var(--body-text-color);
+}
+
+.notes_section {
+    color: var(--notes-section-color);
+}
+
+.notes_section button, .notes_section button[type="submit"] {
+    color: var(--notes-section-button-color);
+}
+
+fieldset {
+    border: none;
+}
+
+.form-holder h2, .form-holder h3 {
+    color: var(--secondary-color);
+}
+
+a, a:hover {
+    text-decoration: none;
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+.flex_full {
+    flex: 1;
+}
+
+.container {
+    display: flex;
+    flex: auto;
+}
+
+button {
+    background-color: var(--button-background-color);
+    border: none;
+    color: var(--white-color);
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+    margin: 0.5em 0;
+    cursor: pointer;
+    border-radius: 0.25em;
+}
+
+footer {
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+}
+
+.messages {
+    margin-top: 1em;
+}
+
+.alert {
+    padding: 1em;
+    border: 1px solid transparent;
+    border-radius: 0.25em;
+    margin-bottom: 1em;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+img {
+    width: 60px;
+}
+
+/*------------------------------Tables---------------------------------------*/
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+table thead th {
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
+    padding: 0.5em;
+    text-align: left;
+    font-weight: normal;
+}
+
+.schedule table thead th {
+    color: var(--secondary-color);
+}
+
+table tbody td,
+table tbody th {
+    border: 1px solid var(--table-border-color);
+    padding: 0.5em;
+    text-align: left;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: var(--main-background-color);
+}
+
+/*------------------------------Forms----------------------------------------*/
+
+input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+button[type="submit"] {
+    background-color: var(--button-background-color);
+    border: none;
+    color: var(--white-color);
+    padding: 0.5em 1em;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+button[type="submit"]:hover, button[type="button"]:hover, .hover-white:hover {
+    background-color: var(--submit-background-color1);
+}
+
+.form-items input[type="submit"]:hover {
+    background-color: var(--submit-background-color1);
+}
+
+button.in_body_button:hover {
+    background: none;
+}
+
+input[type="text"], input[type="number"], select {
+    padding: 0.25em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.sidebar a:hover, .left-column a h2:hover, .right-column a h2:hover {
+    color: var(--title-link-color);
+}
+
+.schedule_background tr:nth-child(even) {
+    background-color: var(--background-schedule-color);
+}
+
+.schedule_background tr:nth-child(odd) {
+    background-color: var(--background-schedule-color2);
+}
+
+.form-holder {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    padding-top: 2em;
+}
+
+.form-items.revert-colors {
+    background-color: var(--form-input-background-color);
+}
+
+.form-items.revert-colors input.black-text, button.black-text {
+    color: var(--form-input-color);
+}
+
+.form-content {
+    max-width: 800px;
+    width: 100%;
+}
+
+#no-background {
+    background: none;
+    box-shadow: none;
+    padding-left: 0;
+}
+
+.form-items {
+    background-color: var(--main-text-color);
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-items form {
+    margin-bottom: 1em;
+}
+
+.form-items input[type="text"],
+.form-items input[type="file"],
+.form-items select {
+    width: calc(100% - 20px);
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+.form-items input[type="submit"] {
+    background-color: var(--button-background-color);
+    border: none;
+    color: var(--white-color);
+    padding: 0.5em 1em;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.form-items p {
+    margin-bottom: 1em;
+}
+
+.form-items input[type="datetime-local"],
+.form-items input[type="number"],
+.form-items select,
+.form-items input[type="checkbox"] {
+    width: calc(100% - 12px);
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+.form-items input[type="submit"] {
+    background-color: var(--button-background-color);
+    border: none;
+    color: var(--white-color);
+    padding: 0.5em 1em;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.form-items input[type="submit"]:hover {
+    background-color: var(--submit-background-color1);
+}
+
+.form-items label {
+    font-weight: bold;
+}
+
+input[type="email"] {
+    width: calc(100% - 20px);
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+button.in_body_button {
+    background: none;
+    border: none;
+    color: var(--white-color);
+    cursor: pointer;
+    font: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+#right-panel h2 {
+    font-size: 1.5em;
+    color: var(--secondary-color);
+    margin-bottom: 1em;
+}
+
+#right-panel form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+#right-panel input[type="text"],
+#right-panel input[type="file"] {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+#right-panel input[type="submit"] {
+    background-color: var(--button-background-color);
+    border: none;
+    color: var(--button-color2);
+    padding: 0.5em 1em;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#right-panel input[type="submit"]:hover {
+    background-color: var(--submit-background-color1);
+}
+
+#right-panel #search-user-results,
+#right-panel #search-group-results {
+    margin-top: 1em;
+}
+
+#right-panel .scrollable-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#right-panel .scrollable-list li {
+    margin: 0.5em 0;
+    padding: 0.5em;
+    background-color: var(--background-color-1);
+    border-bottom: 1px solid #ddd;
+}
+
+#right-panel .scrollable-list li a {
+    text-decoration: none;
+    color: var(--link-color);
+}
+
+.background-green {
+    background-color: var(--call-done-background-color);
+}
+
+#right-panel .scrollable-list li a:hover, #right-panel p a:hover {
+    color: var(--link-hover-color);
+}
+
+#right-panel p a {
+    color: var(--button-link-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#left-panel ul li a.hover-active:hover {
+    color: var(--link-hover-color);
+}
+
+.background-cells-schedule {
+    background-color: var(--taken-cells-background-color);
+}
+
+.background-cells-schedule-exam {
+    background-color: var(--taken-cells-exam-background-color);
+}
+
+#admin-content {
+    display: flex;
+    gap: 2em;
+}
+
+#left-panel {
+    width: 25%;
+    padding: 1em;
+    background-color: var(--main-text-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#left-panel h3 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5em;
+}
+
+#left-panel ul {
+    margin-bottom: 1.5em;
+}
+
+.internal-link:hover {
+    color: var(--link-hover-color);
+}
+
+#right-panel {
+    width: 75%;
+    padding: 1em;
+    background-color: var(--white-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#my-account-content {
+    width: 100%;
+    padding: 1em;
+    background-color: var(--white-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#user-section {
+    display: flex;
+    gap: 2rem;
+}
+
+.left-column {
+    width: 25%;
+    padding: 0 15px;
+    margin-right: 2em;
+    background-color: var(--main-text-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.right-column {
+    width: 75%;
+    padding: 0 15px;
+    background-color: var(--white-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar {
+    background-color: var(--secondary-color);
+    color: var(--main-text-color);
+    padding: 20px;
+    width: 10rem;
+    height: 100vh;
+}
+
+.sidebar a {
+    display: block;
+    color: var(--main-text-color);
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.evaluation, .absence, .notes, .schedule {
+    margin-bottom: 30px;
+}
+
+.schedule table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.schedule th, .schedule td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.schedule th {
+    background-color: var(--f2-color);
+}
+
+.schedule td {
+    background-color: var(--white-color);
+}
+
+.schedule td:first-child {
+    width: 30%;
+}
+
+
+
+
+
+
+
+
+body {
+    transition: all .2s ease-in-out;
+}
+
+.theme-switch {
+    font-size: 10%; /* Changer cette propriété pour modifier la taille du
+    bouton */
+    position: relative;
+    margin-right: 0;
+    height: var(--toggle_height);
+    width: var(--toggle_width);
+    border-radius: var(--toggle_height);
+    border-style: inset;
+    border-color: #000000;
+    transition: all 500ms ease-in-out;
+    background: var(--background-color-night);
+}
+
+.day {
+    background: var(--background-color-day);
+}
+
+.sun {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    transition: all 400ms ease-in-out;
+
+    top: 4.5em;
+    left: 18em;
+    transform: rotate(0deg);
+    width: 7em;
+    height: 7em;
+    background: #FFFFFF;
+    box-shadow: 3em 3em 0 5em #FBE61E inset,
+    0 -5em 0 -2.7em #FBE61E,
+    3.5em -3.5em 0 -3em #FBE61E,
+    5em 0 0 -2.7em #FBE61E,
+    3.5em 3.5em 0 -3em #FBE61E,
+    0 5em 0 -2.7em #FBE61E,
+    -3.5em 3.5em 0 -3em #FBE61E,
+    -5em 0 0 -2.7em #FBE61E,
+    -3.5em -3.5em 0 -3em #FBE61E;
+}
+
+.moon {
+    top: 3em;
+    left: 3em;
+    transform: rotate(-75deg);
+    width: var(--toggle_btn_radius);
+    height: var(--toggle_btn_radius);
+    background: var(--background-color-night);
+    box-shadow:
+    3em 2.5em 0 0em var(--moon_color) inset,
+    rgba(255, 255, 255, 0.1) 0em -7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 3em 7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 2em 13em 0 -4em,
+    rgba(255, 255, 255, 0.1) 6em 2em 0 -4.1em,
+    rgba(255, 255, 255, 0.1) 8em 8em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 6em 13em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) -4em 7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) -1em 10em 0 -4.5em;
+}
+
+.no-transition {
+    transition: none !important;
+}

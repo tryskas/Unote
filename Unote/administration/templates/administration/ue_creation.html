@@ -1,0 +1,19 @@
+{% extends "administration/base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Créer une UE</h2>
+
+<div class="form-holder">
+    <div class="form-content">
+        <div class="form-items revert-colors">
+            <form method="post">
+                {% csrf_token %}
+                {{form}}
+                <input type="hidden" name="create_ue" value="create">
+                <input class="black-text" type="submit" value="Créer">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
