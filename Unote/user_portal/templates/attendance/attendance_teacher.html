@@ -2,29 +2,25 @@
 {% load static %}
 
 {% block content %}
-<div>
+<div class="flex_full">
     <table>
       <tbody>
         <thead>
             <tr>
-                <th>Appel à faire :</th>
+                <th>Appel à faire ou en cours</th>
             </tr>
 
         </thead>
 
         {% for session in sessions %}
-            {% if session.course.teacher == user %}
-                {% if not session.is_called_done%}
                     <tr>
                         <td>
-                            <a  class="notes_section"
-                                href="{% url 'user_portal:class_call' session.id %}">
+                            <a class="notes_section"
+                               href="{% url 'user_portal:class_call' session.id %}">
                                 {{session.course.name}} {{session.date}}
-                            </a></div>
+                            </a>
                         </td>
                     </tr>
-                {% endif %}
-            {% endif %}
         {% endfor %}
       </tbody>
 

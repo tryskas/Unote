@@ -3,6 +3,8 @@
 
 {% block content %}
 <div class="class_call flex_full notes_section">
+    <form method="POST">
+    {% csrf_token %}
     <table>
     <thead>
         <tr>
@@ -18,37 +20,79 @@
             <td scope="col">Nom</td>
             <td scope="col">Présence</td>
         </tr>
-    <form method="POST">
-    {% csrf_token %}
+
     {% for s in student_list %}
 
-        <tr>
-            <th scope="row">{{s.username}}</th>
-            <td>{{s.first_name}}</td>
-            <td>{{s.last_name}}</td>
-            <td><fieldset>
+        {% with presences_dict|default_if_none:None as presence %}
+            <tr>
+                <th scope="row">{{s.username}}</th>
+                <td>{{s.first_name}}</td>
+                <td>{{s.last_name}}</td>
+                <td><fieldset>
 
+                    <div>
 
-                <div>
-                  <input type="radio" classe="{{s.username}}"
-                         name="{{s.username}}" value="present" checked />
-                  <label for="present">présent</label>
+                        {% for key, value in presence.items %}
+                            {% if s.id == key %}
+                                {% if value.presence == "present" %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="present" checked />
+                                {% else %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="present"/>
+                                {% endif %}
 
-                  <input type="radio" classe="{{s.username}}"
-                         name="{{s.username}}" value="absent"  />
-                  <label for="absent">absent</label>
+                                <label for="present">Présent</label>
 
-                  <input type="radio" classe="{{s.username}}"
-                         name="{{s.username}}" value="late"  />
-                  <label for="late">en retard</label>
-                </div>
-            </fieldset>
-            </td>
+                                {% if value.presence == "absent" %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="absent" checked/>
+                                {% else %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="absent"/>
+                                {% endif %}
 
-        </tr>
+                                <label for="absent">Absent</label>
 
+                                {% if value.presence == "late" %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="late" checked/>
+                                {% else %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="late"/>
+                                {% endif %}
 
+                                <label for="late">En retard</label>
+                            {% endif %}
+                        {% empty %}
+                            <input type="radio" classe="{{s.username}}"
+                                   name="{{s.username}}" value="present" checked />
 
+                            <label for="present">Présent</label>
+
+                            <input type="radio" classe="{{s.username}}"
+                                   name="{{s.username}}" value="absent"/>
+
+                            <label for="absent">Absent</label>
+
+                            <input type="radio" classe="{{s.username}}"
+                                   name="{{s.username}}" value="late"/>
+
+                            <label for="late">En retard</label>
+                        {% endfor %}
+
+                    </div>
+                </fieldset>
+                </td>
+
+            </tr>
+        {% endwith %}
 
     {% endfor %}
     </tbody>

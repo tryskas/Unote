@@ -86,8 +86,7 @@ class Presence(models.Model):
         ('absent', 'Absent'),
         ('late', 'En retard'),
     )
-    presence = models.CharField(max_length=30, choices=PRESENCE_TYPE,
-                                default='present')
+    presence = models.CharField(max_length=30, choices=PRESENCE_TYPE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     justified = models.BooleanField(default=False)

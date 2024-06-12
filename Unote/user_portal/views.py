@@ -14,6 +14,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from django.db.models import Q, F, ExpressionWrapper,DateTimeField
 
 from users.models import CustomUser
 
@@ -404,9 +405,20 @@ def generate_student_view(request):
 
 def attendance_teacher(request):
     user = request.user
-    sessions = Session.objects.order_by('-date')
-    now = timezone.now()
-    sessions = [session for session in sessions if session.date <= now]
+    current_time = timezone.now()
+    three_hours_ago = current_time - timezone.timedelta(hours=3)
+
+    sessions = Session.objects.annotate(
+        end_time=ExpressionWrapper(F('date') + F('duration'),
+                                   output_field=DateTimeField())
+    ).filter(
+        date__lt=current_time,
+        course__teacher=user
+    ).filter(
+        Q(is_called_done=False) |
+        Q(end_time__gt=three_hours_ago)
+    ).order_by('-date')
+
     context = {'user': user, 'sessions': sessions}
 
     return render(request, 'attendance/attendance_teacher.html', context)
@@ -414,12 +426,10 @@ def attendance_teacher(request):
 
 def class_call(request, id):
     user = request.user
-
     session = get_object_or_404(Session, pk=id)
-    course = session.course
-    group = course.group
-
-    student_list = group.users.order_by('last_name')
+    student_list = session.course.group.users.order_by('last_name')
+    presences = Presence.objects.filter(session=session)
+    presences_dict = {presence.user_id: presence for presence in presences}
 
     if request.method == 'POST':
         for student in student_list:
@@ -434,7 +444,8 @@ def class_call(request, id):
             session.save()
         return HttpResponseRedirect(reverse("user_portal:attendance_teacher"))
 
-    context = {'user': user, 'session': session, 'student_list': student_list}
+    context = {'user': user, 'session': session, 'student_list': student_list,
+               'presences_dict': presences_dict}
 
     return render(request, 'attendance/class_call.html', context)
 
