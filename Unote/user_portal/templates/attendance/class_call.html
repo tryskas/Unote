@@ -1,0 +1,104 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="class_call flex_full notes_section">
+    <form method="POST">
+    {% csrf_token %}
+    <table>
+    <thead>
+        <tr>
+            <th colspan="4">
+                Appel pour {{session.course.name}} par {{user.first_name}} {{user.last_name}} :
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td scope="col">Eleve</td>
+            <td scope="col">Prénom</td>
+            <td scope="col">Nom</td>
+            <td scope="col">Présence</td>
+        </tr>
+
+    {% for s in student_list %}
+
+        {% with presences_dict|default_if_none:None as presence %}
+            <tr>
+                <th scope="row">{{s.username}}</th>
+                <td>{{s.first_name}}</td>
+                <td>{{s.last_name}}</td>
+                <td><fieldset>
+
+                    <div>
+
+                        {% for key, value in presence.items %}
+                            {% if s.id == key %}
+                                {% if value.presence == "present" %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="present" checked />
+                                {% else %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="present"/>
+                                {% endif %}
+
+                                <label for="present">Présent</label>
+
+                                {% if value.presence == "absent" %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="absent" checked/>
+                                {% else %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="absent"/>
+                                {% endif %}
+
+                                <label for="absent">Absent</label>
+
+                                {% if value.presence == "late" %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="late" checked/>
+                                {% else %}
+                                    <input type="radio" classe="{{s.username}}"
+                                           name="{{s.username}}"
+                                           value="late"/>
+                                {% endif %}
+
+                                <label for="late">En retard</label>
+                            {% endif %}
+                        {% empty %}
+                            <input type="radio" classe="{{s.username}}"
+                                   name="{{s.username}}" value="present" checked />
+
+                            <label for="present">Présent</label>
+
+                            <input type="radio" classe="{{s.username}}"
+                                   name="{{s.username}}" value="absent"/>
+
+                            <label for="absent">Absent</label>
+
+                            <input type="radio" classe="{{s.username}}"
+                                   name="{{s.username}}" value="late"/>
+
+                            <label for="late">En retard</label>
+                        {% endfor %}
+
+                    </div>
+                </fieldset>
+                </td>
+
+            </tr>
+        {% endwith %}
+
+    {% endfor %}
+    </tbody>
+    </table>
+    <button type="submit" href="{% url 'user_portal:attendance_teacher' %}" class="button">
+        Valider </button>
+</form>
+</div>
+{% endblock %}

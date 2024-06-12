@@ -1,0 +1,59 @@
+{% extends "user_portal/base.html" %}
+
+{% block content %}
+<div class="flex_full notes_section">
+  <h1>Université de Haute-Alsace</h1>
+
+  {% if user.user_type == 'teacher' or user.user_type == 'admin'%}
+
+  <table>
+    <thead>
+    <tr>
+        <th colspan="2">Informations complémentaires</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Nom Prénom</td>
+        <td>{{ user.last_name }} {{ user.first_name }} </td>
+    </tr>
+    <tr>
+        <td>Numéro professeur</td>
+        <td> {{ user.username }} </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+    <table>
+      <thead>
+        <th colspan="7">Eleve</th>
+      </thead>
+      <tbody>
+        {% for student in students%}
+      <tr>
+        <td colspan="6">{{ student.last_name }} {{ student.first_name }} </td>
+        <td>
+          <form method="post"
+                action="{% url 'user_portal:generate_student_view' %}">
+          {% csrf_token %}
+          <input type="hidden" name="student_id" value="{{ student.id }}">
+          <button type="submit">Télécharger</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+
+  <button type="button"
+          onclick="window.location.href='{% url 'user_portal:new_studentreport' %}'">Retour</button>
+
+
+  {% else %}
+    <div>
+      Vous n'êtes pas autorisé à accéder à cette page !
+      </div>
+  {% endif %}
+</div>
+{% endblock %}

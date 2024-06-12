@@ -1,0 +1,102 @@
+{% extends "user_portal/base.html" %}
+{% block content %}
+<div class="flex_full notes_section">
+    {% if user.user_type == 'student' %}
+    <table>
+      <thead>
+      <tr>
+          <th colspan="2">Informations sur l'étudiant</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+          <td>Nom Prénom</td>
+          <td>{{ user.last_name }} {{ user.first_name }} </td>
+      </tr>
+      <tr>
+          <td>Numéro étudiant</td>
+          <td> {{ user.username }} </td>
+      </tr>
+      <tr>
+        <td>Classe</td>
+        <td>{{ user_promo }}</td>
+    </tr>
+      </tbody>
+    </table>
+
+    {% if no_note == False %}
+
+    <h2>Notes par UE</h2>
+
+    {% for u in ues_list %}
+    {% with j=forloop.counter %}
+
+
+      <table>
+        <thead>
+        <tr>
+            <th colspan="2">UE</span></th>
+            <th>Coefficient</th>
+            <th>Moyenne</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <td rowspan="50"> {{ u.name }} </td>
+
+
+
+        {% with subjlast=subj_list|slice:j|last %}
+        {% for subj in subjlast %}
+        {% with i=forloop.counter %}
+        <tr>
+            <td> {{ subj }} </td>
+            <td>{{ subj.coeff }}</td>
+              <td>{{ subj_average|slice:j|last|slice:i|last }}</td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+        {% endwith %}
+        <tr>
+          <td colspan="2">Total</td>
+          <td class="total">{{ ues_average|slice:j|last }}</td>
+        </tr>
+
+
+      </tbody>
+      </table>
+      {% endwith %}
+    {% endfor %}
+
+    <h2>Notes par matière</h2>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Matière</span></th>
+                <th>Coefficient</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.subject }}</td>
+                    <td>{{ grade.coeff }}</td>
+                    <td>{{ grade.grade }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+    <div> Pas de notes pour le moment !</div>
+    {% endif %}
+    {% else %}
+      <div>
+        Vous n'êtes pas autorisé à accéder à cette page !
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

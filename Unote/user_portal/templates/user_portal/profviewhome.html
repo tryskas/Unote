@@ -1,0 +1,26 @@
+{% extends "user_portal/base.html" %}
+
+{% block content %}
+<div class="flex_full notes_section">
+    {% if user.user_type == 'teacher' or user.user_type == 'admin' %}
+
+    <h1>Université de Haute-Alsace</h1>
+    <p>Bienvenue {{ user.first_name }} !</p>
+
+    <button type="button"
+            onclick="window.location.href='{% url 'user_portal:profview' %}'">Ajouter des notes</button>
+    <button type="button"
+            onclick="window.location.href='{% url 'user_portal:modify_grades' %}'">Supprimer des notes</button>
+    <button type="button"
+            onclick="window.location.href='{% url 'user_portal:profview_grades' %}'">Voir les notes</button>
+    <button type="button"
+            onclick="window.location.href='{% url 'user_portal:new_studentreport' %}'">Télécharger un rapport</button>
+
+
+    {% else %}
+    <div>
+        Vous n'êtes pas autorisé à accéder à cette page !
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

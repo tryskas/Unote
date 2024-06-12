@@ -1,0 +1,120 @@
+<!doctype html>
+{% load static %}
+<html lang="fr">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Unote</title>
+        {% block styles %}
+            <link rel="stylesheet" href="{% static 'style.css' %}"/>
+            <link rel="stylesheet"
+                  href="{% static 'user_portal/css/style.css' %}"/>
+        {% endblock %}
+    </head>
+
+    <body>
+        {% block jquery %}
+            <!-- Script jquery -->
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                    crossorigin="anonymous"></script>
+        {% endblock %}
+
+        <header>
+            {% if user.is_authenticated %}
+                {% if user.user_type == 'student' or user.user_type == 'teacher' %}
+                    <a href="{% url 'user_portal:dashboard' %}"
+                       class="header-link">
+                        <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+                    </a>
+                {% elif user.user_type == 'admin' %}
+                    <a href="{% url 'administration:dashboard' %}"
+                       class="header-link">
+                        <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+                    </a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'users:login' %}" class="header-link">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo"/>
+                </a>
+            {% endif %}
+
+            <h1>
+                {% if user.is_authenticated %}
+                    {% if user.user_type == 'student' or user.user_type == 'teacher' %}
+                        <a href="{% url 'user_portal:dashboard' %}"
+                           class="header-link">
+                            Unote</a>
+                    {% elif user.user_type == 'admin' %}
+                        <a href="{% url 'administration:dashboard' %}"
+                           class="header-link">
+                            Unote</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'users:login' %}"
+                       class="header-link">Unote</a>
+                {% endif %}
+            </h1>
+
+            <nav>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'users:login' %}"
+                       class="header-link">Se connecter</a>
+                {% else %}
+                    <form action="{% url 'users:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="in_body_button header-link">Se
+                            déconnecter</button>
+                    </form>
+                {% endif %}
+                <a href="{% url 'main:help' %}" class="header-link">Support</a>
+            </nav>
+            <div class="theme-switch day">
+                <div class="sun">
+                </div>
+            </div>
+        </header>
+
+        <section id="user-section">
+            {% if user.user_type != "admin" %}
+                <div class="sidebar">
+                    <a href="{% url 'user_portal:dashboard' %}"
+                       class="sidebar-button">Home</a>
+                    <a href="{% url 'user_portal:my_account' %}"
+                       class="sidebar-button">Mon Compte</a>
+                </div>
+            {% else %}
+                <div class="sidebar">
+                    <a href="{% url 'administration:dashboard' %}"
+                       class="sidebar-button">Home</a>
+                    <a href="{% url 'user_portal:my_account' %}"
+                       class="sidebar-button">Mon Compte</a>
+                </div>
+            {% endif %}
+            {% block content %} {% endblock %}
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+
+        <footer>
+            <p>Site web ENSISA groupe Antropius/Ben
+                Charnia/Carbon/Jabri/Ouidir/Oumaloul/Routier</p>
+        </footer>
+
+        {% block js %}
+            <!-- Script de base -->
+            <script type="text/javascript"
+                    src="{% static 'script.js' %}"></script>
+            <script type="text/javascript"
+                    src="{% static 'user_portal/js/script.js' %}"></script>
+        {% endblock %}
+    </body>
+</html>

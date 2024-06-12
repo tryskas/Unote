@@ -1,0 +1,133 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="left-column">
+        <h2>Bonjour {{ user.first_name }} {{ user.last_name }}</h2>
+        <br>
+        {% if user.user_type == "student" %}
+        <div class="evaluation">
+            <h2>Évaluations & examens</h2>
+            <ul>
+                    {% for exam in future_exams %}
+                        <li>
+                            <strong>{{ exam.course.name }}</strong> - {{ exam.date|date:"d M Y H:i" }}
+                            <br> Salle : {{ exam.room.name }}
+                        </li>
+                    {% empty %}
+                        <p>Aucun examen programmé.</p>
+                    {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <div class="absence">
+            {% if user.user_type == "student" %}
+            <a href="{% url 'user_portal:attendance_student' %}">
+                    <h2>Absences</h2></a>
+                    {% for a in absence_late %}
+                        <div>
+
+                        {% if a.presence == "absent" %}
+                            Absent à {{a.session.lesson.name}} le {{a.session.date}}
+                        {% endif%}
+                        {% if a.presence == "late" %}
+                            En retard à {{a.session.lesson.name}} le {{a.session.date}}
+                        {% endif %}
+                        </div>
+                    {% empty %}
+                        <p>Aucune absence à justifier.</p>
+                    {% endfor %}
+            {% else %}
+                <a href="{% url 'user_portal:attendance_teacher' %}">
+                    <h2>Faire l'appel</h2>
+
+                </a>
+            {% endif %}
+
+        </div>
+        <div class="notes">
+            {% if user.user_type == "student" %}
+
+            <a href="{% url 'user_portal:notes' %}">
+                <h2>Notes</h2>
+            </a>
+
+            <ul>
+                {% for g in grades %}
+                <li>{{ g.subject }} : <b>{{ g.grade }}/20</b> </li>
+                {% empty %}
+                <li> Aucune notes pour le moment.</li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+            <a href="{% url 'user_portal:profviewhome' %}">
+                <h2>Notes</h2>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="right-column">
+        <div class="schedule-section">
+            <h2><a href="{% url 'user_portal:weekly_schedule' %}"
+                   class="schedule-title-color">Emploi du temps</a> pour
+                aujourd'hui </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Heure de début</th>
+                        <th>Heure de fin</th>
+                        <th>Cours</th>
+                        <th>Salle</th>
+                    </tr>
+                </thead>
+                <tbody class="schedule_background">
+                    {% for session, end_time in today_sessions %}
+                    <tr>
+                        <td>{{ session.date|time:"H:i" }}</td>
+                        <td>{{ end_time|time:"H:i" }}</td>
+                        <td>{{ session.course.subject }}</td>
+                        <td>{{ session.room }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">Aucun cours programmé aujourd'hui.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h2><a href="{% url 'user_portal:weekly_schedule' %}"
+                   class="schedule-title-color">Emploi du temps</a> pour
+                demain </h2>
+            </a>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Heure de début</th>
+                        <th>Heure de fin</th>
+                        <th>Cours</th>
+                        <th>Salle</th>
+                    </tr>
+                </thead>
+                <tbody class="schedule_background">
+                    {% for session, end_time in tomorrow_sessions %}
+                    <tr>
+                        <td>{{ session.date|time:"H:i" }}</td>
+                        <td>{{ end_time|time:"H:i" }}</td>
+                        <td>{{ session.course.subject }}</td>
+                        <td>{{ session.room }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">Aucun cours programmé demain.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

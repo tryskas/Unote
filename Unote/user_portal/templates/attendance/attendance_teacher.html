@@ -1,0 +1,38 @@
+{% extends "user_portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex_full">
+    <table>
+      <tbody>
+        <thead>
+            <tr>
+                <th>Appel à faire ou en cours</th>
+            </tr>
+
+        </thead>
+
+        {% for session in sessions %}
+                    <tr>
+                        {% if session.is_called_done %}
+                        <td class="background-green">
+                            <a class="notes_section"
+                               href="{% url 'user_portal:class_call' session.id %}">
+                                {{session.course.name}} {{session.date}}
+                            </a>
+                        </td>
+                        {% else %}
+                        <td>
+                            <a class="notes_section"
+                               href="{% url 'user_portal:class_call' session.id %}">
+                                {{session.course.name}} {{session.date}}
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+</div>
+{% endblock %}
