@@ -87,7 +87,9 @@ class SessionForm(forms.ModelForm):
     repeat = forms.BooleanField(required=False, label='Répéter cette session')
     repeat_interval = forms.IntegerField(required=False,
                                          label='Intervalle (jours)')
-    repeat_duration = forms.IntegerField(required=False, label='Durée (jours)')
+    repeat_duration = forms.IntegerField(required=False,
+                                         label='Nombre total de sessions à '
+                                               'créer')
 
     class Meta:
         model = Session

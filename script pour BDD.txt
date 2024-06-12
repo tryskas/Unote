@@ -1,0 +1,170 @@
+from users.models import CustomUser
+from administration.models import Subject, UE, Group, Course, Room, Session, Grade, Message, Presence
+
+from django.utils import timezone
+
+admin1 = CustomUser.objects.create_user(
+    username='00000000',
+    password='password123',
+    email='antropius.simon00@gmail.com',
+    user_type='admin',
+    first_name='Admin',
+    last_name='Istrateur',
+    is_superuser=True,
+    is_staff=True
+)
+
+teacher1 = CustomUser.objects.create_user(
+    username='00000001',
+    password='password123',
+    user_type='teacher',
+    first_name='John',
+    last_name='Doe'
+)
+
+teacher2 = CustomUser.objects.create_user(
+    username='00000002',
+    password='password123',
+    user_type='teacher',
+    first_name='Tyson',
+    last_name='Myke'
+)
+
+student1 = CustomUser.objects.create_user(
+    username='00000003',
+    password='password123',
+    user_type='student',
+    first_name='Simon',
+    last_name='Antropius'
+)
+
+student2 = CustomUser.objects.create_user(
+    username='00000004',
+    password='password123',
+    user_type='student',
+    first_name='Benjamin',
+    last_name='Carbon'
+)
+
+student3 = CustomUser.objects.create_user(
+    username='00000005',
+    password='password123',
+    user_type='student',
+    first_name='Remi',
+    last_name='Routier'
+)
+
+student4 = CustomUser.objects.create_user(
+    username='00000006',
+    password='password123',
+    user_type='student',
+    first_name='Zyad',
+    last_name='Oumaloul'
+)
+
+student5 = CustomUser.objects.create_user(
+    username='00000007',
+    password='password123',
+    user_type='student',
+    first_name='Sirine',
+    last_name='Ben-Charnia'
+)
+
+student6 = CustomUser.objects.create_user(
+    username='00000008',
+    password='password123',
+    user_type='student',
+    first_name='Fadwa',
+    last_name='Jabri'
+)
+
+student7 = CustomUser.objects.create_user(
+    username='00000009',
+    password='password123',
+    user_type='student',
+    first_name='Nassim',
+    last_name='Ouidir'
+)
+
+math = Subject.objects.create(name='Mathématiques discrètes I', coeff=4)
+math2 = Subject.objects.create(name='Mathématiques discrètes II', coeff=3)
+math3 = Subject.objects.create(name='Mathématiques et signal', coeff=2)
+anglais = Subject.objects.create(name='Anglais', coeff=5)
+info1 = Subject.objects.create(name='Architecture des ordinateurs', coeff=6)
+info2 = Subject.objects.create(name='ICG', coeff=4)
+info3 = Subject.objects.create(name='Découverte des réseaux', coeff=7)
+
+ue1 = UE.objects.create(name='Maths-info')
+ue2 = UE.objects.create(name='Informatique base')
+ue3 = UE.objects.create(name='Anglais')
+
+ue1.subjects.add(math, math2, math3)
+ue2.subjects.add(info1, info2, info3)
+ue3.subjects.add(anglais)
+
+group1 = Group.objects.create(type='promo', name='1A IR')
+group1.ues.add(ue1, ue2)
+group1.users.add(student1, student2, student3)
+
+group2 = Group.objects.create(type='promo', name='1A ASE')
+group2.ues.add(ue2, ue3)
+group2.users.add(student4, student5, student6, student7)
+
+course1 = Course.objects.create(name='Course1', group=group1, teacher=teacher1, subject=math)
+course2 = Course.objects.create(name='Course2', group=group2, teacher=teacher2, subject=anglais)
+
+room1 = Room.objects.create(name='E25')
+room2 = Room.objects.create(name='Grand Amphi')
+room3 = Room.objects.create(name='Petit Amphi')
+room4 = Room.objects.create(name='E26')
+room5 = Room.objects.create(name='E27')
+room6 = Room.objects.create(name='E30')
+room7 = Room.objects.create(name='Backroom')
+
+duration_60_minutes = timezone.timedelta(minutes=60)
+duration_120_minutes = timezone.timedelta(minutes=120)
+
+session1 = Session.objects.create(date=timezone.now(), duration=duration_120_minutes,
+                                  exam=False, is_called_done=False, room=room1, course=course1)
+session2 = Session.objects.create(date=timezone.now() + timezone.timedelta(hours=2), duration=duration_120_minutes,
+                                  exam=False, is_called_done=False, room=room3, course=course2)
+session3 = Session.objects.create(date=timezone.now() + timezone.timedelta(hours=6), duration=duration_60_minutes,
+                                  exam=True, is_called_done=False, room=room3, course=course2)
+session4 = Session.objects.create(date=timezone.now() - timezone.timedelta(hours=2), duration=duration_120_minutes,
+                                  exam=True, is_called_done=False, room=room7, course=course2)   
+session5 = Session.objects.create(date=timezone.now() + timezone.timedelta(days=1), duration=duration_120_minutes,
+                                  exam=False, is_called_done=False, room=room4, course=course1)
+session6 = Session.objects.create(date=timezone.now() + timezone.timedelta(days=1) - timezone.timedelta(hours=3), duration=duration_60_minutes,
+                                  exam=True, is_called_done=False, room=room3, course=course2)
+session7 = Session.objects.create(date=timezone.now() - timezone.timedelta(days=1) + timezone.timedelta(hours=1), duration=duration_120_minutes,
+                                  exam=True, is_called_done=False, room=room6, course=course2)
+session8 = Session.objects.create(date=timezone.now() + timezone.timedelta(days=2) + timezone.timedelta(hours=3), duration=duration_60_minutes,
+                                  exam=False, is_called_done=False, room=room5, course=course2)  
+                        
+
+grade1 = Grade.objects.create(grade=15.5, coeff=2, user=student1, subject=math)
+grade2 = Grade.objects.create(grade=7, coeff=2, user=student1, subject=math2)
+grade3 = Grade.objects.create(grade=8, coeff=3, user=student1, subject=math3)
+grade4 = Grade.objects.create(grade=10, coeff=4, user=student1, subject=anglais)
+grade5 = Grade.objects.create(grade=12, coeff=1, user=student1, subject=info1)
+grade6 = Grade.objects.create(grade=14, coeff=3, user=student1, subject=info2)
+grade7 = Grade.objects.create(grade=1, coeff=2, user=student1, subject=info3)
+
+grade8 = Grade.objects.create(grade=15.5, coeff=2, user=student2, subject=math)
+grade9 = Grade.objects.create(grade=7, coeff=2, user=student2, subject=math2)
+grade10 = Grade.objects.create(grade=8, coeff=3, user=student2, subject=math3)
+grade11 = Grade.objects.create(grade=10, coeff=4, user=student2, subject=anglais)
+grade12 = Grade.objects.create(grade=12, coeff=1, user=student2, subject=info1)
+grade13 = Grade.objects.create(grade=14, coeff=3, user=student2, subject=info2)
+grade14 = Grade.objects.create(grade=1, coeff=2, user=student2, subject=info3)
+
+grade15 = Grade.objects.create(grade=15.5, coeff=2, user=student3, subject=math)
+grade16 = Grade.objects.create(grade=7, coeff=2, user=student3, subject=math2)
+grade17 = Grade.objects.create(grade=8, coeff=3, user=student3, subject=math3)
+grade18 = Grade.objects.create(grade=10, coeff=4, user=student3, subject=anglais)
+grade19 = Grade.objects.create(grade=12, coeff=1, user=student3, subject=info1)
+grade20 = Grade.objects.create(grade=14, coeff=3, user=student3, subject=info2)
+grade21 = Grade.objects.create(grade=1, coeff=2, user=student3, subject=info3)
+
+print("Données créées avec succès!")
+

@@ -1,8 +1,33 @@
-# UNOTE - Groupe Antropius - Ben Charnia - Carbon - Jabri - Ouidir - Oumaloul - Routier
+# UNOTE - Groupe 6 (Antropius - Ben Charnia - Carbon - Jabri - Ouidir - Oumaloul - Routier)
 
-Projet de groupe ENSISA gestion abscences et notes.
-Site disponible en ligne à cette adresse :
-Lien du projet Github : https://github.com/tryskas/Unote
+Projet de groupe ENSISA gestion absences et notes.
+Lien du projet Github : [https://github.com/tryskas/Unote](https://github.com/tryskas/Unote)
+
+## Attention
+
+Ce projet est utilisable dans tous les navigateurs excepté Safari dû à un problème de compatibilité au niveau du CSS.
+
+## Connexion
+
+Pour vous connecter, un administrateur est disponible avec :
+- **Identifiant**: 00000000
+- **Mot de passe**: password123
+
+À partir de cet administrateur, vous pouvez créer n'importe quel autre utilisateur.
+
+Tous les autres comptes (00000001 à 00000008) utilisent le même mot de passe `password123` :
+- 00000001 et 00000002 : Professeurs
+- 00000003 et + : Étudiants
+
+## Remarques concernant l'utilisation du site
+
+- À la connexion, suivant son type (étudiant, professeur ou administrateur), l'utilisateur est renvoyé vers des pages différentes.
+- La plupart des pages requièrent d'être connecté et sont restreintes à un type d'utilisateur en particulier. En cas de déconnexion, une page de connexion est donc d'abord présentée avant de rediriger, une fois connecté, vers la page demandée.
+- Lorsqu'un utilisateur est créé par un administrateur, son identifiant et son mot de passe sont automatiquement créés puis envoyés au mail indiqué. L'administrateur n'a accès à aucun moment au mot de passe de l'utilisateur créé.
+- Si vous créez toute une liste d'utilisateurs à partir d'un CSV, gardez ce fichier pour pouvoir tous les supprimer d'un coup une fois qu'ils n'étudient plus à l'école.
+- En tant qu'étudiant ou professeur, les liens "Emploi du temps", "Absences" et "Notes" pour les élèves et "Emploi du temps", "Faire l'appel" et "Notes" pour les professeurs permettent d'accéder aux vues plus spécifiques correspondant à chacune des actions nommées. (Par exemple, la page principale des élèves affiche les 3 dernières notes reçues mais toutes sont consultables sur la page "Notes".)
+
+Pour peupler la base de donnée en cas de destruction de celle-ci, nous joignons au projet un "script pour BDD". Pour l'utiliser, il faut effectuer la commande python manage.py shell au niveau du manage.py puis coller le contenu de ce fichier dans le shell.
 
 ## Lancer le serveur avec debug = false:
 

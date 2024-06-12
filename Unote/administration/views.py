@@ -661,9 +661,9 @@ class SessionCreationView(CreateView):
         repeat_duration = form.cleaned_data.get('repeat_duration')
 
         if repeat and repeat_interval and repeat_duration:
-            end_date = self.object.date + timedelta(days=repeat_duration)
-            current_date = self.object.date + timedelta(days=repeat_interval)
-            while current_date <= end_date:
+            current_date = self.object.date
+            for _ in range(repeat_duration-1):
+                current_date += timedelta(days=repeat_interval)
                 Session.objects.create(
                     course=self.object.course,
                     date=current_date,
@@ -671,11 +671,10 @@ class SessionCreationView(CreateView):
                     room=self.object.room,
                     exam=self.object.exam,
                 )
-                current_date += timedelta(days=repeat_interval)
 
         messages.success(self.request, 'La session a bien été créée.')
 
-        return super().form_valid(form)
+        return response  # Ne pas appeler super().form_valid(form) deux fois
 
     def get_success_url(self):
         user_type = self.request.user.user_type
@@ -720,9 +719,9 @@ class SessionUpdateView(UpdateView):
         repeat_duration = form.cleaned_data.get('repeat_duration')
 
         if repeat and repeat_interval and repeat_duration:
-            end_date = self.object.date + timedelta(days=repeat_duration)
-            current_date = self.object.date + timedelta(days=repeat_interval)
-            while current_date <= end_date:
+            current_date = self.object.date
+            for _ in range(repeat_duration - 1):
+                current_date += timedelta(days=repeat_interval)
                 Session.objects.create(
                     course=self.object.course,
                     date=current_date,
@@ -730,11 +729,10 @@ class SessionUpdateView(UpdateView):
                     room=self.object.room,
                     exam=self.object.exam,
                 )
-                current_date += timedelta(days=repeat_interval)
 
         messages.success(self.request, 'La session a bien été mise à jour.')
 
-        return super().form_valid(form)
+        return response  # Ne pas appeler super().form_valid(form) deux fois
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.user_type == 'admin':
