@@ -28,6 +28,7 @@ Tous les autres comptes (00000001 à 00000008) utilisent le même mot de passe `
 - En tant qu'étudiant ou professeur, les liens "Emploi du temps", "Absences" et "Notes" pour les élèves et "Emploi du temps", "Faire l'appel" et "Notes" pour les professeurs permettent d'accéder aux vues plus spécifiques correspondant à chacune des actions nommées. (Par exemple, la page principale des élèves affiche les 3 dernières notes reçues mais toutes sont consultables sur la page "Notes".)
 
 Pour peupler la base de donnée en cas de destruction de celle-ci, nous joignons au projet un "script pour BDD". Pour l'utiliser, il faut effectuer la commande python manage.py shell au niveau du manage.py puis coller le contenu de ce fichier dans le shell.
+Le dossier contient 2 csv permettant de créer des élèves et des groupes automatiquement.
 
 ## Lancer le serveur avec debug = false:
 
